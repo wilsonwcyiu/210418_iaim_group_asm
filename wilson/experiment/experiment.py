@@ -38,13 +38,11 @@ if __name__ == '__main__':
     sleep_sec: int = 2
 
 
-
-
     img_rect2b: PyDIPjavaio.ImageRead = ImageUtil.obtain_image("rect2b")
 
-    date_time_str: str = CommonUtil.generate_date_time_str()
     guass_value_list = [2,3,4,5]
 
+    date_time_str: str = CommonUtil.generate_date_time_str()
     for guass_value in guass_value_list:
         tmp_rect = dip.Gauss(img_rect2b, guass_value)
 
