@@ -26,7 +26,7 @@ def processimage():
     # Read image
     rect = dip.ImageReadTIFF("C:/Users/rosa-/PycharmProjects/iaim_own_work/images_assignment2/rect1b.tif")
 
-    new_rect = dip.AdaptiveGauss(rect, 2)
+    new_rect = dip.Gauss(rect, 4)
 
     #showimage(new_rect)
 
