@@ -45,14 +45,14 @@ if __name__ == '__main__':
     date_time_str: str = CommonUtil.generate_date_time_str()
     for image_name in image_name_list:
         tmp_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+
         for guass_value in guass_value_list:
 
-
-            tmp_rect = dip.Gauss(tmp_img, guass_value)
+            tmp_guass_img = dip.Gauss(tmp_img, guass_value)
 
             file_name = date_time_str + image_name + "_guass_filter_" + str(guass_value) + ".tiff"
 
-            CommonUtil.save_image_to_default_project_folder(tmp_img, file_name)
+            CommonUtil.save_image_to_default_project_folder(tmp_guass_img, file_name)
 
             # ImageUtil.show_image_in_dip_view(tmp_img, sleep_sec)
 
