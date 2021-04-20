@@ -10,7 +10,8 @@ from PIL import Image as PilImage
 import PIL
 from diplib import PyDIPjavaio
 
-
+from common_util import CommonUtil
+from image_util import ImageUtil
 
 
 def measure_size_and_perimeter(image: PyDIPjavaio.ImageRead):
@@ -36,16 +37,23 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 3
     time.sleep(sleep_sec)
-    image_file_path = "../../image_files/rect2"
 
-    img: PyDIPjavaio.ImageRead = dip.ImageRead(image_file_path)
+
+    img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image("rect2")
     # img.Show()
     dip.Show(img)
     time.sleep(sleep_sec)
 
-    size, perimeter = measure_size_and_perimeter(img)
+
+    size, perimeter = ImageUtil.measure_size_and_perimeter(image=img, iso_threshold=65)
     print("size, perimeter ", size, perimeter)
 
+
+
+    new_rect = dip.Gauss(img, 2)
+    ImageUtil.show_image(new_rect, sleep_sec=2)
+    # showimage(new_rect)
+    # _, thresh = dip.Threshold(rect) -> 64.5
 
 
 
