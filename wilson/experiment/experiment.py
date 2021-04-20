@@ -40,7 +40,7 @@ if __name__ == '__main__':
     image_name_list: list = ["rect1a", "rect1b", "rect2a", "rect2b", "rect3a", "rect3b", "rect4a", "rect4b"]
 
 
-    guass_value_list = [2,3,4,5,6,7,8,9,10]
+    guass_value_list = [2,5]
 
     date_time_str: str = CommonUtil.generate_date_time_str()
     for image_name in image_name_list:
