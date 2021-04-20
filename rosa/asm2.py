@@ -152,6 +152,8 @@ if __name__ == '__main__':
     # THIRD graph shows values from images 1b-4b with first Gaussian filter and where FOURTH graph shows values from
     # images 1b-4b with second Gaussian filter
     
+    # Do line 136 - 153 also for Median filter
+    
     # SIGNAL TO NOISE RATIO
     # -> Characterizes image quality. mean_sig/std_sig where mean_sig is average signal value and std_sig is std of the signal
     # Do this without noise suppression filter:
