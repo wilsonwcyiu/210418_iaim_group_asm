@@ -50,9 +50,16 @@ if __name__ == '__main__':
 
             tmp_guass_img = dip.Gauss(tmp_img, guass_value)
 
+            threshold_value = ImageUtil.threshold(tmp_guass_img)
+
+            rectbin = tmp_guass_img < threshold_value
+
+            # ImageUtil.show_image_in_dip_view(threshold_value, sleep_sec)
+
+
             file_name = date_time_str + image_name + "_guass_filter_" + str(guass_value) + ".tiff"
 
-            CommonUtil.save_image_to_default_project_folder(tmp_guass_img, file_name)
+            CommonUtil.save_image_to_default_project_folder(rectbin, file_name)
 
             # ImageUtil.show_image_in_dip_view(tmp_img, sleep_sec)
 
