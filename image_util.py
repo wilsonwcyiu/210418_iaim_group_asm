@@ -15,7 +15,7 @@ class ImageUtil:
 
 
     @staticmethod
-    def show_image(img: PyDIPjavaio.ImageRead, sleep_sec: int):
+    def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int):
         diplib.PyDIPviewer.Show(img)
         time.sleep(sleep_sec)
 

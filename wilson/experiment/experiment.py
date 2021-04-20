@@ -35,23 +35,73 @@ def measure_size_and_perimeter(image: PyDIPjavaio.ImageRead):
 # test
 if __name__ == '__main__':
     print("starting...")
-    sleep_sec: int = 3
-    time.sleep(sleep_sec)
+    sleep_sec: int = 2
 
 
-    img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image("rect2")
+
+
+    img_rect2b: PyDIPjavaio.ImageRead = ImageUtil.obtain_image("rect2b")
+
+    date_time_str: str = CommonUtil.generate_date_time_str()
+    guass_value_list = [2,3,4,5]
+
+    for guass_value in guass_value_list:
+        tmp_rect = dip.Gauss(img_rect2b, guass_value)
+        file_name = date_time_str + "_img_rect2b_guass_filter_" + str(guass_value) + ".tiff"
+        CommonUtil.save_image_to_default_project_folder(img_rect2b, file_name)
+        ImageUtil.show_image_in_dip_view(img_rect2b, sleep_sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # img.Show()
-    dip.Show(img)
-    time.sleep(sleep_sec)
+    # dip.Show(img)
+    # time.sleep(sleep_sec)
+    #
+    #
+    # size, perimeter = ImageUtil.measure_size_and_perimeter(image=img, iso_threshold=65)
+    # print("size, perimeter ", size, perimeter)
 
 
-    size, perimeter = ImageUtil.measure_size_and_perimeter(image=img, iso_threshold=65)
-    print("size, perimeter ", size, perimeter)
+    # new_rect = dip.Gauss(img, 2)
+    # ImageUtil.show_image_in_dip_view(new_rect, sleep_sec)
 
 
+    # new_rect = dip.Gauss(img, 3)
+    # ImageUtil.show_image_in_dip_view(new_rect, sleep_sec)
+    #
+    #
+    # new_rect = dip.Gauss(img, 4)
+    # ImageUtil.show_image_in_dip_view(new_rect, sleep_sec)
 
-    new_rect = dip.Gauss(img, 2)
-    ImageUtil.show_image(new_rect, sleep_sec=2)
+
+    # new_rect = dip.Gauss(img, 2)
+    # new_rect.Show()
+    # CommonUtil.sleep(sleep_sec)
+    #
+    #
+    # new_rect = dip.Gauss(img, 3)
+    # new_rect.Show()
+    # CommonUtil.sleep(sleep_sec)
+    #
+    #
+    # new_rect = dip.Gauss(img, 4)
+    # new_rect.Show()
+    # CommonUtil.sleep(sleep_sec)
+
     # showimage(new_rect)
     # _, thresh = dip.Threshold(rect) -> 64.5
 
