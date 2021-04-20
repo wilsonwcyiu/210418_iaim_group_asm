@@ -1,5 +1,6 @@
 import diplib as dip
 import numpy as np
+import time
 import matplotlib.pyplot as plt
 from scipy import stats
 
@@ -23,7 +24,11 @@ def getpixelvalues(img):
 
 def processimage():
     # Read image
-    rect = dip.ImageReadTIFF("C:/Users/rosa-/PycharmProjects/iaim_own_work/images_assignment2/rect1.tif")
+    rect = dip.ImageReadTIFF("C:/Users/rosa-/PycharmProjects/iaim_own_work/images_assignment2/rect1b.tif")
+
+    new_rect = dip.Gauss(rect, 4)
+
+    #showimage(new_rect)
 
     # Reduce noise filter 1
     #rect = dip.MedianFilter(rect, "rectangular")
@@ -31,26 +36,29 @@ def processimage():
     #rect = dip.Gauss(rect, 4)
 
     #Get threshold
-    _, thresh = dip.Threshold(rect)
-    #print(thresh)
+    _, thresh = dip.Threshold(new_rect)
+    print(thresh)
 
-    rectbin = rect < thresh
+    rectbin = new_rect < thresh
+
+    showimage(new_rect)
 
     #showimage(rectbin)
 
     #values = getpixelvalues(rect)
     #getstatistics(values)
 
-    rectbin = dip.Label(rectbin)
-    showimage(rectbin)
-    m = dip.MeasurementTool.Measure(rectbin, rect, ['Size', 'Perimeter'])
-    print(m)
+    #rectbin = dip.Label(rectbin)
+    #showimage(rectbin)
+    #m = dip.MeasurementTool.Measure(rectbin, rect, ['Size', 'Perimeter'])
+    #print(m)
 
 
 def showimage(img):
-    dip.PyDIPviewer.Show(img)
-    #img.Show()
-    input()
+    #dip.PyDIPviewer.Show(img)
+    sleep_sec: int = 10
+    img.Show()
+    time.sleep(sleep_sec)
     return 0
 
 
