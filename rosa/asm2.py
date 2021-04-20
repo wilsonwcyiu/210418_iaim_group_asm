@@ -26,7 +26,7 @@ def processimage():
     # Read image
     rect = dip.ImageReadTIFF("C:/Users/rosa-/PycharmProjects/iaim_own_work/images_assignment2/rect1b.tif")
 
-    new_rect = dip.MedianFilter(rect, "elliptic")
+    new_rect = dip.AdaptiveGauss(rect, 2)
 
     #showimage(new_rect)
 
@@ -41,7 +41,7 @@ def processimage():
 
     rectbin = new_rect < thresh
 
-    showimage(rectbin)
+    showimage(new_rect)
 
     #showimage(rectbin)
 
