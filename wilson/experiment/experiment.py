@@ -47,8 +47,11 @@ if __name__ == '__main__':
 
     for guass_value in guass_value_list:
         tmp_rect = dip.Gauss(img_rect2b, guass_value)
+
         file_name = date_time_str + "_img_rect2b_guass_filter_" + str(guass_value) + ".tiff"
+
         CommonUtil.save_image_to_default_project_folder(img_rect2b, file_name)
+
         ImageUtil.show_image_in_dip_view(img_rect2b, sleep_sec)
 
 
