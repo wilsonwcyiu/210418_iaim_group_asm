@@ -117,6 +117,7 @@ if __name__ == '__main__':
         snr = mean / std
 
         sizes, perimeters = measure_size_and_perimeter(curr_img)
+        # TODO DOES NOT WORK ATM
         sizes = UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
 
         snr_values_no_filter.append(snr)
@@ -224,6 +225,7 @@ if __name__ == '__main__':
         snr = mean / std
 
         sizes, perimeters = measure_size_and_perimeter(curr_img)
+        # TODO: DOES NOT WORK ATM
         sizes = UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
 
         snr_values.append(snr)
