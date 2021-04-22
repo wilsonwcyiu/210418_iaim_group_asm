@@ -133,19 +133,19 @@ if __name__ == '__main__':
                 # Here, also measure size and perimeter per image and per Gaussian filter with certain filter (for part 2.3, question 7)
                 sizes, perimeters = measure_size_and_perimeter(curr_gauss_img)
 
-                # Filters all irrelevant objects from incorrect segmentations
-                UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
+                # Filters all irrelevant objects from incorrect segmentations returns size and perimeter mean and std
+                s_mean, s_std, p_mean, p_std = UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
 
                 # Then, get the statistics (mean and std) from these measurements
-                mean, std = UtilFunctions.get_mean_std(sizes)
-                mean_size.append(mean)
-                std_size.append(std)
-                print("Size:  | mean    ", mean, " | std    ", std, "  |")
+                # mean, std = UtilFunctions.get_mean_std(sizes)
+                mean_size.append(s_mean)
+                std_size.append(s_std)
+                print("Size:  | mean    ", s_mean, " | std    ", s_std, "  |")
 
-                mean, std = UtilFunctions.get_mean_std(perimeters)
-                mean_perimeter.append(mean)
-                std_perimeter.append(std)
-                print("Perimeter:  | mean    ", mean, "  | std    ", std, "  |")
+                # mean, std = UtilFunctions.get_mean_std(perimeters)
+                mean_perimeter.append(p_mean)
+                std_perimeter.append(p_std)
+                print("Perimeter:  | mean    ", p_mean, "  | std    ", p_std, "  |")
 
             print("Plots for gauss filter " + str(gauss_parameter_value))
             # Now, all the mean and std values are known for images (rect)1-4 that are used for the following:
@@ -181,18 +181,18 @@ if __name__ == '__main__':
                 sizes, perimeters = measure_size_and_perimeter(curr_median_img)
 
                 # Filters all irrelevant objects from incorrect segmentations
-                UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
+                s_mean, s_std, p_mean, p_std = UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
 
                 # Then, get the statistics (mean and std) from these measurements
-                mean, std = UtilFunctions.get_mean_std(sizes)
-                mean_size.append(mean)
-                std_size.append(std)
-                print("Size:  | mean    ", mean, " | std    ", std, "  |")
+                # mean, std = UtilFunctions.get_mean_std(sizes)
+                mean_size.append(s_mean)
+                std_size.append(s_std)
+                print("Size:  | mean    ", s_mean, " | std    ", s_std, "  |")
 
-                mean, std = UtilFunctions.get_mean_std(perimeters)
-                mean_perimeter.append(mean)
-                std_perimeter.append(std)
-                print("Perimeter:  | mean    ", mean, "  | std    ", std, "  |")
+                # mean, std = UtilFunctions.get_mean_std(perimeters)
+                mean_perimeter.append(p_mean)
+                std_perimeter.append(p_std)
+                print("Perimeter:  | mean    ", p_mean, "  | std    ", p_std, "  |")
 
             print("Plots for median filter " + median_parameter)
             # Now, all the mean and std values are known for images (rect)1-4 that are used for the following:
