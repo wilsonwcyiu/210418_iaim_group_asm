@@ -65,6 +65,8 @@ class UtilFunctions:
         print("perimeters mean ", mean, " | perimeters std ", std)
         print("----------------------------------")
 
+        return sizes_top
+
 
     @staticmethod
     def threshold(img: PyDIPjavaio.ImageRead):
@@ -77,3 +79,14 @@ class UtilFunctions:
     def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int):
         diplib.PyDIPviewer.Show(img)
         time.sleep(sleep_sec)
+
+
+    @staticmethod
+    def get_pixel_values(img: PyDIPjavaio.ImageRead):
+        pixel_value_list = []
+
+        for pixel_location in range(len(img)):
+            list_entry = img[pixel_location]
+            pixel_value_list = numpy.append(pixel_value_list, int(list_entry[0]))
+
+        return pixel_value_list

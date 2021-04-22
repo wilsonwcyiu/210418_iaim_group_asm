@@ -23,14 +23,14 @@ def measure_size_and_perimeter(img):
     #segm_img = dip.BinaryOpening(segm_img, -1, 4)
     #segm_img = dip.BinaryDilation(segm_img)
 
-    UtilFunctions.show_image_in_dip_view(segm_img, 4)
+    #UtilFunctions.show_image_in_dip_view(segm_img, 4)
 
     # Label segmented objects
     segm_img = dip.Label(segm_img)
 
     # Get measurements
     px_measurements = dip.MeasurementTool.Measure(segm_img, img, ['Size', 'Perimeter'])
-    print(px_measurements)
+    #print(px_measurements)
 
     # Get array with all sizes
     sizes = np.array(px_measurements['Size']).transpose()
@@ -54,15 +54,40 @@ def plot_relative_discretization_error(mean_array, std_array, label, img_series)
     fig.savefig("../plot_output/" + label + "_" + img_series)
 
 
+def plot_snr_measurements(sizes, snr_values):
+    labels = ['no noise series, no filter', 'no noise series, with filter', 'A series, with filter', 'B series, with filter']
+    colors = ['tab:gray', 'tab:blue', 'tab:green', 'tab:red']
+
+    sizes_per_series = [sizes[0:4], sizes[4:8], sizes[8:12], sizes[12:16]]
+    snr_per_series = [snr_values[0:4], snr_values[4:8], snr_values[8:12], snr_values[12:16]]
+    fig, ax = plt.subplots()
+
+    for i in range(len(sizes_per_series)):
+        x_values = np.log(sizes_per_series[i])
+        y_values = snr_per_series[i]
+
+        print(sizes_per_series[i])
+        print(y_values)
+
+        ax.scatter(x_values, y_values, c=colors[i], label=labels[i])
+
+    ax.legend()
+
+    ax.set(xlabel='log(size)',
+           ylabel='SNR value',
+           title='SNR related to the measurement')
+    fig.savefig("../plot_output/snr_plot")
+
+
 if __name__ == '__main__':
     sleep_sec: int = 3
 
     # Initialize and state image name lists
-    image_name_list: list = []
-    image_name_list_noise: list = ["rect4b"]
+    image_name_list: list = ["rect1", "rect2", "rect3", "rect4", "rect1a", "rect2a", "rect3a", "rect4a", "rect1b", "rect2b", "rect3b", "rect4b"]
+    image_name_list_no_noise: list = ["rect1", "rect2", "rect3", "rect4"]
 
     # Initialize parameters for Gaussian filter
-    gauss_parameter_list = [3]
+    gauss_parameter_list = [2]
 
     # Initialize parameters for Median filter and then repeat steps
     median_parameter_list = ['elliptic']
@@ -73,23 +98,32 @@ if __name__ == '__main__':
     mean_perimeter = []
     std_perimeter = []
 
+    # For storage of sizes and snr values of image series without noise and without filter
+    size_values_no_filter = []
+    snr_values_no_filter = []
+
     # Performing analysis on no noise images
-    for image_name in image_name_list:
+    for image_name in image_name_list_no_noise:
         # Load current image
-        curr_img = obtain_image(image_name)
-        # Measure size and perimeter of current image
+        curr_img = UtilFunctions.obtain_image(image_name)
+
+        # Get a list of all the pixel values of current image
+        pixel_values = UtilFunctions.get_pixel_values(curr_img)
+
+        # Get average and standard deviation of pixel values
+        mean, std = UtilFunctions.get_mean_std(pixel_values)
+
+        # Calculate and print SNR of current image
+        snr = mean / std
+
         sizes, perimeters = measure_size_and_perimeter(curr_img)
+        sizes = UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
 
-        # Get statistics
-        mean, std = UtilFunctions.get_mean_std(sizes)
-        mean_size.append(mean)
-        std_size.append(std)
-        print("Size:  | mean    ", mean, " | std    ", std, "  |")
+        snr_values_no_filter.append(snr)
+        size_values_no_filter.append(np.sum(sizes))
 
-        mean, std = UtilFunctions.get_mean_std(perimeters)
-        mean_perimeter.append(mean)
-        std_perimeter.append(std)
-        print("Perimeter:  | mean    ", mean, "  | std    ", std, "  |")
+    print('no filter, size : ', size_values_no_filter)
+    print('no filter, snr : ', snr_values_no_filter)
 
     # Now, all the mean and std values are known for images (rect)1-4 that are used for the following:
     # Plot the graph of the relative discretization error of the size
@@ -100,7 +134,10 @@ if __name__ == '__main__':
     # Initialize date and time
     date_time_str = UtilFunctions.generate_date_time_str()
 
+
+
     '''
+    
     for image_name in image_name_list_noise:
         # Load current image
         curr_img = UtilFunctions.obtain_image(image_name)
@@ -126,8 +163,6 @@ if __name__ == '__main__':
             mean_perimeter.append(mean)
             std_perimeter.append(std)
             print("Perimeter:  | mean    ", mean, "  | std    ", std, "  |")
-
-    '''
 
     for image_name in image_name_list_noise:
         # Load current image
@@ -155,7 +190,7 @@ if __name__ == '__main__':
             std_perimeter.append(std)
             print("Perimeter:  | mean    ", mean, "  | std    ", std, "  |")
 
-
+    '''
     # Now, all the mean and std values are known for images (rect)1a,1b-4a,4b that are used for the following:
     # Plot the relative discretization error graphs for size and perimeter where FOR EACH label (size and perimeter):
     # FIRST graph shows values from images 1a-4a with first Gaussian filter, 
@@ -165,15 +200,33 @@ if __name__ == '__main__':
     
     # SIGNAL TO NOISE RATIO
     # -> Characterizes image quality. mean_sig/std_sig where mean_sig is average signal value and std_sig is std of the signal
-    # Do this without noise suppression filter:
-        # First series: rect1, rect2, rect3, rect4
-        # Second series: rect1a, rect2a, rect3a, rect4a
-        # Third series: rect1b, rect2b, rect3b, rect4b
-        # Put the results in a table
-    # Do this with best performing noise suppression filter:
-        # First series: rect1, rect2, rect3, rect4
-        # Second series: rect1a, rect2a, rect3a, rect4a
-        # Third series: rect1b, rect2b, rect3b, rect4b
-        # Put the results in a table
-    
-    # Lastly, produce plot (with SNR against sum of all measurements in that image) PER image
+
+    # For storage of sizes and snr values of image series
+    size_values = size_values_no_filter
+    snr_values = snr_values_no_filter
+
+    for image_name in image_name_list:
+        # Load current image
+        curr_img = UtilFunctions.obtain_image(image_name)
+
+        # Gaussian filter with sigma value 3 applied (best performing filter)
+        curr_img = dip.Gauss(curr_img, 3)
+
+        #UtilFunctions.show_image_in_dip_view(curr_img, sleep_sec)
+
+        # Get a list of all the pixel values of current image
+        pixel_values = UtilFunctions.get_pixel_values(curr_img)
+
+        # Get average and standard deviation of pixel values
+        mean, std = UtilFunctions.get_mean_std(pixel_values)
+
+        # Calculate and print SNR of current image
+        snr = mean / std
+
+        sizes, perimeters = measure_size_and_perimeter(curr_img)
+        sizes = UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
+
+        snr_values.append(snr)
+        size_values.append(np.sum(sizes))
+
+    plot_snr_measurements(size_values, snr_values)
