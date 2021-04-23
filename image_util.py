@@ -7,6 +7,17 @@ from diplib import PyDIPjavaio
 
 class ImageUtil:
 
+
+    @staticmethod
+    def gauss_filter(img: PyDIPjavaio.ImageRead, sigmas: int):
+        tmp_gauss_img: diplib.PyDIP_bin.Image = diplib.Gauss(img, sigmas)
+        threshold_value: float = ImageUtil.threshold(tmp_gauss_img)
+        filtered_img: diplib.PyDIP_bin.Image = tmp_gauss_img < threshold_value
+
+        return filtered_img
+
+
+
     @staticmethod
     def threshold(img: PyDIPjavaio.ImageRead):
         threshold: float = None

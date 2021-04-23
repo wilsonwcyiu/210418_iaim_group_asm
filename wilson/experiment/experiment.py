@@ -48,21 +48,14 @@ if __name__ == '__main__':
 
         for guass_value in guass_value_list:
             sigmas: int = guass_value
-            tmp_guass_img: diplib.PyDIP_bin.Image = diplib.Gauss(tmp_img, sigmas)
 
-            threshold_value: float = ImageUtil.threshold(tmp_guass_img)
-
-            rectbin: diplib.PyDIP_bin.Image = tmp_guass_img < threshold_value
-
-
-            # ImageUtil.show_image_in_dip_view(threshold_value, sleep_sec)
-
+            filtered_img = ImageUtil.gauss_filter(tmp_img, sigmas)
 
             file_name = image_name + "_guass_filter_" + str(guass_value) + ".tiff"
 
-            CommonUtil.save_image_to_default_project_folder(img=rectbin, dir_name=date_time_str, file_name=file_name)
+            CommonUtil.save_image_to_default_project_folder(img=filtered_img, dir_name=date_time_str, file_name=file_name)
 
-            # ImageUtil.show_image_in_dip_view(tmp_img, sleep_sec)
+            # ImageUtil.show_image_in_dip_view(filtered_img, sleep_sec)
 
 
 
