@@ -13,6 +13,35 @@ import matplotlib.pyplot as plt
 from util import UtilFunctions
 
 
+def measure_conv_and_solid(img):
+    # Get threshold
+    threshold_value = UtilFunctions.threshold(img)
+
+    # Segment image
+    segm_img = img < threshold_value
+
+    UtilFunctions.show_image_in_dip_view(segm_img, 4)
+
+    # Label segmented objects
+    segm_img = dip.Label(segm_img)
+
+    # Get measurements
+    measurements = dip.MeasurementTool.Measure(segm_img, img, ['Size', 'Solidity', 'Convexity'])
+    print(measurements)
+
+    sizes = []
+    convexity = []
+    solidity = []
+
+    # Only save the measurement values of the actual objects; filter out the irrelevant objects and their measurements
+    for object in np.array(measurements):
+        if object[0] > 200:
+            sizes.append(object[0])
+            convexity.append(object[2])
+            solidity.append(object[1])
+
+    return sizes, convexity, solidity
+
 
 def measure_size_and_perimeter(img):
     threshold_value = UtilFunctions.threshold(img)
@@ -22,8 +51,6 @@ def measure_size_and_perimeter(img):
     # Opening (erosion for removing smaller objects then dilation for restoring remaining objects)
     #segm_img = dip.BinaryOpening(segm_img, -1, 4)
     #segm_img = dip.BinaryDilation(segm_img)
-
-    #UtilFunctions.show_image_in_dip_view(segm_img, 4)
 
     # Label segmented objects
     segm_img = dip.Label(segm_img)
@@ -82,6 +109,37 @@ def plot_snr_measurements(sizes, snr_values):
 if __name__ == '__main__':
     sleep_sec: int = 3
 
+    # Which images are going to be analysed?
+    image_name_list: list = ["rect4a"]
+
+    snr_values = []
+
+    for image_name in image_name_list:
+        # Load image
+        curr_img = UtilFunctions.obtain_image(image_name)
+
+        # Get pixel values from current image
+        pixel_values = UtilFunctions.get_pixel_values(curr_img)
+
+        # Get average and std of the pixel values
+        mean, std = UtilFunctions.get_mean_std(pixel_values)
+        # Calculate SNR
+        snr = mean / std
+        snr_values.append(snr)
+
+        # Calculate convexity and solidity
+        sizes, convexity, solidity = measure_conv_and_solid(curr_img)
+
+        # Every entry in array corresponds to one object in image
+        print('Sizes of ', image_name, ': ', sizes)
+        print('Convexity of ', image_name, ': ', convexity)
+        print('Solidity of ', image_name, ': ', solidity)
+
+    print(snr_values)
+
+
+    '''
+
     # Initialize and state image name lists
     image_name_list: list = ["rect1", "rect2", "rect3", "rect4", "rect1a", "rect2a", "rect3a", "rect4a", "rect1b", "rect2b", "rect3b", "rect4b"]
     image_name_list_no_noise: list = ["rect1", "rect2", "rect3", "rect4"]
@@ -135,10 +193,6 @@ if __name__ == '__main__':
     # Initialize date and time
     date_time_str = UtilFunctions.generate_date_time_str()
 
-
-
-    '''
-    
     for image_name in image_name_list_noise:
         # Load current image
         curr_img = UtilFunctions.obtain_image(image_name)
@@ -191,7 +245,6 @@ if __name__ == '__main__':
             std_perimeter.append(std)
             print("Perimeter:  | mean    ", mean, "  | std    ", std, "  |")
 
-    '''
     # Now, all the mean and std values are known for images (rect)1a,1b-4a,4b that are used for the following:
     # Plot the relative discretization error graphs for size and perimeter where FOR EACH label (size and perimeter):
     # FIRST graph shows values from images 1a-4a with first Gaussian filter, 
@@ -225,10 +278,11 @@ if __name__ == '__main__':
         snr = mean / std
 
         sizes, perimeters = measure_size_and_perimeter(curr_img)
-        # TODO: DOES NOT WORK ATM
+
         sizes = UtilFunctions.print_largest_measurements(sizes[0], perimeters[0])
 
         snr_values.append(snr)
         size_values.append(np.sum(sizes))
 
     plot_snr_measurements(size_values, snr_values)
+    '''

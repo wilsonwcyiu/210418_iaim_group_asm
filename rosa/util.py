@@ -58,16 +58,14 @@ class UtilFunctions:
         print("Only relevant objects:")
         print(sizes_top)
         print(perimeters_top)
-        # size meadn and std
-        s_mean, s_std = UtilFunctions.get_mean_std(sizes_top)
-        print("sizes mean ", s_mean, " | sizes std ", s_std)
+        mean, std = UtilFunctions.get_mean_std(sizes_top)
+        print("sizes mean ", mean, " | sizes std ", std)
 
-        # perimeter mean and std
-        p_mean, p_std = UtilFunctions.get_mean_std(perimeters_top)
-        print("perimeters mean ", p_mean, " | perimeters std ", p_std)
+        mean, std = UtilFunctions.get_mean_std(perimeters_top)
+        print("perimeters mean ", mean, " | perimeters std ", std)
         print("----------------------------------")
 
-        return s_mean, s_std, p_mean, p_std
+        return sizes_top
 
 
     @staticmethod
