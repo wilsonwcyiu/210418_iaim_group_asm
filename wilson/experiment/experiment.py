@@ -5,7 +5,7 @@ import numpy as np
 
 
 
-import diplib as dip
+
 from PIL import Image as PilImage
 import PIL
 from diplib import PyDIPjavaio
@@ -17,9 +17,9 @@ from image_util import ImageUtil
 def measure_size_and_perimeter(image: PyDIPjavaio.ImageRead):
     iso_threshold: int = 65
     rectangles = image < iso_threshold
-    rectangles = dip.Label(rectangles)
+    rectangles = diplib.Label(rectangles)
 
-    px_measure: diplib.PyDIP_bin.MeasurementTool.Measurement = dip.MeasurementTool.Measure(rectangles, image, ['Size', 'Perimeter'])
+    px_measure: diplib.PyDIP_bin.MeasurementTool.Measurement = diplib.MeasurementTool.Measure(rectangles, image, ['Size', 'Perimeter'])
 
 
     print("px_measure: ", type(px_measure), px_measure)
@@ -40,26 +40,27 @@ if __name__ == '__main__':
     image_name_list: list = ["rect1a", "rect1b", "rect2a", "rect2b", "rect3a", "rect3b", "rect4a", "rect4b"]
 
 
-    guass_value_list = [2,5]
+    guass_value_list: list = [2,5]
 
     date_time_str: str = CommonUtil.generate_date_time_str()
     for image_name in image_name_list:
         tmp_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
 
         for guass_value in guass_value_list:
+            sigmas: int = guass_value
+            tmp_guass_img: diplib.PyDIP_bin.Image = diplib.Gauss(tmp_img, sigmas)
 
-            tmp_guass_img = dip.Gauss(tmp_img, guass_value)
+            threshold_value: float = ImageUtil.threshold(tmp_guass_img)
 
-            threshold_value = ImageUtil.threshold(tmp_guass_img)
+            rectbin: diplib.PyDIP_bin.Image = tmp_guass_img < threshold_value
 
-            rectbin = tmp_guass_img < threshold_value
 
             # ImageUtil.show_image_in_dip_view(threshold_value, sleep_sec)
 
 
-            file_name = date_time_str + image_name + "_guass_filter_" + str(guass_value) + ".tiff"
+            file_name = image_name + "_guass_filter_" + str(guass_value) + ".tiff"
 
-            CommonUtil.save_image_to_default_project_folder(rectbin, file_name)
+            CommonUtil.save_image_to_default_project_folder(img=rectbin, dir_name=date_time_str, file_name=file_name)
 
             # ImageUtil.show_image_in_dip_view(tmp_img, sleep_sec)
 

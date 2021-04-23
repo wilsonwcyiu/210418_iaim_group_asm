@@ -9,7 +9,9 @@ class ImageUtil:
 
     @staticmethod
     def threshold(img: PyDIPjavaio.ImageRead):
+        threshold: float = None
         _, threshold = diplib.Threshold(img)
+
         return threshold
 
 

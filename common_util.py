@@ -1,8 +1,9 @@
-
+import os
 import time
 from datetime import datetime
 
 from diplib import PyDIPjavaio
+from os import path
 
 
 class CommonUtil:
@@ -14,9 +15,22 @@ class CommonUtil:
         return date_time_str
 
 
+    # @staticmethod
+    # def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, file_name: str):
+    #     CommonUtil.save_image_to_default_project_folder(img=img, dir_name=None, file_name=file_name)
+
+
     @staticmethod
-    def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, image_name: str):
-        PyDIPjavaio.ImageWrite(img, "../../image_output/" + image_name)
+    def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, dir_name: str, file_name: str):
+        project_dir: str = "../../image_output/"
+        dir_path_str: str = os.path.join(project_dir, dir_name)
+        full_file_path: str = os.path.join(dir_path_str, file_name)
+
+        if dir_name is not None and not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+            print("dir_path_str", dir_path_str)
+
+        PyDIPjavaio.ImageWrite(img, full_file_path)
 
 
 
