@@ -9,6 +9,13 @@ class ImageUtil:
 
 
     @staticmethod
+    def median_filter(img: PyDIPjavaio.ImageRead, median_parameter: int):
+        filtered_img = diplib.MedianFilter(img, median_parameter)
+        return filtered_img
+
+
+
+    @staticmethod
     def gauss_filter(img: PyDIPjavaio.ImageRead, sigmas: int):
         tmp_gauss_img: diplib.PyDIP_bin.Image = diplib.Gauss(img, sigmas)
         threshold_value: float = ImageUtil.threshold(tmp_gauss_img)

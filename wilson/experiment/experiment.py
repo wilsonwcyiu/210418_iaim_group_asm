@@ -38,8 +38,6 @@ if __name__ == '__main__':
     sleep_sec: int = 0
 
     image_name_list: list = ["rect1a", "rect1b", "rect2a", "rect2b", "rect3a", "rect3b", "rect4a", "rect4b"]
-
-
     guass_value_list: list = [2,5]
 
     date_time_str: str = CommonUtil.generate_date_time_str()
