@@ -6,7 +6,6 @@ from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 
 
-# test
 from util.plot_util import PlotUtil
 
 if __name__ == '__main__':
@@ -16,11 +15,11 @@ if __name__ == '__main__':
 
     date_time_str: str = CommonUtil.generate_date_time_str()
 
-    # image_name_list: list = ["rect1a", "rect2a", "rect3a", "rect4a"]
-    # img_file_name_id: str = "_imgA"
+    image_name_list: list = ["rect1a", "rect2a", "rect3a", "rect4a"]
+    img_file_name_id: str = "_imgA"
 
-    image_name_list: list = ["rect1b", "rect2b", "rect3b", "rect4b"]
-    img_file_name_id: str = "_imgB"
+    # image_name_list: list = ["rect1b", "rect2b", "rect3b", "rect4b"]
+    # img_file_name_id: str = "_imgB"
 
 
 
