@@ -19,7 +19,7 @@ class PlotUtil():
 
 
 
-    @staticmethod
+    @staticmethod       # xy_tuple_list = [(0,0), (3,5), (5,5)]
     def create_plot(plot_id: int, plot_title: str, x_label: str, y_label: str, xy_tuple_list: list):
         pyplot.figure(plot_id)
         pyplot.clf()
