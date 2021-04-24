@@ -15,9 +15,10 @@ if __name__ == '__main__':
 
     date_time_str: str = CommonUtil.generate_date_time_str()
     for image_name in image_name_list:
-        tmp_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        threshold_img = ImageUtil.obtain_threshold_image(original_img)
 
-        surface_area_list: list = ImageUtil.measure_surface_area_of_all_objects(tmp_img)
+        surface_area_list: list = ImageUtil.measure_surface_area_of_all_objects(threshold_img, original_img)
         mean: float = CommonUtil.calc_mean(surface_area_list)
         std_dev: float = CommonUtil.calc_standard_deviation(surface_area_list, mean)
 

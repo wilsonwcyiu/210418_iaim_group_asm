@@ -8,19 +8,49 @@ from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
 
 class ImageUtil:
 
+    @staticmethod
+    def obtain_threshold_image(img: diplib.PyDIP_bin.Image):
+        threshold_value: float = ImageUtil.threshold(img)
+        threshold_img: diplib.PyDIP_bin.Image = img < threshold_value
+
+        return threshold_img
+
+
+
+    @staticmethod   # median_kernel_para_list = ['rectangular', 'elliptic']
+    def median_filter(img, median_kernel_para: str):
+        filtered_img = diplib.MedianFilter(img, median_kernel_para)
+
+        return filtered_img
+
+
+
+    # @staticmethod
+    # def measure_perimeter_of_all_objects(img: PyDIPjavaio.ImageRead):
+    #     threshold_value = ImageUtil.threshold(img)
+    #
+    #     # Segment image
+    #     segm_img = img < threshold_value
+    #
+    #     # Label segmented objects
+    #     segm_img = diplib.Label(segm_img)
+    #
+    #     px_measurements = diplib.MeasurementTool.Measure(segm_img, img, ['Perimeter'])
+    #
+    #     tmp: MeasurementFeature = px_measurements['Perimeter']
+    #
+    #     numpy_list = numpy.array(tmp).transpose()[0]
+    #     perimeter_list: list = numpy_list.tolist()
+    #
+    #     return perimeter_list
+
 
 
     @staticmethod
-    def measure_perimeter_of_all_objects(img: PyDIPjavaio.ImageRead):
-        threshold_value = ImageUtil.threshold(img)
+    def measure_perimeter_of_all_objects(threshold_image, img: PyDIPjavaio.ImageRead):
+        labeled_img = diplib.Label(threshold_image)
 
-        # Segment image
-        segm_img = img < threshold_value
-
-        # Label segmented objects
-        segm_img = diplib.Label(segm_img)
-
-        px_measurements = diplib.MeasurementTool.Measure(segm_img, img, ['Perimeter'])
+        px_measurements = diplib.MeasurementTool.Measure(labeled_img, img, ['Perimeter'])
 
         tmp: MeasurementFeature = px_measurements['Perimeter']
 
@@ -31,17 +61,31 @@ class ImageUtil:
 
 
 
+    # @staticmethod
+    # def measure_surface_area_of_all_objects(img: PyDIPjavaio.ImageRead):
+    #     threshold_value: float = ImageUtil.threshold(img)
+    #
+    #     # Segment image
+    #     segm_img: diplib.PyDIP_bin.Image = img < threshold_value
+    #
+    #     # Label segmented objects
+    #     segm_img: diplib.PyDIP_bin.Image = diplib.Label(segm_img)
+    #
+    #     px_measurements: Measurement = diplib.MeasurementTool.Measure(segm_img, img, ['Size'])
+    #
+    #     tmp: MeasurementFeature = px_measurements['Size']
+    #
+    #     numpy_list = numpy.array(tmp).transpose()[0]
+    #     surface_area_list: list = numpy_list.tolist()
+    #
+    #     return surface_area_list
+
+
     @staticmethod
-    def measure_surface_area_of_all_objects(img: PyDIPjavaio.ImageRead):
-        threshold_value = ImageUtil.threshold(img)
+    def measure_surface_area_of_all_objects(threshold_image, img: PyDIPjavaio.ImageRead):
+        labeled_img = diplib.Label(threshold_image)
 
-        # Segment image
-        segm_img = img < threshold_value
-
-        # Label segmented objects
-        segm_img = diplib.Label(segm_img)
-
-        px_measurements: Measurement = diplib.MeasurementTool.Measure(segm_img, img, ['Size'])
+        px_measurements: Measurement = diplib.MeasurementTool.Measure(labeled_img, img, ['Size'])
 
         tmp: MeasurementFeature = px_measurements['Size']
 
@@ -62,11 +106,11 @@ class ImageUtil:
 
     @staticmethod
     def gauss_filter(img: PyDIPjavaio.ImageRead, sigmas: int):
-        tmp_gauss_img: diplib.PyDIP_bin.Image = diplib.Gauss(img, sigmas)
-        threshold_value: float = ImageUtil.threshold(tmp_gauss_img)
-        filtered_img: diplib.PyDIP_bin.Image = tmp_gauss_img < threshold_value
+        gauss_img: diplib.PyDIP_bin.Image = diplib.Gauss(img, sigmas)
+        threshold_value: float = ImageUtil.threshold(gauss_img)
+        filtered_img: diplib.PyDIP_bin.Image = gauss_img < threshold_value
 
-        return filtered_img
+        return gauss_img
 
 
 
@@ -80,7 +124,7 @@ class ImageUtil:
 
 
     @staticmethod
-    def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int):
+    def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int = 0):
         diplib.PyDIPviewer.Show(img)
         time.sleep(sleep_sec)
 

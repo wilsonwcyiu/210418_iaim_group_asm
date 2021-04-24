@@ -30,6 +30,10 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
 
+    # txt = "a.tiff"
+    # print(txt[:-5])
+
+
     image_name_list: list = ["rect1a", "rect1b", "rect2a", "rect2b", "rect3a", "rect3b", "rect4a", "rect4b"]
     guass_value_list: list = [2,5]
 
@@ -40,7 +44,8 @@ if __name__ == '__main__':
         for guass_value in guass_value_list:
             sigmas: int = guass_value
 
-            filtered_img = ImageUtil.gauss_filter(tmp_img, sigmas)
+            gauss_img = ImageUtil.gauss_filter(tmp_img, sigmas)
+            filtered_img = ImageUtil.obtain_threshold_image(gauss_img)
 
             file_name = image_name + "_guass_filter_" + str(guass_value) + ".tiff"
 

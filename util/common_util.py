@@ -16,6 +16,23 @@ import numpy as np
 
 class CommonUtil:
 
+    @staticmethod
+    def derive_relative_error(float_list: list):
+        mean: float = CommonUtil.calc_mean(float_list)
+        std_dev: float = CommonUtil.calc_standard_deviation(float_list, mean)
+
+        square_root_of_perimeter_mean: float = CommonUtil.square_root(mean)
+        coefficient_of_variation: float = std_dev / mean
+
+        return square_root_of_perimeter_mean, coefficient_of_variation
+
+
+
+    @staticmethod
+    def press_enter_to_continue():
+        input("Press enter to end the process...")
+
+
 
     @staticmethod
     def square_root(data: float):
