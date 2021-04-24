@@ -1,17 +1,10 @@
-import time
-
 import diplib
 import numpy as np
 
-
-
-
-from PIL import Image as PilImage
-import PIL
 from diplib import PyDIPjavaio
 
-from common_util import CommonUtil
-from image_util import ImageUtil
+from util.common_util import CommonUtil
+from util.image_util import ImageUtil
 
 
 def measure_size_and_perimeter(image: PyDIPjavaio.ImageRead):

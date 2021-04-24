@@ -3,9 +3,54 @@ import time
 import diplib
 import numpy
 from diplib import PyDIPjavaio
+from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
 
 
 class ImageUtil:
+
+
+
+    @staticmethod
+    def measure_perimeter_of_all_objects(img: PyDIPjavaio.ImageRead):
+        threshold_value = ImageUtil.threshold(img)
+
+        # Segment image
+        segm_img = img < threshold_value
+
+        # Label segmented objects
+        segm_img = diplib.Label(segm_img)
+
+        px_measurements = diplib.MeasurementTool.Measure(segm_img, img, ['Perimeter'])
+
+        tmp: MeasurementFeature = px_measurements['Perimeter']
+
+        numpy_list = numpy.array(tmp).transpose()[0]
+        perimeter_list: list = numpy_list.tolist()
+
+        return perimeter_list
+
+
+
+    @staticmethod
+    def measure_surface_area_of_all_objects(img: PyDIPjavaio.ImageRead):
+        threshold_value = ImageUtil.threshold(img)
+
+        # Segment image
+        segm_img = img < threshold_value
+
+        # Label segmented objects
+        segm_img = diplib.Label(segm_img)
+
+        px_measurements: Measurement = diplib.MeasurementTool.Measure(segm_img, img, ['Size'])
+
+        tmp: MeasurementFeature = px_measurements['Size']
+
+        numpy_list = numpy.array(tmp).transpose()[0]
+        surface_area_list: list = numpy_list.tolist()
+
+        return surface_area_list
+
+
 
 
     @staticmethod
@@ -38,6 +83,7 @@ class ImageUtil:
     def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int):
         diplib.PyDIPviewer.Show(img)
         time.sleep(sleep_sec)
+
 
 
 
