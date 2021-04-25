@@ -17,7 +17,7 @@ if __name__ == '__main__':
     date_time_str: str = CommonUtil.generate_date_time_str()
 
     image_name_list: list = ["rect1a", "rect2a", "rect3a", "rect4a"]
-    img_file_name_id: str = "_imgA"
+    img_file_group_name_id: str = "_imgA"
 
     # image_name_list: list = ["rect1b", "rect2b", "rect3b", "rect4b"]
     # img_file_name_id: str = "_imgB"
@@ -57,16 +57,16 @@ if __name__ == '__main__':
 
 
     plot_id: int = 1; plot_title: str = "Relative Error";  x_label: str = "Square root of Size Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_size_filter1_gauss_filter_para1_" + str(sigma_value)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_size_filter1_gauss_filter_para1_" + str(sigma_value)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 
     plot_id: int = 2; plot_title: str = "Relative Error";  x_label: str = "Square root of Perimeter Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_perimeter_filter1_gauss_filter_para1_" + str(sigma_value)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_perimeter_filter1_gauss_filter_para1_" + str(sigma_value)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 
@@ -103,16 +103,16 @@ if __name__ == '__main__':
 
 
     plot_id: int = 3; plot_title: str = "Relative Error";  x_label: str = "Square root of Size Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_size_filter1_gauss_filter_para2_" + str(sigma_value)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_size_filter1_gauss_filter_para2_" + str(sigma_value)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 
     plot_id: int = 4; plot_title: str = "Relative Error";  x_label: str = "Square root of Perimeter Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_perimeter_filter1_gauss_filter_para2_" + str(sigma_value)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_perimeter_filter1_gauss_filter_para2_" + str(sigma_value)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 
@@ -150,16 +150,16 @@ if __name__ == '__main__':
 
 
     plot_id: int = 5; plot_title: str = "Relative Error";  x_label: str = "Square root of Size Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_size_filter2_median_filter_para1_" + str(median_para)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_size_filter2_median_filter_para1_" + str(median_para)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 
     plot_id: int = 6; plot_title: str = "Relative Error";  x_label: str = "Square root of Perimeter Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_perimeter_filter2_median_filter_para1_" + str(median_para)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_perimeter_filter2_median_filter_para1_" + str(median_para)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 
@@ -197,16 +197,16 @@ if __name__ == '__main__':
 
 
     plot_id: int = 7; plot_title: str = "Relative Error";  x_label: str = "Square root of Size Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, surface_area_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_size_filter2_median_filter_para2_" + str(median_para)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_size_filter2_median_filter_para2_" + str(median_para)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 
     plot_id: int = 8; plot_title: str = "Relative Error";  x_label: str = "Square root of Perimeter Mean";  y_label: str = "Coefficient of Variation (CV)"
-    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list)
+    plt: pyplot = PlotUtil.create_plot(plot_id, plot_title, x_label, y_label, perimeter_relative_error_xy_tuple_list, marker="o")
 
-    plot_file_name: str = "relative_error_of" + img_file_name_id + "_perimeter_filter2_median_filter_para2_" + str(median_para)
+    plot_file_name: str = "relative_error_of" + img_file_group_name_id + "_perimeter_filter2_median_filter_para2_" + str(median_para)
     PlotUtil.save_plot_to_project_folder(plt, date_time_str, plot_file_name)
 
 

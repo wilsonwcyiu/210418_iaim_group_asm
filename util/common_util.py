@@ -1,5 +1,6 @@
 import math
 import os
+import pprint
 import time
 from datetime import datetime
 
@@ -15,6 +16,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class CommonUtil:
+
+
+    @staticmethod
+    def pretty_print(obj: object, width=10000):
+        pprint.pprint(obj, width=width)
+
+
 
     @staticmethod
     def derive_relative_error(float_list: list):

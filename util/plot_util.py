@@ -20,7 +20,7 @@ class PlotUtil():
 
 
     @staticmethod       # xy_tuple_list = [(0,0), (3,5), (5,5)]
-    def create_plot(plot_id: int, plot_title: str, x_label: str, y_label: str, xy_tuple_list: list):
+    def create_plot(plot_id: int, plot_title: str, x_label: str, y_label: str, xy_tuple_list: list, marker=''):
         pyplot.figure(plot_id)
         pyplot.clf()
         pyplot.title(plot_title)
@@ -33,7 +33,7 @@ class PlotUtil():
             x_list.append(xy_tuple[0])
             y_list.append(xy_tuple[1])
 
-        pyplot.plot(x_list, y_list)
+        pyplot.plot(x_list, y_list, marker=marker)
 
         return pyplot
 
