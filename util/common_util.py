@@ -1,21 +1,79 @@
+import json
 import math
 import os
 import pprint
 import time
 from datetime import datetime
-
-from diplib import PyDIPjavaio
+from decimal import Decimal
 from os import path
 
-import json
-import os
-from datetime import datetime
-from decimal import Decimal
+import pandas
+from diplib import PyDIPjavaio
 
-import matplotlib.pyplot as plt
-import numpy as np
 
 class CommonUtil:
+
+    @staticmethod
+    def obtain_project_default_output_file_path(project_file_output_dir_name: str = "file_output", max_layers: int = 20):
+        parent_dir: str = os.getcwd()
+
+        project_default_output_file_path: str = ""
+        layer_idx: int = 0
+        while True:
+            for root, sub_dir_name_list, files in os.walk(parent_dir):
+                for sub_dir_name in sub_dir_name_list:
+                    if sub_dir_name == project_file_output_dir_name:
+                        project_default_output_file_path += project_file_output_dir_name + "/"
+                        return project_default_output_file_path
+
+
+            parent_dir, dir_name = os.path.split(parent_dir)
+            if dir_name != project_file_output_dir_name:
+                project_default_output_file_path += "../"
+
+            elif dir_name == project_file_output_dir_name:
+                project_default_output_file_path += dir_name + "/"
+                return project_default_output_file_path
+
+
+            layer_idx += 1
+            if layer_idx == max_layers:
+                err_msg: str = "directory " + project_file_output_dir_name + " not exist in the " + str(max_layers) + " layer above"
+                raise Exception(err_msg)
+
+
+
+
+    # players = [{'dailyWinners': 3, 'dailyFreePlayed': 2, 'user': 'Player1', 'bank': 0.06},
+    #            {'dailyWinners': 3, 'dailyFreePlayed': 2, 'user': 'Player2', 'bank': 4.0},
+    #            {'dailyWinners': 1, 'dailyFree': 2, 'user': 'Player3', 'bank': 3.1}]
+    @staticmethod
+    def write_list_of_dict_to_excel(list_of_dict: dict, file_path: str):
+        parent_dir, dir_name = os.path.split(file_path)
+
+        if dir_name is not None and not path.exists(parent_dir):
+            os.mkdir(parent_dir, 0x0755)
+
+        print("file_path", file_path)
+        df = pandas.DataFrame.from_dict(list_of_dict)
+        df.to_excel(file_path)
+
+
+
+
+    @staticmethod
+    def calc_signal_to_noise_ratio_SNR(mean: float, standard_deviation: float):
+        SNR: float = standard_deviation / mean
+
+        return SNR
+
+
+
+    @staticmethod
+    def calc_coefficient_of_variation_CV(mean: float, standard_deviation: float):
+        cv: float = mean / standard_deviation
+
+        return cv
 
 
     @staticmethod
@@ -75,7 +133,6 @@ class CommonUtil:
 
         if dir_name is not None and not path.exists(dir_path_str):
             os.mkdir(dir_path_str, 0x0755)
-            print("dir_path_str", dir_path_str)
 
         PyDIPjavaio.ImageWrite(img, full_file_path)
 

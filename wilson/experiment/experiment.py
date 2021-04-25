@@ -33,25 +33,29 @@ if __name__ == '__main__':
     # txt = "a.tiff"
     # print(txt[:-5])
 
+    # CommonUtil.obtain_project_default_output_file_path(project_file_output_dir_name="s")
+    dir: str = CommonUtil.obtain_project_default_output_file_path("image_output")
+    print(dir)
 
-    image_name_list: list = ["rect1a", "rect1b", "rect2a", "rect2b", "rect3a", "rect3b", "rect4a", "rect4b"]
-    guass_value_list: list = [2,5]
 
-    date_time_str: str = CommonUtil.generate_date_time_str()
-    for image_name in image_name_list:
-        tmp_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
-
-        for guass_value in guass_value_list:
-            sigmas: int = guass_value
-
-            gauss_img = ImageUtil.gauss_filter(tmp_img, sigmas)
-            filtered_img = ImageUtil.obtain_threshold_image(gauss_img)
-
-            file_name = image_name + "_guass_filter_" + str(guass_value) + ".tiff"
-
-            CommonUtil.save_image_to_default_project_folder(img=filtered_img, dir_name=date_time_str, file_name=file_name)
-
-            # ImageUtil.show_image_in_dip_view(filtered_img, sleep_sec)
+    # image_name_list: list = ["rect1a", "rect1b", "rect2a", "rect2b", "rect3a", "rect3b", "rect4a", "rect4b"]
+    # guass_value_list: list = [2,5]
+    #
+    # date_time_str: str = CommonUtil.generate_date_time_str()
+    # for image_name in image_name_list:
+    #     tmp_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+    #
+    #     for guass_value in guass_value_list:
+    #         sigmas: int = guass_value
+    #
+    #         gauss_img = ImageUtil.gauss_filter(tmp_img, sigmas)
+    #         filtered_img = ImageUtil.obtain_threshold_image(gauss_img)
+    #
+    #         file_name = image_name + "_guass_filter_" + str(guass_value) + ".tiff"
+    #
+    #         CommonUtil.save_image_to_default_project_folder(img=filtered_img, dir_name=date_time_str, file_name=file_name)
+    #
+    #         # ImageUtil.show_image_in_dip_view(filtered_img, sleep_sec)
 
 
 
