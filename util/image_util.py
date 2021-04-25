@@ -8,6 +8,35 @@ from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
 
 class ImageUtil:
 
+
+    @staticmethod
+    def obtain_convexity(threshold_img: diplib.PyDIP_bin.Image, original_img: diplib.PyDIP_bin.Image):
+        labeled_img = diplib.Label(threshold_img)
+
+        measurements = diplib.MeasurementTool.Measure(labeled_img, original_img, ['Convexity'])
+
+        convenity_list: list = []
+        for object in numpy.array(measurements):
+            convenity_list.append(object[0])
+
+        return convenity_list
+
+
+
+    @staticmethod
+    def obtain_solidity(threshold_img: diplib.PyDIP_bin.Image, original_img: diplib.PyDIP_bin.Image):
+        labeled_img = diplib.Label(threshold_img)
+
+        measurements = diplib.MeasurementTool.Measure(labeled_img, original_img, ['Solidity'])
+
+        solidity_list: list = []
+        for object in numpy.array(measurements):
+            solidity_list.append(object[0])
+
+        return solidity_list
+
+
+
     @staticmethod
     def obtain_threshold_image(img: diplib.PyDIP_bin.Image):
         threshold_value: float = ImageUtil.threshold(img)
