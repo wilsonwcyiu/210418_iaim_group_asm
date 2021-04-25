@@ -54,7 +54,6 @@ class CommonUtil:
         if dir_name is not None and not path.exists(parent_dir):
             os.mkdir(parent_dir, 0x0755)
 
-        print("file_path", file_path)
         df = pandas.DataFrame.from_dict(list_of_dict)
         df.to_excel(file_path)
 
@@ -123,6 +122,17 @@ class CommonUtil:
     # @staticmethod
     # def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, file_name: str):
     #     CommonUtil.save_image_to_default_project_folder(img=img, dir_name=None, file_name=file_name)
+
+
+    @staticmethod
+    def save_image_to_folder(img: PyDIPjavaio.ImageRead, dir_path_str: str, file_name: str):
+        if not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+
+        full_file_path: str = os.path.join(dir_path_str, file_name)
+
+        PyDIPjavaio.ImageWrite(img, full_file_path)
+
 
 
     @staticmethod
