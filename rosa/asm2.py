@@ -20,18 +20,18 @@ def measure_conv_and_solid(img):
     # Segment image
     segm_img = img < threshold_value
 
-    UtilFunctions.show_image_in_dip_view(segm_img, 4)
+    #UtilFunctions.show_image_in_dip_view(segm_img, 4)
 
     # Label segmented objects
     segm_img = dip.Label(segm_img)
 
     # Get measurements
     measurements = dip.MeasurementTool.Measure(segm_img, img, ['Size', 'Solidity', 'Convexity'])
-    print(measurements)
 
     sizes = []
     convexity = []
     solidity = []
+    perimeters = []
 
     # Only save the measurement values of the actual objects; filter out the irrelevant objects and their measurements
     for object in np.array(measurements):
@@ -39,8 +39,9 @@ def measure_conv_and_solid(img):
             sizes.append(object[0])
             convexity.append(object[2])
             solidity.append(object[1])
+            perimeters.append(object[4])
 
-    return sizes, convexity, solidity
+    return sizes, convexity, solidity, perimeters
 
 
 def measure_size_and_perimeter(img):
@@ -81,12 +82,12 @@ def plot_relative_discretization_error(mean_array, std_array, label, img_series)
     fig.savefig("../plot_output/" + label + "_" + img_series)
 
 
-def plot_snr_measurements(sizes, snr_values):
-    labels = ['no noise series, no filter', 'no noise series, with filter', 'A series, with filter', 'B series, with filter']
-    colors = ['tab:gray', 'tab:blue', 'tab:green', 'tab:red']
+def plot_snr_measurements(sizes, snr_values, image_names):
+    labels = ['no noise series', 'A series']
+    colors = ['tab:gray', 'tab:blue']
 
-    sizes_per_series = [sizes[0:4], sizes[4:8], sizes[8:12], sizes[12:16]]
-    snr_per_series = [snr_values[0:4], snr_values[4:8], snr_values[8:12], snr_values[12:16]]
+    sizes_per_series = [sizes[0:4], sizes[4:8]]
+    snr_per_series = [snr_values[0:4], snr_values[4:8]]
     fig, ax = plt.subplots()
 
     for i in range(len(sizes_per_series)):
@@ -100,9 +101,9 @@ def plot_snr_measurements(sizes, snr_values):
 
     ax.legend()
 
-    ax.set(xlabel='log(size)',
+    ax.set(xlabel='log(total perimeter of objects in image)',
            ylabel='SNR value',
-           title='SNR related to the measurement')
+           title='SNR related to the perimeter')
     fig.savefig("../plot_output/snr_plot")
 
 
@@ -110,9 +111,11 @@ if __name__ == '__main__':
     sleep_sec: int = 3
 
     # Which images are going to be analysed?
-    image_name_list: list = ["rect4a"]
+    image_name_list: list = ["rect1", "rect2", "rect3", "rect4", "rect1a", "rect2a", "rect3a", "rect4a"]
 
     snr_values = []
+    sum_sizes = []
+    sum_perimeters = []
 
     for image_name in image_name_list:
         # Load image
@@ -128,14 +131,25 @@ if __name__ == '__main__':
         snr_values.append(snr)
 
         # Calculate convexity and solidity
-        sizes, convexity, solidity = measure_conv_and_solid(curr_img)
+        sizes, convexity, solidity, perimeters = measure_conv_and_solid(curr_img)
 
         # Every entry in array corresponds to one object in image
         print('Sizes of ', image_name, ': ', sizes)
+        print('Perimeters of ', image_name, ': ', perimeters)
         print('Convexity of ', image_name, ': ', convexity)
         print('Solidity of ', image_name, ': ', solidity)
 
-    print(snr_values)
+        #norm_convexity_value = sum(convexity) / len(convexity)
+        #norm_convexity.append(norm_convexity_value)
+
+        sum_sizes.append(sum(sizes))
+        sum_perimeters.append(sum(perimeters))
+
+
+    #print(norm_convexity)
+    #print(sum_sizes)
+
+    plot_snr_measurements(sum_perimeters, snr_values, image_name_list)
 
 
     '''
