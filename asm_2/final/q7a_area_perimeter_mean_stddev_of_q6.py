@@ -18,6 +18,7 @@ if __name__ == '__main__':
 
 
     date_time_str: str = CommonUtil.generate_date_time_str()
+    output_dir: str = CommonUtil.obtain_project_default_output_file_path() + date_time_str + "/"
 
     result_dict_list: list = []
 
@@ -30,7 +31,7 @@ if __name__ == '__main__':
         threshold_img = ImageUtil.obtain_threshold_image(gauss_img)
 
         file_name = image_name + "_filter1_gauss_filter_para1_" + str(sigma_value) + ".tif"
-        CommonUtil.save_image_to_default_project_folder(img=original_img, dir_name=date_time_str, file_name=file_name)
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
 
         surface_area_list: list = ImageUtil.measure_surface_area_of_all_objects(threshold_img, original_img)
@@ -68,7 +69,7 @@ if __name__ == '__main__':
         threshold_img = ImageUtil.obtain_threshold_image(gauss_img)
 
         file_name = image_name + "_filter1_gauss_filter_para2_" + str(sigma_value) + ".tif"
-        CommonUtil.save_image_to_default_project_folder(img=threshold_img, dir_name=date_time_str, file_name=file_name)
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
 
         surface_area_list: list = ImageUtil.measure_surface_area_of_all_objects(threshold_img, original_img)
@@ -106,7 +107,7 @@ if __name__ == '__main__':
         threshold_img = ImageUtil.obtain_threshold_image(median_img)
 
         file_name = image_name + "_filter1_median_filter_para1_" + str(median_para) + ".tif"
-        CommonUtil.save_image_to_default_project_folder(img=threshold_img, dir_name=date_time_str, file_name=file_name)
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
 
         surface_area_list: list = ImageUtil.measure_surface_area_of_all_objects(threshold_img, original_img)
@@ -144,7 +145,7 @@ if __name__ == '__main__':
         threshold_img = ImageUtil.obtain_threshold_image(median_img)
 
         file_name = image_name + "_filter1_median_filter_para2_" + str(median_para) + ".tif"
-        CommonUtil.save_image_to_default_project_folder(img=threshold_img, dir_name=date_time_str, file_name=file_name)
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
 
         surface_area_list: list = ImageUtil.measure_surface_area_of_all_objects(threshold_img, original_img)

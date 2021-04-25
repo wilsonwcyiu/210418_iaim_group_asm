@@ -13,8 +13,11 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
 
-    image_name_list: list = ["rect1a", "rect2a", "rect3a", "rect4a",
-                             "rect1b", "rect2b", "rect3b", "rect4b"]
+    image_name_list: list = [
+                            "rect1", "rect2", "rect3", "rect4"
+                            # "rect1a", "rect2a", "rect3a", "rect4a",
+                            # "rect1b", "rect2b", "rect3b", "rect4b"
+                            ]
 
 
     date_time_str: str = CommonUtil.generate_date_time_str()
@@ -31,6 +34,8 @@ if __name__ == '__main__':
         file_name = image_name + "_original_" + ".tif"
         CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
+
         solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
         solidity_mean: float = CommonUtil.calc_mean(solidity_list)
         solidity_std_dev: float = CommonUtil.calc_standard_deviation(solidity_list, solidity_mean)
@@ -46,6 +51,7 @@ if __name__ == '__main__':
         result_dict: dict = {}
         result_dict["image_name"] = image_name
         result_dict["filter_name"] = "no filter"
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
 
         result_dict["solidity_list"] = str(solidity_list)
         result_dict["solidity_mean"] = solidity_mean
@@ -72,6 +78,7 @@ if __name__ == '__main__':
         file_name = image_name + "_filter1_gauss_filter_para1_" + str(sigma_value) + ".tif"
         CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
 
         solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
         solidity_mean: float = CommonUtil.calc_mean(solidity_list)
@@ -88,6 +95,7 @@ if __name__ == '__main__':
         result_dict["image_name"] = image_name
         result_dict["filter_name"] = "gaussian"
         result_dict["parameter"] = "signma: " + str(sigma_value)
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
 
         result_dict["solidity_list"] = str(solidity_list)
         result_dict["solidity_mean"] = solidity_mean
@@ -114,6 +122,7 @@ if __name__ == '__main__':
         file_name = image_name + "_filter1_gauss_filter_para2_" + str(sigma_value) + ".tif"
         CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
 
         solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
         solidity_mean: float = CommonUtil.calc_mean(solidity_list)
@@ -130,6 +139,7 @@ if __name__ == '__main__':
         result_dict["image_name"] = image_name
         result_dict["filter_name"] = "gaussian"
         result_dict["parameter"] = "signma: " + str(sigma_value)
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
 
         result_dict["solidity_list"] = str(solidity_list)
         result_dict["solidity_mean"] = solidity_mean
@@ -154,8 +164,9 @@ if __name__ == '__main__':
         threshold_img = ImageUtil.obtain_threshold_image(median_img)
 
         file_name = image_name + "_filter1_median_filter_para1_" + str(median_para) + ".tif"
-        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=date_time_str, file_name=file_name)
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
 
         solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
         solidity_mean: float = CommonUtil.calc_mean(solidity_list)
@@ -172,6 +183,7 @@ if __name__ == '__main__':
         result_dict["image_name"] = image_name
         result_dict["filter_name"] = "median"
         result_dict["parameter"] = median_para
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
 
         result_dict["solidity_list"] = str(solidity_list)
         result_dict["solidity_mean"] = solidity_mean
@@ -198,6 +210,7 @@ if __name__ == '__main__':
         file_name = image_name + "_filter1_median_filter_para2_" + str(median_para) + ".tif"
         CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
 
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
 
         solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
         solidity_mean: float = CommonUtil.calc_mean(solidity_list)
@@ -215,6 +228,7 @@ if __name__ == '__main__':
         result_dict["image_name"] = image_name
         result_dict["filter_name"] = "median"
         result_dict["parameter"] = median_para
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
 
         result_dict["solidity_list"] = str(solidity_list)
         result_dict["solidity_mean"] = solidity_mean
@@ -236,4 +250,5 @@ if __name__ == '__main__':
     xlsx_path = CommonUtil.obtain_project_default_output_file_path() + date_time_str + "/" + date_time_str + "_solidity_convexity_snr_excel.xlsx"
     CommonUtil.write_list_of_dict_to_excel(result_dict_list, xlsx_path)
 
+    print("output folder " + output_dir)
     CommonUtil.press_enter_to_continue()

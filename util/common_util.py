@@ -13,6 +13,18 @@ from diplib import PyDIPjavaio
 
 class CommonUtil:
 
+
+    @staticmethod
+    def filter_list_value_smaller_than(data_list: int, filter_value: int):
+        filtered_list: list = []
+        for data in data_list:
+            if data > filter_value:
+                filtered_list.append(data)
+
+        return filtered_list
+
+
+
     @staticmethod
     def obtain_project_default_output_file_path(project_file_output_dir_name: str = "file_output", max_layers: int = 20):
         parent_dir: str = os.getcwd()

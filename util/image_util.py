@@ -5,8 +5,82 @@ import numpy
 from diplib import PyDIPjavaio
 from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
 
+from util.common_util import CommonUtil
+
 
 class ImageUtil:
+
+    @staticmethod
+    def sum_of_pixel_value(img: PyDIPjavaio.ImageRead):
+        pixel_value_list: list = ImageUtil.obtain_pixel_value_list(img)
+
+        sum_of_pixel_value: float = numpy.sum(pixel_value_list)
+
+        return sum_of_pixel_value
+
+
+
+    @staticmethod
+    def obtain_histogram_list(img: PyDIPjavaio.ImageRead):
+        pixel_value_list: list = ImageUtil.obtain_pixel_value_list(img)
+
+        max_pixel_value: int = max(pixel_value_list)
+
+        if max_pixel_value < 256:
+            max_value = 256
+
+
+        histogram_list: list = ([0] * max_value) + 1
+
+
+        for pixel_location in range(len(img)):
+            pixel_value = img[pixel_location][0]
+            histogram_list[pixel_value] += 1
+
+        return histogram_list
+
+
+
+
+    @staticmethod
+    def calc_snr(img: PyDIPjavaio.ImageRead):
+        pixel_value_list: list = ImageUtil.obtain_pixel_value_list(img)
+
+        mean: float = CommonUtil.calc_mean(pixel_value_list)
+        standard_deviation: float = CommonUtil.calc_standard_deviation(pixel_value_list, mean)
+
+        snr: float = mean / standard_deviation
+
+        return snr
+
+
+
+    @staticmethod
+    def obtain_pixel_value_list(img: PyDIPjavaio.ImageRead):
+        pixel_value_list: list = []
+
+        for pixel_location in range(len(img)):
+            pixel_value: int = int(img[pixel_location][0])
+            pixel_value_list.append(pixel_value)
+
+        return pixel_value_list
+
+
+
+
+    @staticmethod
+    def detect_number_of_objects(threshold_img: diplib.PyDIP_bin.Image, original_img: diplib.PyDIP_bin.Image):
+        labeled_img = diplib.Label(threshold_img)
+
+        measurements = diplib.MeasurementTool.Measure(labeled_img, original_img, ['Size'])
+
+        number_of_objects: int = 0
+        for object in numpy.array(measurements):
+            number_of_objects += 1
+
+        return number_of_objects
+
+
 
 
     @staticmethod
@@ -136,8 +210,8 @@ class ImageUtil:
     @staticmethod
     def gauss_filter(img: PyDIPjavaio.ImageRead, sigmas: int):
         gauss_img: diplib.PyDIP_bin.Image = diplib.Gauss(img, sigmas)
-        threshold_value: float = ImageUtil.threshold(gauss_img)
-        filtered_img: diplib.PyDIP_bin.Image = gauss_img < threshold_value
+        # threshold_value: float = ImageUtil.threshold(gauss_img)
+        # filtered_img: diplib.PyDIP_bin.Image = gauss_img < threshold_value
 
         return gauss_img
 
@@ -153,8 +227,8 @@ class ImageUtil:
 
 
     @staticmethod
-    def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int = 0):
-        diplib.PyDIPviewer.Show(img)
+    def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int = 0, title="No title"):
+        diplib.PyDIPviewer.Show(img, title=title)
         time.sleep(sleep_sec)
 
 

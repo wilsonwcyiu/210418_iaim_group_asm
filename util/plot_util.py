@@ -7,6 +7,35 @@ from matplotlib import pyplot
 class PlotUtil():
 
     @staticmethod
+    def save_plot_to_folder(plt: pyplot, dir_path_str: str, file_name: str):
+        full_file_path: str = os.path.join(dir_path_str, file_name)
+
+        if dir_path_str is not None and not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+
+        plt.savefig(full_file_path)
+
+
+
+    @staticmethod       # xy_tuple_list = [(0,0), (3,5), (5,5)]
+    def create_plot_hist(plot_id: int, plot_title: str, x_label: str, y_label: str, data_list: list, bins:int=None):
+        pyplot.figure(plot_id)
+        pyplot.clf()
+        pyplot.title(plot_title)
+        pyplot.xlabel(x_label)
+        pyplot.ylabel(y_label)
+
+        if bins is None:
+            bins = int(max(data_list) + 1)
+
+        pyplot.hist(data_list, bins=bins)
+
+        return pyplot
+
+
+
+
+    @staticmethod
     def save_plot_to_project_folder(plt: pyplot, dir_name: str, file_name: str):
         project_dir: str = "../../image_output/"
         dir_path_str: str = os.path.join(project_dir, dir_name)

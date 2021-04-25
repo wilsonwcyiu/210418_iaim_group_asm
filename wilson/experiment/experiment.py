@@ -2,6 +2,7 @@ import diplib
 import numpy as np
 
 from diplib import PyDIPjavaio
+from matplotlib import pyplot
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
@@ -30,12 +31,32 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
 
+    surface_area_list = [1,100, 1000]
+    surface_area_list = [x for x in surface_area_list if x > 50]
+
+    print("surface_area_list", surface_area_list)
+
+    # data = np.random.randn(100).tolist()
+    #
+    # pyplot.figure(1)
+    # pyplot.clf()
+    #
+    # # pyplot.hist(hist_data_list, bins=len(hist_data_list))
+    # pyplot.hist(data)
+    # pyplot.show()
+
+    # return pyplot
+
+    # PlotUtil.create_plot_hist(data)
+
+    # print(data)
+
     # txt = "a.tiff"
     # print(txt[:-5])
 
     # CommonUtil.obtain_project_default_output_file_path(project_file_output_dir_name="s")
-    dir: str = CommonUtil.obtain_project_default_output_file_path("image_output")
-    print(dir)
+    # dir: str = CommonUtil.obtain_project_default_output_file_path("image_output")
+    # print(dir)
 
 
     # image_name_list: list = ["rect1a", "rect1b", "rect2a", "rect2b", "rect3a", "rect3b", "rect4a", "rect4b"]
