@@ -72,11 +72,11 @@ class CommonUtil:
 
 
 
-    @staticmethod
-    def calc_signal_to_noise_ratio_SNR(mean: float, standard_deviation: float):
-        SNR: float = standard_deviation / mean
-
-        return SNR
+    # @staticmethod
+    # def calc_signal_to_noise_ratio_SNR(mean: float, standard_deviation: float):
+    #     SNR: float = standard_deviation / mean
+    #
+    #     return SNR
 
 
 
@@ -88,7 +88,7 @@ class CommonUtil:
 
 
     @staticmethod
-    def pretty_print(obj: object, width=10000):
+    def pretty_print(obj: object, width=100):
         pprint.pprint(obj, width=width)
 
 

@@ -11,6 +11,19 @@ from util.common_util import CommonUtil
 class ImageUtil:
 
     @staticmethod
+    def calculate_signal_to_noise_ratio_SNR(original_img: diplib.PyDIP_bin.Image):
+        pixel_value_list: list = ImageUtil.obtain_pixel_value_list(original_img)
+
+        mean: float = numpy.mean(pixel_value_list)
+        standard_dev: float = numpy.std(pixel_value_list)
+
+        snr: float = mean / standard_dev
+
+        return snr
+
+
+
+    @staticmethod
     def sum_of_pixel_value(img: PyDIPjavaio.ImageRead):
         pixel_value_list: list = ImageUtil.obtain_pixel_value_list(img)
 
@@ -236,7 +249,9 @@ class ImageUtil:
 
     @staticmethod
     def obtain_image(image_name: str):
-        image_file_path = "../../image_files/" + image_name
+        dir_path = CommonUtil.obtain_project_default_output_file_path("image_files")
+        image_file_path = dir_path + image_name
+        # image_file_path = "../../image_files/" + image_name
 
         img: PyDIPjavaio.ImageRead = diplib.ImageRead(image_file_path)
 

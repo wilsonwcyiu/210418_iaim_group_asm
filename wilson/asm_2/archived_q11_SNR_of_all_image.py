@@ -1,0 +1,254 @@
+import diplib
+from diplib import PyDIPjavaio
+from matplotlib import pyplot
+
+from util.common_util import CommonUtil
+from util.image_util import ImageUtil
+import pprint
+
+# test
+from util.plot_util import PlotUtil
+
+if __name__ == '__main__':
+    print("starting...")
+    sleep_sec: int = 0
+
+    image_name_list: list = [
+                            "rect1", "rect2", "rect3", "rect4"
+                            # "rect1a", "rect2a", "rect3a", "rect4a",
+                            # "rect1b", "rect2b", "rect3b", "rect4b"
+                            ]
+
+
+    date_time_str: str = CommonUtil.generate_date_time_str()
+    output_dir: str = CommonUtil.obtain_project_default_output_file_path() + date_time_str + "/"
+    result_dict_list: list = []
+
+
+
+    # original image SNR
+    for image_name in image_name_list:
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        threshold_img = ImageUtil.obtain_threshold_image(original_img)
+
+        file_name = image_name + "_original_" + ".tif"
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
+
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
+
+        solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
+        solidity_mean: float = CommonUtil.calc_mean(solidity_list)
+        solidity_std_dev: float = CommonUtil.calc_standard_deviation(solidity_list, solidity_mean)
+
+        convexity_list: list = ImageUtil.obtain_convexity(threshold_img, original_img)
+        convexity_mean: float = CommonUtil.calc_mean(convexity_list)
+        convexity_std_dev: float = CommonUtil.calc_standard_deviation(convexity_list, convexity_mean)
+
+        solidity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(solidity_mean, solidity_std_dev)
+        convexity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(convexity_mean, convexity_std_dev)
+
+
+        result_dict: dict = {}
+        result_dict["image_name"] = image_name
+        result_dict["filter_name"] = "no filter"
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
+
+        result_dict["solidity_list"] = str(solidity_list)
+        result_dict["solidity_mean"] = solidity_mean
+        result_dict["solidity_std_dev"] = solidity_std_dev
+        result_dict["solidity_snr"] = solidity_snr
+
+        result_dict["convexity_list"] = str(convexity_list)
+        result_dict["convexity_mean"] = convexity_mean
+        result_dict["convexity_std_dev"] = convexity_std_dev
+        result_dict["convexity_snr"] = convexity_snr
+
+        result_dict_list.append(result_dict)
+
+
+
+    # filter 1 para 1
+    for image_name in image_name_list:
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+
+        sigma_value: int = 2
+        gauss_img = ImageUtil.gauss_filter(original_img, sigma_value)
+        threshold_img = ImageUtil.obtain_threshold_image(gauss_img)
+
+        file_name = image_name + "_filter1_gauss_filter_para1_" + str(sigma_value) + ".tif"
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
+
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
+
+        solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
+        solidity_mean: float = CommonUtil.calc_mean(solidity_list)
+        solidity_std_dev: float = CommonUtil.calc_standard_deviation(solidity_list, solidity_mean)
+
+        convexity_list: list = ImageUtil.obtain_convexity(threshold_img, original_img)
+        convexity_mean: float = CommonUtil.calc_mean(convexity_list)
+        convexity_std_dev: float = CommonUtil.calc_standard_deviation(convexity_list, convexity_mean)
+
+        solidity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(solidity_mean, solidity_std_dev)
+        convexity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(convexity_mean, convexity_std_dev)
+
+        result_dict: dict = {}
+        result_dict["image_name"] = image_name
+        result_dict["filter_name"] = "gaussian"
+        result_dict["parameter"] = "signma: " + str(sigma_value)
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
+
+        result_dict["solidity_list"] = str(solidity_list)
+        result_dict["solidity_mean"] = solidity_mean
+        result_dict["solidity_std_dev"] = solidity_std_dev
+        result_dict["solidity_snr"] = solidity_snr
+
+        result_dict["convexity_list"] = str(convexity_list)
+        result_dict["convexity_mean"] = convexity_mean
+        result_dict["convexity_std_dev"] = convexity_std_dev
+        result_dict["convexity_snr"] = convexity_snr
+
+        result_dict_list.append(result_dict)
+
+
+
+    # filter 1 para 2
+    for image_name in image_name_list:
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+
+        sigma_value: int = 3
+        gauss_img = ImageUtil.gauss_filter(original_img, sigma_value)
+        threshold_img = ImageUtil.obtain_threshold_image(gauss_img)
+
+        file_name = image_name + "_filter1_gauss_filter_para2_" + str(sigma_value) + ".tif"
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
+
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
+
+        solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
+        solidity_mean: float = CommonUtil.calc_mean(solidity_list)
+        solidity_std_dev: float = CommonUtil.calc_standard_deviation(solidity_list, solidity_mean)
+
+        convexity_list: list = ImageUtil.obtain_convexity(threshold_img, original_img)
+        convexity_mean: float = CommonUtil.calc_mean(convexity_list)
+        convexity_std_dev: float = CommonUtil.calc_standard_deviation(convexity_list, convexity_mean)
+
+        solidity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(solidity_mean, solidity_std_dev)
+        convexity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(convexity_mean, convexity_std_dev)
+
+        result_dict: dict = {}
+        result_dict["image_name"] = image_name
+        result_dict["filter_name"] = "gaussian"
+        result_dict["parameter"] = "signma: " + str(sigma_value)
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
+
+        result_dict["solidity_list"] = str(solidity_list)
+        result_dict["solidity_mean"] = solidity_mean
+        result_dict["solidity_std_dev"] = solidity_std_dev
+        result_dict["solidity_snr"] = solidity_snr
+
+        result_dict["convexity_list"] = str(convexity_list)
+        result_dict["convexity_mean"] = convexity_mean
+        result_dict["convexity_std_dev"] = convexity_std_dev
+        result_dict["convexity_snr"] = convexity_snr
+
+        result_dict_list.append(result_dict)
+
+
+
+    # filter 2 para 1
+    for image_name in image_name_list:
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+
+        median_para: str = 'rectangular'
+        median_img = ImageUtil.median_filter(original_img, median_para)
+        threshold_img = ImageUtil.obtain_threshold_image(median_img)
+
+        file_name = image_name + "_filter1_median_filter_para1_" + str(median_para) + ".tif"
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
+
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
+
+        solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
+        solidity_mean: float = CommonUtil.calc_mean(solidity_list)
+        solidity_std_dev: float = CommonUtil.calc_standard_deviation(solidity_list, solidity_mean)
+
+        convexity_list: list = ImageUtil.obtain_convexity(threshold_img, original_img)
+        convexity_mean: float = CommonUtil.calc_mean(convexity_list)
+        convexity_std_dev: float = CommonUtil.calc_standard_deviation(convexity_list, convexity_mean)
+
+        solidity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(solidity_mean, solidity_std_dev)
+        convexity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(convexity_mean, convexity_std_dev)
+
+        result_dict: dict = {}
+        result_dict["image_name"] = image_name
+        result_dict["filter_name"] = "median"
+        result_dict["parameter"] = median_para
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
+
+        result_dict["solidity_list"] = str(solidity_list)
+        result_dict["solidity_mean"] = solidity_mean
+        result_dict["solidity_std_dev"] = solidity_std_dev
+        result_dict["solidity_snr"] = solidity_snr
+
+        result_dict["convexity_list"] = str(convexity_list)
+        result_dict["convexity_mean"] = convexity_mean
+        result_dict["convexity_std_dev"] = convexity_std_dev
+        result_dict["convexity_snr"] = convexity_snr
+
+        result_dict_list.append(result_dict)
+
+
+
+    # filter 2 para 2
+    for image_name in image_name_list:
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+
+        median_para: str = 'elliptic'
+        median_img = ImageUtil.median_filter(original_img, median_para)
+        threshold_img = ImageUtil.obtain_threshold_image(median_img)
+
+        file_name = image_name + "_filter1_median_filter_para2_" + str(median_para) + ".tif"
+        CommonUtil.save_image_to_folder(img=threshold_img, dir_path_str=output_dir, file_name=file_name)
+
+        num_of_objects_detected: int = ImageUtil.detect_number_of_objects(threshold_img, original_img)
+
+        solidity_list: list = ImageUtil.obtain_solidity(threshold_img, original_img)
+        solidity_mean: float = CommonUtil.calc_mean(solidity_list)
+        solidity_std_dev: float = CommonUtil.calc_standard_deviation(solidity_list, solidity_mean)
+
+        convexity_list: list = ImageUtil.obtain_convexity(threshold_img, original_img)
+        convexity_mean: float = CommonUtil.calc_mean(convexity_list)
+        convexity_std_dev: float = CommonUtil.calc_standard_deviation(convexity_list, convexity_mean)
+
+        solidity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(solidity_mean, solidity_std_dev)
+        convexity_snr: float = CommonUtil.calc_signal_to_noise_ratio_SNR(convexity_mean, convexity_std_dev)
+
+
+        result_dict: dict = {}
+        result_dict["image_name"] = image_name
+        result_dict["filter_name"] = "median"
+        result_dict["parameter"] = median_para
+        result_dict["num_of_objects_detected"] = num_of_objects_detected
+
+        result_dict["solidity_list"] = str(solidity_list)
+        result_dict["solidity_mean"] = solidity_mean
+        result_dict["solidity_std_dev"] = solidity_std_dev
+        result_dict["solidity_snr"] = solidity_snr
+
+        result_dict["convexity_list"] = str(convexity_list)
+        result_dict["convexity_mean"] = convexity_mean
+        result_dict["convexity_std_dev"] = convexity_std_dev
+        result_dict["convexity_snr"] = convexity_snr
+
+        result_dict_list.append(result_dict)
+
+
+
+
+    CommonUtil.pretty_print(result_dict_list, width=1000)
+
+    xlsx_path = CommonUtil.obtain_project_default_output_file_path() + date_time_str + "/" + date_time_str + "_solidity_convexity_snr_excel.xlsx"
+    CommonUtil.write_list_of_dict_to_excel(result_dict_list, xlsx_path)
+
+    print("output folder " + output_dir)
+    CommonUtil.press_enter_to_continue()
