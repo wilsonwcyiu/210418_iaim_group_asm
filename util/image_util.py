@@ -248,11 +248,13 @@ class ImageUtil:
 
 
     @staticmethod
-    def obtain_image(image_name: str):
-        dir_path = CommonUtil.obtain_project_default_output_file_path("image_files")
+    def obtain_image(image_name: str, dir_path: str = None):
+        if dir_path == None:
+            dir_path = CommonUtil.obtain_project_default_output_file_path("image_files") + "/"
+
         image_file_path = dir_path + image_name
         # image_file_path = "../../image_files/" + image_name
-
+        print("image_file_path", image_file_path)
         img: PyDIPjavaio.ImageRead = diplib.ImageRead(image_file_path)
 
         return img
