@@ -9,10 +9,8 @@ if __name__ == '__main__':
     sleep_sec: int = 0
 
     file_name: str = "asm3/AxioCamIm01"
-    img = ImageUtil.obtain_image(file_name)
+    img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(file_name)
     ImageUtil.show_image_in_dip_view(img)
-
-
 
     print("end")
     CommonUtil.press_enter_to_continue()

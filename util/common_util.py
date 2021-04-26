@@ -6,12 +6,49 @@ import time
 from datetime import datetime
 from decimal import Decimal
 from os import path
+from turtle import pd
 
 import pandas
 from diplib import PyDIPjavaio
 
 
 class CommonUtil:
+
+    @staticmethod
+    def print_complete_panda_data_frame(data_frame):
+        with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+            print(data_frame)
+
+
+
+    @staticmethod
+    def obtain_project_default_input_dir_path(project_file_output_dir_name: str = "image_files", max_layers: int = 20):
+        parent_dir: str = os.getcwd()
+
+        project_default_input_dir_path: str = ""
+        layer_idx: int = 0
+        while True:
+            for root, sub_dir_name_list, files in os.walk(parent_dir):
+                for sub_dir_name in sub_dir_name_list:
+                    if sub_dir_name == project_file_output_dir_name:
+                        project_default_input_dir_path += project_file_output_dir_name + "/"
+                        return project_default_input_dir_path
+
+
+            parent_dir, dir_name = os.path.split(parent_dir)
+            if dir_name != project_file_output_dir_name:
+                project_default_input_dir_path += "../"
+
+            elif dir_name == project_file_output_dir_name:
+                project_default_input_dir_path += dir_name + "/"
+                return project_default_input_dir_path
+
+
+            layer_idx += 1
+            if layer_idx == max_layers:
+                err_msg: str = "directory " + project_file_output_dir_name + " not exist in the " + str(max_layers) + " layer above"
+                raise Exception(err_msg)
+
 
 
     @staticmethod
@@ -26,7 +63,7 @@ class CommonUtil:
 
 
     @staticmethod
-    def obtain_project_default_output_file_path(project_file_output_dir_name: str = "file_output", max_layers: int = 20):
+    def obtain_project_default_output_dir_path(project_file_output_dir_name: str = "file_output", max_layers: int = 20):
         parent_dir: str = os.getcwd()
 
         project_default_output_file_path: str = ""
@@ -71,20 +108,12 @@ class CommonUtil:
 
 
 
-
-    # @staticmethod
-    # def calc_signal_to_noise_ratio_SNR(mean: float, standard_deviation: float):
-    #     SNR: float = standard_deviation / mean
-    #
-    #     return SNR
-
-
-
     @staticmethod
     def calc_coefficient_of_variation_CV(mean: float, standard_deviation: float):
         cv: float = mean / standard_deviation
 
         return cv
+
 
 
     @staticmethod
@@ -130,10 +159,6 @@ class CommonUtil:
         date_time_str = str(datetime.now().strftime("%Y-%m-%d_%H%M%S"))
         return date_time_str
 
-
-    # @staticmethod
-    # def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, file_name: str):
-    #     CommonUtil.save_image_to_default_project_folder(img=img, dir_name=None, file_name=file_name)
 
 
     @staticmethod

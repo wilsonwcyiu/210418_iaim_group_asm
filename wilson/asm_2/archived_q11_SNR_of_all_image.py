@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
 
     date_time_str: str = CommonUtil.generate_date_time_str()
-    output_dir: str = CommonUtil.obtain_project_default_output_file_path() + date_time_str + "/"
+    output_dir: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "/"
     result_dict_list: list = []
 
 
@@ -247,7 +247,7 @@ if __name__ == '__main__':
 
     CommonUtil.pretty_print(result_dict_list, width=1000)
 
-    xlsx_path = CommonUtil.obtain_project_default_output_file_path() + date_time_str + "/" + date_time_str + "_solidity_convexity_snr_excel.xlsx"
+    xlsx_path = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "/" + date_time_str + "_solidity_convexity_snr_excel.xlsx"
     CommonUtil.write_list_of_dict_to_excel(result_dict_list, xlsx_path)
 
     print("output folder " + output_dir)

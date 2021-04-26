@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
 
     date_time_str: str = CommonUtil.generate_date_time_str()
-    output_dir: str = CommonUtil.obtain_project_default_output_file_path() + date_time_str + "/"
+    output_dir: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "/"
 
     # image_name_list: list = ["rect1", "rect2", "rect3", "rect4"]
     # img_file_group_name_id: str = "_imgOrg"
