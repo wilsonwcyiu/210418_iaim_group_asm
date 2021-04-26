@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
             result_dict: dict = {
                                 "image_name": image_name,
-                                 "snr": log_snr
+                                 "Decibel - log(SNR) value": log_snr
                                 }
             result_dict_list.append(result_dict)
 
