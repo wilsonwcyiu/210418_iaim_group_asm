@@ -29,16 +29,18 @@ if __name__ == '__main__':
     dip_img = dip.Image(cv2.imread(input_file_dir + png_file_name, 0))
     # dip_img = ImageUtil.obtain_image(tif_file_name, input_file_dir)
 
-
-    OD = ~dip.Threshold(dip.Gauss(dip_img))[0];     ImageUtil.show_image_in_dip_view(OD)
+    # ImageUtil.gauss_filter
+    # ImageUtil.threshold
+    filter_img = dip.Gauss(dip_img)
+    OD = ~dip.Threshold(filter_img)[0];             ImageUtil.show_image_in_dip_view(OD)
     OD = dip.EdgeObjectsRemove(OD);                 ImageUtil.show_image_in_dip_view(OD)
-    OD = dip.Opening(dip.Closing(OD,9),9);          ImageUtil.show_image_in_dip_view(OD)
+    OD = dip.Opening(dip.Closing(OD, 9), 9);        ImageUtil.show_image_in_dip_view(OD)
 
     ID = dip.EdgeObjectsRemove(~OD);                ImageUtil.show_image_in_dip_view(ID)
 
     #label the images
-    lab_OD = dip.Label(OD, minSize=10000)
-    lab_ID = dip.Label(ID, minSize=1000, maxSize=30000)
+    lab_OD = dip.Label(OD, minSize=10000);                ImageUtil.show_image_in_dip_view(lab_OD)
+    lab_ID = dip.Label(ID, minSize=1000, maxSize=30000);  ImageUtil.show_image_in_dip_view(lab_ID)
 
     #Measurement
     msr_OD = dip.MeasurementTool.Measure(lab_OD, dip_img, ['Radius', 'Center', 'Inertia', 'DimensionsEllipsoid', 'Size'])
