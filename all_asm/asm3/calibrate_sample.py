@@ -26,27 +26,41 @@ if __name__ == '__main__':
     
     """
 
-    # dip_img = dip.Image(cv2.imread(input_file_dir + file_name, 0))
-    dip_img = ImageUtil.obtain_image(tif_file_name, input_file_dir)
+    dip_img = dip.Image(cv2.imread(input_file_dir + png_file_name, 0))
+    # dip_img = ImageUtil.obtain_image(tif_file_name, input_file_dir)
 
 
-    OD = ~dip.Threshold(dip.Gauss(dip_img))[0]
-    OD = dip.EdgeObjectsRemove(OD)
-    OD = dip.Opening(dip.Closing(OD,9),9)
-    ID = dip.EdgeObjectsRemove(~OD)
+    OD = ~dip.Threshold(dip.Gauss(dip_img))[0];     ImageUtil.show_image_in_dip_view(OD)
+    OD = dip.EdgeObjectsRemove(OD);                 ImageUtil.show_image_in_dip_view(OD)
+    OD = dip.Opening(dip.Closing(OD,9),9);          ImageUtil.show_image_in_dip_view(OD)
+
+    ID = dip.EdgeObjectsRemove(~OD);                ImageUtil.show_image_in_dip_view(ID)
 
     #label the images
-    lab_OD = dip.Label(OD,minSize = 10000)
-    lab_ID = dip.Label(ID,minSize = 1000,maxSize=30000)
+    lab_OD = dip.Label(OD, minSize=10000)
+    lab_ID = dip.Label(ID, minSize=1000, maxSize=30000)
+
+    #Measurement
+    msr_OD = dip.MeasurementTool.Measure(lab_OD, dip_img, ['Radius', 'Center', 'Inertia', 'DimensionsEllipsoid', 'Size'])
+    msr_ID = dip.MeasurementTool.Measure(lab_ID, dip_img, ['Radius', 'Center', 'Inertia', 'DimensionsEllipsoid', 'Size'])
+
+
 
     # a placeholder dataframe to hold the result
     df = pd.DataFrame(columns=['feature','maxD','meanD','minD','center','axis_x','axis_y','mean_axis','size','dia_measured_from_size'])
 
-    #Measurement
-    msr_OD = dip.MeasurementTool.Measure(lab_OD,dip_img,['Radius','Center','Inertia','DimensionsEllipsoid','Size'])
-    msr_ID = dip.MeasurementTool.Measure(lab_ID,dip_img,['Radius','Center','Inertia','DimensionsEllipsoid','Size'])
     # add OD values
-    df.loc[0] = 'OD',msr_OD[1]['Radius'][0]*2,msr_OD[1]['Radius'][1]*2,msr_OD[1]['Radius'][2]*2,tuple(msr_OD[1]['Center']),msr_OD[1]['DimensionsEllipsoid'][0],msr_OD[1]['DimensionsEllipsoid'][1],(msr_OD[1]['DimensionsEllipsoid'][0] + msr_OD[1]['DimensionsEllipsoid'][1])/2,msr_OD[1]['Size'][0],2*np.sqrt(msr_OD[1]['Size'][0] / np.pi)
+    df.loc[0] = 'OD', \
+                msr_OD[1]['Radius'][0]*2, \
+                msr_OD[1]['Radius'][1]*2, \
+                msr_OD[1]['Radius'][2]*2, \
+                tuple(msr_OD[1]['Center']), \
+                msr_OD[1]['DimensionsEllipsoid'][0], \
+                msr_OD[1]['DimensionsEllipsoid'][1], \
+                (msr_OD[1]['DimensionsEllipsoid'][0] + msr_OD[1]['DimensionsEllipsoid'][1])/2, \
+                msr_OD[1]['Size'][0], \
+                2*np.sqrt(msr_OD[1]['Size'][0] / np.pi)
+
     # add values for 4 PCD holes
     object_ids = msr_ID.Objects()
     for i in object_ids:
@@ -54,3 +68,6 @@ if __name__ == '__main__':
 
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(df)
+
+
+    CommonUtil.press_enter_to_continue()
