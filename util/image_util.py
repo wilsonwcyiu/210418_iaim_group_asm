@@ -12,6 +12,40 @@ from util.common_util import CommonUtil
 class ImageUtil:
 
     @staticmethod
+    def opening(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
+        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(threshold_img, segment_size)
+        opening_img: diplib.PyDIP_bin.Image = diplib.Dilation(erosion_img, segment_size)
+
+        return opening_img
+
+
+
+    @staticmethod
+    def closing(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
+        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(threshold_img, segment_size)
+        closing_img: diplib.PyDIP_bin.Image = diplib.Erosion(dilation_img, segment_size)
+
+        return closing_img
+
+
+
+    @staticmethod
+    def dilation(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
+        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(threshold_img, segment_size)
+
+        return dilation_img
+
+
+
+    @staticmethod
+    def erosion(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
+        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(threshold_img, segment_size)
+
+        return erosion_img
+
+
+
+    @staticmethod
     def calculate_signal_to_noise_ratio_SNR(original_img: diplib.PyDIP_bin.Image):
         pixel_value_list: list = ImageUtil.obtain_pixel_value_list(original_img)
 
@@ -241,8 +275,12 @@ class ImageUtil:
 
 
     @staticmethod
-    def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int = 0, title="No title"):
-        diplib.PyDIPviewer.Show(img, title=title)
+    def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int = 0, title="No title", position_tuple=None):
+        if position_tuple is not None:
+            diplib.PyDIPviewer.Show(img, title=title, position=position_tuple)
+        else:
+            diplib.PyDIPviewer.Show(img, title=title)
+
         time.sleep(sleep_sec)
 
 

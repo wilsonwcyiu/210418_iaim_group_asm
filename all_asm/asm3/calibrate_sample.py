@@ -32,15 +32,15 @@ if __name__ == '__main__':
     # ImageUtil.gauss_filter
     # ImageUtil.threshold
     filter_img = dip.Gauss(dip_img)
-    OD = ~dip.Threshold(filter_img)[0];             ImageUtil.show_image_in_dip_view(OD)
-    OD = dip.EdgeObjectsRemove(OD);                 ImageUtil.show_image_in_dip_view(OD)
-    OD = dip.Opening(dip.Closing(OD, 9), 9);        ImageUtil.show_image_in_dip_view(OD)
-
-    ID = dip.EdgeObjectsRemove(~OD);                ImageUtil.show_image_in_dip_view(ID)
+    OD = ~dip.Threshold(filter_img)[0];             ImageUtil.show_image_in_dip_view(OD, title="Threshold(filter_img")
+    OD = dip.EdgeObjectsRemove(OD);                 ImageUtil.show_image_in_dip_view(OD, title="OD EdgeObjectsRemove")
+    OD = dip.Opening(dip.Closing(OD, 9), 9);        ImageUtil.show_image_in_dip_view(OD, title="Opening(dip.Closing")
+    ImageUtil.show_image_in_dip_view(~OD, title=" ~OD")
+    ID = dip.EdgeObjectsRemove(~OD);                ImageUtil.show_image_in_dip_view(ID, title=" EdgeObjectsRemove")
 
     #label the images
-    lab_OD = dip.Label(OD, minSize=10000);                ImageUtil.show_image_in_dip_view(lab_OD)
-    lab_ID = dip.Label(ID, minSize=1000, maxSize=30000);  ImageUtil.show_image_in_dip_view(lab_ID)
+    lab_OD = dip.Label(OD, minSize=10000);                ImageUtil.show_image_in_dip_view(lab_OD, title="lab_OD")
+    lab_ID = dip.Label(ID, minSize=1000, maxSize=30000);  ImageUtil.show_image_in_dip_view(lab_ID, title="lab_ID")
 
     #Measurement
     msr_OD = dip.MeasurementTool.Measure(lab_OD, dip_img, ['Radius', 'Center', 'Inertia', 'DimensionsEllipsoid', 'Size'])

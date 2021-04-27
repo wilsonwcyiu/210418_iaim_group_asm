@@ -8,7 +8,7 @@ from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 import pprint
 
-# test
+# test_case
 from util.plot_util import PlotUtil
 
 if __name__ == '__main__':

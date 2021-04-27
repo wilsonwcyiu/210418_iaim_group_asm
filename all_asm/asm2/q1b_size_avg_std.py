@@ -4,7 +4,7 @@ from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 
 
-# test
+# test_case
 
 if __name__ == '__main__':
     print("starting...")
