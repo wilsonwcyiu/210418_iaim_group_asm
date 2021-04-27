@@ -19,7 +19,7 @@ class TestImageUtil:
             original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=dir_path_str)
             threshold_img = ImageUtil.obtain_threshold_image(original_img)
 
-            segment_size: int = 49
+            segment_size: int = 9
             erosion_img = ImageUtil.erosion(threshold_img, segment_size)
 
             ImageUtil.show_image_in_dip_view(erosion_img)
