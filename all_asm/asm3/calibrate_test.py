@@ -13,8 +13,8 @@ from util.image_util import ImageUtil
 if __name__ == '__main__':
 
     input_file_dir: str = CommonUtil.obtain_project_default_input_dir_path() + "calibrate_test/"
-    file_name: str = "circle.png"
-
+    png_file_name: str = "circle.png"
+    tif_file_name: str = "circle.tif"
 
 
     """
@@ -26,10 +26,8 @@ if __name__ == '__main__':
     
     """
 
-    dip_img = dip.Image(cv2.imread(input_file_dir + file_name, 0))
-    # # dip_img = ImageUtil.obtain_image(file_path, dir_path="../../image_files/")
-    # dip_img = ImageUtil.obtain_image("circle.png", dir_path="../../image_files/calibrate_test/")
-    # ImageUtil.show_image_in_dip_view(dip_img)
+    # dip_img = dip.Image(cv2.imread(input_file_dir + file_name, 0))
+    dip_img = ImageUtil.obtain_image(tif_file_name, input_file_dir)
 
 
     OD = ~dip.Threshold(dip.Gauss(dip_img))[0]
@@ -45,8 +43,8 @@ if __name__ == '__main__':
     df = pd.DataFrame(columns=['feature','maxD','meanD','minD','center','axis_x','axis_y','mean_axis','size','dia_measured_from_size'])
 
     #Measurement
-    msr_OD =  dip.MeasurementTool.Measure(lab_OD,dip_img,['Radius','Center','Inertia','DimensionsEllipsoid','Size'])
-    msr_ID =  dip.MeasurementTool.Measure(lab_ID,dip_img,['Radius','Center','Inertia','DimensionsEllipsoid','Size'])
+    msr_OD = dip.MeasurementTool.Measure(lab_OD,dip_img,['Radius','Center','Inertia','DimensionsEllipsoid','Size'])
+    msr_ID = dip.MeasurementTool.Measure(lab_ID,dip_img,['Radius','Center','Inertia','DimensionsEllipsoid','Size'])
     # add OD values
     df.loc[0] = 'OD',msr_OD[1]['Radius'][0]*2,msr_OD[1]['Radius'][1]*2,msr_OD[1]['Radius'][2]*2,tuple(msr_OD[1]['Center']),msr_OD[1]['DimensionsEllipsoid'][0],msr_OD[1]['DimensionsEllipsoid'][1],(msr_OD[1]['DimensionsEllipsoid'][0] + msr_OD[1]['DimensionsEllipsoid'][1])/2,msr_OD[1]['Size'][0],2*np.sqrt(msr_OD[1]['Size'][0] / np.pi)
     # add values for 4 PCD holes
