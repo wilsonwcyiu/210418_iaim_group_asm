@@ -4,12 +4,17 @@ import time
 import diplib
 import numpy
 from diplib import PyDIPjavaio
+from diplib.PyDIP_bin import SE
 from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
 
 from util.common_util import CommonUtil
 
 
 class ImageUtil:
+
+
+
+
 
     @staticmethod
     def opening(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
@@ -37,9 +42,21 @@ class ImageUtil:
 
 
 
+    # https://github.com/DIPlib/diplib/blob/master/dipimage/erosion.m
+    # % SYNOPSIS:
+    # %  image_out = erosion(image_in,filterSize,filterShape,boundary_condition)
+    # %  image_out = erosion(image_in,image_se,boundary_condition)
+    # %
+    # % PARAMETERS:
+    # %  filterSize:  sizes of the filter along each image dimension
+    # %  filterShape: 'rectangular', 'elliptic', 'diamond', 'parabolic'
+    # %  image_se:    binary or grey-value image with the shape for the structuring element
+    # %  boundary_condition: Defines how the boundary of the image is handled.
+    # %                      See HELP BOUNDARY_CONDITION
     @staticmethod
-    def erosion(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
-        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(threshold_img, segment_size)
+    def erosion(threshold_img : diplib.PyDIP_bin.Image, segment_element_length: int, shape: str):
+        segment_element: SE = diplib.PyDIP_bin.SE(shape, param=segment_element_length)
+        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(threshold_img, se=segment_element)
 
         return erosion_img
 
@@ -158,10 +175,16 @@ class ImageUtil:
         return solidity_list
 
 
+    @staticmethod
+    def obtain_threshold_image_by_given_value(img: diplib.PyDIP_bin.Image, threshold_value: float):
+        threshold_img: diplib.PyDIP_bin.Image = img < threshold_value
+
+        return threshold_img
+
 
     @staticmethod
     def obtain_threshold_image(img: diplib.PyDIP_bin.Image):
-        threshold_value: float = ImageUtil.threshold(img)
+        threshold_value: float = ImageUtil.derive_threshold_value(img);     print("134234 threshold_value", threshold_value)
         threshold_img: diplib.PyDIP_bin.Image = img < threshold_value
 
         return threshold_img
@@ -266,11 +289,11 @@ class ImageUtil:
 
 
     @staticmethod
-    def threshold(img: PyDIPjavaio.ImageRead):
-        threshold: float = None
-        _, threshold = diplib.Threshold(img)
+    def derive_threshold_value(img: PyDIPjavaio.ImageRead):
+        threshold_value: float = None
+        _, threshold_value = diplib.Threshold(img)
 
-        return threshold
+        return threshold_value
 
 
 

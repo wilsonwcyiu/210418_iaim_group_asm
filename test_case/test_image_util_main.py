@@ -7,8 +7,9 @@ if __name__ == '__main__':
     sleep_sec: int = 0
 
 
-    TestImageUtil.test_erosion()
+    # TestImageUtil.test_threshold()
 
+    TestImageUtil.erosion_test1()
 
 
 

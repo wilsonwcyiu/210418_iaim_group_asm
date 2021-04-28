@@ -7,6 +7,19 @@ from matplotlib import pyplot
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 
+
+
+
+@staticmethod
+def obtain_threshold_image_trial(img: PyDIPjavaio.ImageRead):
+    threshold_img: diplib.PyDIP_bin.Image = None
+    threshold_value: float = None
+    threshold_img = diplib.Threshold(img)[0]
+
+    return threshold_img
+
+
+
 # test_case
 if __name__ == '__main__':
     print("starting...")
@@ -33,7 +46,7 @@ if __name__ == '__main__':
 
     original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image("rect1");   ImageUtil.show_image_in_dip_view(original_img, title="original img")
     filter_img = diplib.Gauss(original_img)
-    threshold_img = ImageUtil.threshold(filter_img)
+    threshold_img = ImageUtil.derive_threshold_value(filter_img)
 
     ImageUtil.show_image_in_dip_view(threshold_img, title="rect1 threshold_img Threshold(filter_img")
 
