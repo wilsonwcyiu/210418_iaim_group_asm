@@ -44,7 +44,10 @@ if __name__ == '__main__':
             file_name = image_name + "_black_hat_icmg_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
-            ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
+            # ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
+
+            threshold_img = ImageUtil.obtain_threshold_image(black_hat_img);            ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_threshold_img")
+
 
             # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(black_hat_img);
             # plot_id: int = 1; plot_title: str = "t"; x_label: str = "x"; y_label: str = "y"
@@ -77,7 +80,9 @@ if __name__ == '__main__':
             file_name = image_name + "_black_hat_icmg_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
-            ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
+            # ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
+
+            threshold_img = ImageUtil.obtain_threshold_image(black_hat_img);            ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_threshold_img")
 
             # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(black_hat_img);
             # plot_id: int = 1; plot_title: str = "t"; x_label: str = "x"; y_label: str = "y"
@@ -110,7 +115,9 @@ if __name__ == '__main__':
             file_name = image_name + "_black_hat_icmg_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
-            ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
+            # ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
+            median_img = ImageUtil.median_filter(black_hat_img, 60)
+            threshold_img = ImageUtil.obtain_threshold_image(median_img);            ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_median_threshold_img")
 
             # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(black_hat_img);
             # plot_id: int = 1; plot_title: str = "t"; x_label: str = "x"; y_label: str = "y"

@@ -265,8 +265,8 @@ class ImageUtil:
 
 
     @staticmethod   # median_kernel_para_list = ['rectangular', 'elliptic']
-    def median_filter(img, median_kernel_para: str):
-        filtered_img = diplib.MedianFilter(img, median_kernel_para)
+    def median_filter(img, median_kernel_side_length: str):
+        filtered_img = diplib.MedianFilter(img, median_kernel_side_length)
 
         return filtered_img
 
