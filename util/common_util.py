@@ -14,6 +14,12 @@ from diplib import PyDIPjavaio
 
 class CommonUtil:
 
+    @staticmethod
+    def create_missing_dir(dir_path_str: str):
+        if not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+
+
 
     @staticmethod
     def print_complete_panda_data_frame(data_frame):

@@ -11,16 +11,17 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
 
-    image_name_list: list = ["AxioCamIm01"] #, "AxioCamIm02", "AxioCamIm03"]
+    image_name_list: list = ["AxioCamIm01_high_contrast"] #, "AxioCamIm02", "AxioCamIm03"]
 
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
     date_time_str: str = CommonUtil.generate_date_time_str()
-    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str
+    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "/"
+    CommonUtil.create_missing_dir(output_dir_str)
 
 
-    shape_list = ['rectangular'] #, 'elliptic', 'diamond', 'parabolic']
-    se_length_list = [41]
+    shape_list = ['rectangular', 'elliptic', 'diamond', 'parabolic']
+    se_length_list = [5,11,21,31,41,61,71,101]
 
     # filter 1 para 1
     for shape in shape_list:
@@ -31,54 +32,56 @@ if __name__ == '__main__':
                 original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(original_img, title="original img")
                 CommonUtil.save_image_to_folder(original_img, output_dir_str, "original_img.tif")
 
-                high_contrast_image = ImageUtil.increase_image_contrast(original_img)
-                obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(high_contrast_image)
-
-                plot_id: int = 1
-                plot_title: str = "t"
-                x_label: str = "x"
-                y_label: str = "y"
-                plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
-                plot.pause(10)
-
-                # ImageUtil.show_image_in_dip_view(high_contrast_org_image)
-                original_img.Show()
-                # high_contrast_org_image.Show()
-
-
-                CommonUtil.save_image_to_folder(high_contrast_image, output_dir_str, "high_contrast_org_image.tif")
-
 
                 se_one_side_length: int = se_length #7
                 se_shape: str = shape #"rectangular"
 
+                # high_contrast_image = ImageUtil.increase_image_contrast(original_img)
 
-                threshold_img = ImageUtil.obtain_threshold_image(original_img)
-                white_img = ImageUtil.dilation(threshold_img, 10000, "rectangular");                #ImageUtil.show_image_in_dip_view(white_img, title="white_img")
-                #
-                #
+                # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(high_contrast_image)
+                # plot_id: int = 1
+                # plot_title: str = "t"
+                # x_label: str = "x"
+                # y_label: str = "y"
+                # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
+                # plot.pause(10)
 
 
 
-
-
-                # erosion_img = ImageUtil.erosion(inverted_img, se_one_side_length, se_shape)
-                # file_name = image_name + "_ero_img_" + shape + "_" + str(se_length) + ".tif"
-                # CommonUtil.save_image_to_folder(erosion_img, output_dir_str, file_name)
-
-                dilation_img = ImageUtil.dilation(high_contrast_image, se_one_side_length, se_shape)
+                dilation_img = ImageUtil.dilation(original_img, se_one_side_length, se_shape)
                 file_name = image_name + "_dil_img_" + shape + "_" + str(se_length) + ".tif"
                 CommonUtil.save_image_to_folder(dilation_img, output_dir_str, file_name)
 
-                closing_img = ImageUtil.erosion(dilation_img, se_one_side_length, se_shape)
+                closing_img = ImageUtil.closing(original_img, se_one_side_length, se_shape)
                 file_name = image_name + "_closing_img_" + shape + "_" + str(se_length) + ".tif"
                 CommonUtil.save_image_to_folder(closing_img, output_dir_str, file_name)
 
+                invert_closing_img = ImageUtil.invert_img(closing_img)
+                file_name = image_name + "_invert_closing_img_" + shape + "_" + str(se_length) + ".tif"
+                CommonUtil.save_image_to_folder(invert_closing_img, output_dir_str, file_name)
 
 
-                black_hat_img = ImageUtil.subtraction_img1_minus_img2(white_img, high_contrast_image);        #ImageUtil.show_image_in_dip_view(original_img, title="original img")
-                file_name = image_name + "_black_hat_img_" + shape + "_" + str(se_length) + ".tif"
-                CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
+
+
+                # invert_org_img = ImageUtil.invert_img(original_img)
+                # file_name = image_name + "_invert_org_img_" + shape + "_" + str(se_length) + ".tif"
+                # CommonUtil.save_image_to_folder(invert_org_img, output_dir_str, file_name)
+
+                #
+                # erosion_img = ImageUtil.erosion(high_contrast_image, se_one_side_length, se_shape)
+                # file_name = image_name + "_ero_img_" + shape + "_" + str(se_length) + ".tif"
+                # CommonUtil.save_image_to_folder(erosion_img, output_dir_str, file_name)
+
+                #
+                # closing_img = ImageUtil.erosion(dilation_img, se_one_side_length, se_shape)
+                # file_name = image_name + "_closing_img_" + shape + "_" + str(se_length) + ".tif"
+                # CommonUtil.save_image_to_folder(closing_img, output_dir_str, file_name)
+                #
+                #
+                #
+                # black_hat_img = ImageUtil.subtraction_img1_minus_img2(white_img, high_contrast_image);        #ImageUtil.show_image_in_dip_view(original_img, title="original img")
+                # file_name = image_name + "_black_hat_img_" + shape + "_" + str(se_length) + ".tif"
+                # CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
 
 

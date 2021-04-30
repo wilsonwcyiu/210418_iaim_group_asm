@@ -28,34 +28,21 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
 
-    image_name_list: list = ["AxioCamIm01", "AxioCamIm02", "AxioCamIm03"]
+    image_name_list: list = ["rect2"] #, "AxioCamIm02", "AxioCamIm03"]
 
-    input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
+    input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path()# + "asm3/"
 
     date_time_str: str = CommonUtil.generate_date_time_str()
     output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "_" + os.path.basename(__file__) + "/"
 
+    original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name_list[0], dir_path=input_dir_str);
+    ImageUtil.show_image_in_dip_view(original_img, title="original_img")
 
+    invert = diplib.Invert(original_img)
+    ImageUtil.show_image_in_dip_view(invert, title="invert")
 
-    image_name_list: list = ["AxioCamIm01", "AxioCamIm02", "AxioCamIm03"]
-
-    for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str);        ImageUtil.show_image_in_dip_view(original_img, title="original_img")
-        median_filter = ImageUtil.median_filter(original_img, "rectangular");                                    ImageUtil.show_image_in_dip_view(median_filter, title="median_filter")
-        threshold_img = ImageUtil.obtain_threshold_image(median_filter);                                         ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
-
-        se_one_side_length: int = 9
-        se_shape: str = "rectangular"
-        # se: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-
-
-        black_hat_img_dip = black_hat_img = ImageUtil.black_hat(threshold_img, se_one_side_length, se_shape);           CommonUtil.save_image_to_folder(black_hat_img_dip, output_dir_str, "black_hat_img_dip.tif")
-
-        # black_hat_img_code = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img;           CommonUtil.save_image_to_folder(black_hat_img_code, output_dir_str, "black_hat_img_code.tif")
-
-
-
-
+    inverse = diplib.Inverse(original_img)
+    ImageUtil.show_image_in_dip_view(inverse, title="inverse")
 
 
     # black_hat_img: diplib.PyDIP_bin.Image = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img

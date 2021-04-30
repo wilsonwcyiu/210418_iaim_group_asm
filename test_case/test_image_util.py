@@ -20,7 +20,7 @@ class TestImageUtil:
 
             segment_size: int = 9
             se_shape: str = "rectangular"
-            top_hat_img = ImageUtil.top_hat(threshold_img, segment_size, se_shape)
+            top_hat_img = ImageUtil.white_top_hat(threshold_img, segment_size, se_shape)
 
             ImageUtil.show_image_in_dip_view(top_hat_img, title="top_hat_img")
 

@@ -24,8 +24,9 @@ class ImageUtil:
 
     @staticmethod
     def invert_img(img: diplib.PyDIP_bin.Image):
-        return ~img
 
+        return diplib.Invert(img)
+        # return ~img
 
 
     @staticmethod
@@ -54,12 +55,13 @@ class ImageUtil:
 
 
     @staticmethod
-    def top_hat(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
+    def white_top_hat(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
         segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-        top_hat_img = diplib.Tophat(threshold_img, segment_element)
+        # top_hat_img = diplib.Tophat(threshold_img, segment_element)
 
         # works the same
-        # top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img
+        opening_img = ImageUtil.opening(threshold_img, se_one_side_length, se_shape)
+        top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.subtraction_img1_minus_img2(threshold_img, opening_img)
 
         return top_hat_img
 
