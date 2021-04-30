@@ -14,6 +14,13 @@ from diplib import PyDIPjavaio
 
 class CommonUtil:
 
+
+    @staticmethod
+    def press_enter_to_exit():
+        input("Press enter to exit...")
+        exit(0)
+
+
     @staticmethod
     def create_missing_dir(dir_path_str: str):
         if not path.exists(dir_path_str):
