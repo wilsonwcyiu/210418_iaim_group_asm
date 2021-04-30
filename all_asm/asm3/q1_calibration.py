@@ -20,8 +20,8 @@ if __name__ == '__main__':
     CommonUtil.create_missing_dir(output_dir_str)
 
 
-    shape_list = ['rectangular', 'elliptic', 'diamond', 'parabolic']
-    se_length_list = [5,11,21,31,41,61,71,101]
+    shape_list = ['elliptic', 'diamond', 'parabolic', 'rectangular']
+    se_length_list = [11,51,101,201,401,801,1601] #, 211,251,281,321,381, 581, 681, 981]
 
     # filter 1 para 1
     for shape in shape_list:
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
                 # high_contrast_image = ImageUtil.increase_image_contrast(original_img)
 
-                # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(high_contrast_image)
+                # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(original_img)
                 # plot_id: int = 1
                 # plot_title: str = "t"
                 # x_label: str = "x"
@@ -46,22 +46,13 @@ if __name__ == '__main__':
                 # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
                 # plot.pause(10)
 
+                # closing_img = ImageUtil.closing(original_img, se_one_side_length, se_shape)
+                # file_name = image_name + "_closing_img_" + shape + "_" + str(se_length) + ".tif"
+                # CommonUtil.save_image_to_folder(closing_img, output_dir_str, file_name)
 
-
-                dilation_img = ImageUtil.dilation(original_img, se_one_side_length, se_shape)
-                file_name = image_name + "_dil_img_" + shape + "_" + str(se_length) + ".tif"
-                CommonUtil.save_image_to_folder(dilation_img, output_dir_str, file_name)
-
-                closing_img = ImageUtil.closing(original_img, se_one_side_length, se_shape)
-                file_name = image_name + "_closing_img_" + shape + "_" + str(se_length) + ".tif"
-                CommonUtil.save_image_to_folder(closing_img, output_dir_str, file_name)
-
-                invert_closing_img = ImageUtil.invert_img(closing_img)
-                file_name = image_name + "_invert_closing_img_" + shape + "_" + str(se_length) + ".tif"
-                CommonUtil.save_image_to_folder(invert_closing_img, output_dir_str, file_name)
-
-
-
+                black_hat_img = ImageUtil.black_hat(original_img, se_one_side_length, se_shape)
+                file_name = image_name + "_black_hat_img_" + shape + "_" + str(se_length) + ".tif"
+                CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
                 # invert_org_img = ImageUtil.invert_img(original_img)
                 # file_name = image_name + "_invert_org_img_" + shape + "_" + str(se_length) + ".tif"

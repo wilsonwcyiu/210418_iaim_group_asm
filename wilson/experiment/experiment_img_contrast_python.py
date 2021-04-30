@@ -14,6 +14,8 @@ from util.image_util import ImageUtil
 from PIL import Image as PIL_IMAGE, ImageEnhance
 
 # test_case
+from util.plot_util import PlotUtil
+
 if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
@@ -36,14 +38,26 @@ if __name__ == '__main__':
 
         # factor = 0.5 #decrease constrast
         # factor = 1 #gives original image
-        factor = 2 #increase contrast
+        factor = 2.5 #increase contrast
         im_output = enhancer.enhance(factor)
 
-        file_path = output_dir_str + image_name + "_high_contrast.tif"
+        file_name = image_name + "_high_contrast.tif"
+        file_path = output_dir_str + file_name
         im_output.save(file_path)
 
         img = ImageUtil.obtain_image(file_path, "")
         ImageUtil.show_image_in_dip_view(img)
+
+
+
+        original_img = ImageUtil.obtain_image(file_name, input_dir_str)
+        obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(original_img)
+        plot_id: int = 1
+        plot_title: str = file_name
+        x_label: str = "x"
+        y_label: str = "y"
+        plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
+        plot.pause(10)
 
 
 

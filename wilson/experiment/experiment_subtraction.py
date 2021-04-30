@@ -1,5 +1,6 @@
 import os
 
+import cv2
 import diplib
 import numpy as np
 
@@ -11,15 +12,17 @@ from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 
 
-
-
-@staticmethod
-def obtain_threshold_image_trial(img: PyDIPjavaio.ImageRead):
-    threshold_img: diplib.PyDIP_bin.Image = None
-    threshold_value: float = None
-    threshold_img = diplib.Threshold(img)[0]
-
-    return threshold_img
+# https://gist.github.com/sean-mcclure/fcd9112dde54efb7a0be402e793a6ad4
+def img1_subtract_img2(image_path_1, image_path_2, file_name, output_dir: str):
+    image1 = cv2.imread(image_path_1)
+    image2 = cv2.imread(image_path_2)
+    difference = cv2.subtract(image1, image2)
+    Conv_hsv_Gray = cv2.cvtColor(difference, cv2.COLOR_BGR2GRAY)
+    ret, mask = cv2.threshold(Conv_hsv_Gray, 0, 255,cv2.THRESH_BINARY_INV |cv2.THRESH_OTSU)
+    difference[mask != 255] = [0, 0, 255]
+    image1[mask != 255] = [0, 0, 255]
+    image2[mask != 255] = [0, 0, 255]
+    cv2.imwrite(output_dir + file_name + '.png', image1)
 
 
 
@@ -30,13 +33,27 @@ if __name__ == '__main__':
 
     image_name_list: list = ["AxioCamIm01"] #, "AxioCamIm02", "AxioCamIm03"]
 
+    input_dir_abs_path = "D:/Wilson/PycharmProjects/210418_iaim_group_asm/image_files/asm3/"
+
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
 
     date_time_str: str = CommonUtil.generate_date_time_str()
     output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "_" + os.path.basename(__file__) + "/"
+    CommonUtil.make_dir(output_dir_str)
 
-    original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name_list[0], dir_path=input_dir_str);
-    ImageUtil.show_image_in_dip_view(original_img, title="original_img")
+
+    img1 = input_dir_abs_path + image_name_list[0]
+    img2 = input_dir_abs_path + image_name_list[0]
+    img1_subtract_img2(img1, img2, "subtract", output_dir_str)
+
+
+    # original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name_list[0], dir_path=input_dir_str);
+    # subtracted_img = original_img - 0
+    #
+    #
+    # ImageUtil.show_image_in_dip_view(subtracted_img, title="subtracted_img")
+    # CommonUtil.save_image_to_folder(subtracted_img, output_dir_str, "subtracted_img.tif")
+
 
     # invert = diplib.Invert(original_img)
     # ImageUtil.show_image_in_dip_view(invert, title="invert")
