@@ -49,8 +49,8 @@ class ImageUtil:
 
     @staticmethod
     def black_hat(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
-        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-        black_hat_img: diplib.PyDIP_bin.Image = diplib.Tophat(img, segment_element, polarity="black")
+        structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        black_hat_img: diplib.PyDIP_bin.Image = diplib.Tophat(img, structuring_element, polarity="black")
 
         # closing_img: diplib.PyDIP_bin.Image = ImageUtil.closing(img, se_one_side_length, se_shape)
         # black_hat_img: diplib.PyDIP_bin.Image = ImageUtil.subtraction_img1_minus_img2(closing_img, img)
@@ -61,8 +61,8 @@ class ImageUtil:
 
     @staticmethod
     def white_top_hat(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
-        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-        # top_hat_img = diplib.Tophat(threshold_img, segment_element)
+        structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        # top_hat_img = diplib.Tophat(threshold_img, structuring_element)
 
         # works the same
         opening_img = ImageUtil.opening(img, se_one_side_length, se_shape)
@@ -74,10 +74,10 @@ class ImageUtil:
 
     @staticmethod
     def opening(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
-        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
 
-        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(img, se=segment_element)
-        opening_img: diplib.PyDIP_bin.Image = diplib.Dilation(erosion_img, se=segment_element)
+        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(img, se=structuring_element)
+        opening_img: diplib.PyDIP_bin.Image = diplib.Dilation(erosion_img, se=structuring_element)
 
         return opening_img
 
@@ -85,10 +85,10 @@ class ImageUtil:
 
     @staticmethod
     def closing(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
-        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
 
-        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(img, se=segment_element)
-        closing_img: diplib.PyDIP_bin.Image = diplib.Erosion(dilation_img, se=segment_element)
+        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(img, se=structuring_element)
+        closing_img: diplib.PyDIP_bin.Image = diplib.Erosion(dilation_img, se=structuring_element)
 
         return closing_img
 
@@ -103,8 +103,8 @@ class ImageUtil:
     # %                      See HELP BOUNDARY_CONDITION
     @staticmethod
     def dilation(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
-        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(img, se=segment_element)
+        structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(img, se=structuring_element)
 
         return dilation_img
 
@@ -126,8 +126,8 @@ class ImageUtil:
     @staticmethod
     def erosion(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
 
-        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(img, se=segment_element)
+        structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(img, se=structuring_element)
 
         return erosion_img
 
