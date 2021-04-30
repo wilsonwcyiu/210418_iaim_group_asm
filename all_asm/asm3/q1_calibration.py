@@ -11,7 +11,7 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
 
-    image_name_list: list = ["AxioCamIm01_high_contrast", "AxioCamIm02_high_contrast", "AxioCamIm03_high_contrast"]
+    # image_name_list: list = ["AxioCamIm01_high_contrast", "AxioCamIm02_high_contrast", "AxioCamIm03_high_contrast"]
     # image_name_list.append("AxioCamIm01_high_contrast_black_hat_img_diamond_51")
 
 
