@@ -1,5 +1,3 @@
-import os
-
 import diplib
 import numpy as np
 
@@ -33,32 +31,31 @@ if __name__ == '__main__':
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
 
     date_time_str: str = CommonUtil.generate_date_time_str()
-    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "_" + os.path.basename(__file__) + "/"
+    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "/"
 
 
 
-    image_name_list: list = ["AxioCamIm01", "AxioCamIm02", "AxioCamIm03"]
+    image_name_list: list = ["AxioCamIm01"]
+    # , "AxioCamIm02", "AxioCamIm03"]
 
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str);        ImageUtil.show_image_in_dip_view(original_img, title="original_img")
-        median_filter = ImageUtil.median_filter(original_img, "rectangular");                                    ImageUtil.show_image_in_dip_view(median_filter, title="median_filter")
-        threshold_img = ImageUtil.obtain_threshold_image(median_filter);                                         ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str)
+        threshold_img = ImageUtil.obtain_threshold_image(original_img);             ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
 
         se_one_side_length: int = 9
         se_shape: str = "rectangular"
-        # se: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        se: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
 
+        top_hat_img_dip = top_hat_img = diplib.Tophat(threshold_img, se);           CommonUtil.save_image_to_folder(top_hat_img_dip, output_dir_str, "top_hat_img_dip.tif")
 
-        black_hat_img_dip = black_hat_img = ImageUtil.black_hat(threshold_img, se_one_side_length, se_shape);           CommonUtil.save_image_to_folder(black_hat_img_dip, output_dir_str, "black_hat_img_dip.tif")
-
-        # black_hat_img_code = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img;           CommonUtil.save_image_to_folder(black_hat_img_code, output_dir_str, "black_hat_img_code.tif")
-
-
+        top_hat_img_code = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img;           CommonUtil.save_image_to_folder(top_hat_img_code, output_dir_str, "top_hat_img_code.tif")
 
 
 
 
-    # black_hat_img: diplib.PyDIP_bin.Image = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img
+
+
+    # top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img
 
 
 

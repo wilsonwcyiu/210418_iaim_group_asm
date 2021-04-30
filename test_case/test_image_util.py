@@ -6,6 +6,25 @@ from util.image_util import ImageUtil
 
 class TestImageUtil:
 
+    @staticmethod
+    def top_hat_test1():
+        image_name_list: list = ["AxioCamIm01"]
+            # , "AxioCamIm02", "AxioCamIm03"]
+
+        dir_path_str: int = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
+
+
+        for image_name in image_name_list:
+            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=dir_path_str)
+            threshold_img = ImageUtil.obtain_threshold_image(original_img);             ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
+
+            segment_size: int = 9
+            se_shape: str = "rectangular"
+            top_hat_img = ImageUtil.top_hat(threshold_img, segment_size, se_shape)
+
+            ImageUtil.show_image_in_dip_view(top_hat_img, title="top_hat_img")
+
+
 
     @staticmethod
     def test_threshold():
@@ -54,7 +73,7 @@ class TestImageUtil:
             threshold_img = ImageUtil.obtain_threshold_image(original_img)
 
             segment_size: int = 9
-            erosion_img = ImageUtil.erosion(threshold_img, segment_size)
+            erosion_img = ImageUtil.erosion(threshold_img, segment_size, se_shape="rectangular")
 
             ImageUtil.show_image_in_dip_view(erosion_img, title="image_name")
 

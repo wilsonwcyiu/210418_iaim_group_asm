@@ -9,8 +9,7 @@ from matplotlib import pyplot
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
-
-
+from util.plot_util import PlotUtil
 
 
 @staticmethod
@@ -40,19 +39,20 @@ if __name__ == '__main__':
     image_name_list: list = ["AxioCamIm01", "AxioCamIm02", "AxioCamIm03"]
 
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str);        ImageUtil.show_image_in_dip_view(original_img, title="original_img")
-        median_filter = ImageUtil.median_filter(original_img, "rectangular");                                    ImageUtil.show_image_in_dip_view(median_filter, title="median_filter")
-        threshold_img = ImageUtil.obtain_threshold_image(median_filter);                                         ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
+        print(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str);        #ImageUtil.show_image_in_dip_view(original_img, title="original_img")
 
-        se_one_side_length: int = 9
-        se_shape: str = "rectangular"
-        # se: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        histogram_list = ImageUtil.obtain_pixel_value_list(original_img)
+        diplib.ContrastStretch()
 
+        plot_id: int = 1
+        plot_title: str = ""
+        x_label: str = "x"
+        y_label: str = "y"
+        plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, histogram_list)
 
-        black_hat_img_dip = black_hat_img = ImageUtil.black_hat(threshold_img, se_one_side_length, se_shape);           CommonUtil.save_image_to_folder(black_hat_img_dip, output_dir_str, "black_hat_img_dip.tif")
-
-        # black_hat_img_code = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img;           CommonUtil.save_image_to_folder(black_hat_img_code, output_dir_str, "black_hat_img_code.tif")
-
+        file_name = image_name + "_histrogram"
+        PlotUtil.save_plot_to_folder(plot, output_dir_str, file_name)
 
 
 

@@ -12,33 +12,96 @@ from util.common_util import CommonUtil
 
 class ImageUtil:
 
+    # method ("linear","signed linear","logarithmic","signed logarithmic","erf","decade","sigmoid")
+    # https://qiftp.tudelft.nl/dipref/ContrastStretch.html
+    @staticmethod
+    def increase_image_contrast(img: diplib.PyDIP_bin.Image):
+        high_contrast_img: diplib.PyDIP_bin.Image = diplib.ContrastStretch(img, method="linear")
 
+        return high_contrast_img
 
 
 
     @staticmethod
-    def opening(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
-        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(threshold_img, segment_size)
-        opening_img: diplib.PyDIP_bin.Image = diplib.Dilation(erosion_img, segment_size)
+    def invert_img(img: diplib.PyDIP_bin.Image):
+        return ~img
+
+
+
+    @staticmethod
+    def filter_image_by_threshold_value(img: diplib.PyDIP_bin.Image, threshold_value: float):
+        filtered_img: diplib.PyDIP_bin.Image = img < threshold_value
+
+        return filtered_img
+
+
+
+    @staticmethod
+    def subtraction_img1_minus_img2(img1: diplib.PyDIP_bin.Image, img2: diplib.PyDIP_bin.Image):
+        subtracted_img: diplib.PyDIP_bin.Image = img1 > img2
+
+        return subtracted_img
+
+
+
+    @staticmethod
+    def black_hat(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
+        closing_img: diplib.PyDIP_bin.Image = ImageUtil.closing(threshold_img, se_one_side_length, se_shape)
+        black_hat_img: diplib.PyDIP_bin.Image =  ImageUtil.subtraction_img1_minus_img2(closing_img, threshold_img)
+
+        return black_hat_img
+
+
+
+    @staticmethod
+    def top_hat(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
+        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        top_hat_img = diplib.Tophat(threshold_img, segment_element)
+
+        # works the same
+        # top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img
+
+        return top_hat_img
+
+
+
+    @staticmethod
+    def opening(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
+        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+
+        erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(threshold_img, se=segment_element)
+        opening_img: diplib.PyDIP_bin.Image = diplib.Dilation(erosion_img, se=segment_element)
 
         return opening_img
 
 
 
     @staticmethod
-    def closing(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
-        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(threshold_img, segment_size)
-        closing_img: diplib.PyDIP_bin.Image = diplib.Erosion(dilation_img, segment_size)
+    def closing(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
+        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+
+        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(threshold_img, se=segment_element)
+        closing_img: diplib.PyDIP_bin.Image = diplib.Erosion(dilation_img, se=segment_element)
 
         return closing_img
 
 
 
+
+    # https://github.com/DIPlib/diplib/blob/master/dipimage/erosion.m
+    # % SYNOPSIS:
+    # %  filterShape: 'rectangular', 'elliptic', 'diamond', 'parabolic'
+    # %  image_se:    binary or grey-value image with the shape for the structuring element
+    # %  boundary_condition: Defines how the boundary of the image is handled.
+    # %                      See HELP BOUNDARY_CONDITION
     @staticmethod
-    def dilation(threshold_img : diplib.PyDIP_bin.Image, segment_size: int):
-        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(threshold_img, segment_size)
+    def dilation(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
+        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        dilation_img: diplib.PyDIP_bin.Image = diplib.Dilation(threshold_img, se=segment_element)
 
         return dilation_img
+
+
 
 
 
@@ -54,11 +117,14 @@ class ImageUtil:
     # %  boundary_condition: Defines how the boundary of the image is handled.
     # %                      See HELP BOUNDARY_CONDITION
     @staticmethod
-    def erosion(threshold_img : diplib.PyDIP_bin.Image, segment_element_length: int, shape: str):
-        segment_element: SE = diplib.PyDIP_bin.SE(shape, param=segment_element_length)
+    def erosion(threshold_img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
+
+        segment_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
         erosion_img: diplib.PyDIP_bin.Image = diplib.Erosion(threshold_img, se=segment_element)
 
         return erosion_img
+
+
 
 
 
@@ -95,7 +161,7 @@ class ImageUtil:
             max_value = 256
 
 
-        histogram_list: list = ([0] * max_value) + 1
+        histogram_list: list = [0] * max_value
 
 
         for pixel_location in range(len(img)):
@@ -184,7 +250,7 @@ class ImageUtil:
 
     @staticmethod
     def obtain_threshold_image(img: diplib.PyDIP_bin.Image):
-        threshold_value: float = ImageUtil.derive_threshold_value(img);     print("134234 threshold_value", threshold_value)
+        threshold_value: float = ImageUtil.derive_threshold_value(img);     #print("134234 threshold_value", threshold_value)
         threshold_img: diplib.PyDIP_bin.Image = img < threshold_value
 
         return threshold_img

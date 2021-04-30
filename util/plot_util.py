@@ -18,7 +18,7 @@ class PlotUtil():
 
 
     @staticmethod       # xy_tuple_list = [(0,0), (3,5), (5,5)]
-    def create_plot_hist(plot_id: int, plot_title: str, x_label: str, y_label: str, data_list: list, bins:int=None):
+    def create_histogram_plot(plot_id: int, plot_title: str, x_label: str, y_label: str, data_list: list, bins:int=None):
         pyplot.figure(plot_id)
         pyplot.clf()
         pyplot.title(plot_title)

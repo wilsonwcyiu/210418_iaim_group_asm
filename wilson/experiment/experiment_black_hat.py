@@ -37,8 +37,11 @@ if __name__ == '__main__':
 
 
 
-    image_name_list: list = ["AxioCamIm01", "AxioCamIm02", "AxioCamIm03"]
+    image_name_list: list = ["AxioCamIm01"]
 
+    # , "AxioCamIm02", "AxioCamIm03"]
+    # original_img1: PyDIPjavaio.ImageRead = ImageUtil.obtain_image("AxioCamIm02", dir_path=input_dir_str);
+    # t1 = ImageUtil.obtain_threshold_image(original_img1)
     for image_name in image_name_list:
         original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str);        ImageUtil.show_image_in_dip_view(original_img, title="original_img")
         median_filter = ImageUtil.median_filter(original_img, "rectangular");                                    ImageUtil.show_image_in_dip_view(median_filter, title="median_filter")
@@ -47,9 +50,13 @@ if __name__ == '__main__':
         se_one_side_length: int = 9
         se_shape: str = "rectangular"
         # se: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+        closing_img = ImageUtil.closing(threshold_img, se_one_side_length, se_shape)   ;                                ImageUtil.show_image_in_dip_view(closing_img, title="closing_img")
+
+        black_hat_img: diplib.PyDIP_bin.Image = closing_img > threshold_img   ;                                         ImageUtil.show_image_in_dip_view(black_hat_img, title="black_hat_img")
 
 
-        black_hat_img_dip = black_hat_img = ImageUtil.black_hat(threshold_img, se_one_side_length, se_shape);           CommonUtil.save_image_to_folder(black_hat_img_dip, output_dir_str, "black_hat_img_dip.tif")
+
+        # black_hat_img_dip = black_hat_img = ImageUtil.black_hat(threshold_img, se_one_side_length, se_shape);           CommonUtil.save_image_to_folder(black_hat_img_dip, output_dir_str, "black_hat_img_dip.tif")
 
         # black_hat_img_code = ImageUtil.opening(threshold_img, se_one_side_length, se_shape) < threshold_img;           CommonUtil.save_image_to_folder(black_hat_img_code, output_dir_str, "black_hat_img_code.tif")
 
