@@ -32,19 +32,8 @@ if __name__ == '__main__':
             high_contrast_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(high_contrast_img, title="high_contrast_img")
             CommonUtil.save_image_to_folder(high_contrast_img, output_dir_str, image_name + "_original_img.tif")
 
-
-            se_one_side_length: int = se_length #7
+            se_one_side_length: int = se_length
             se_shape: str = shape
-
-            # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(high_contrast_img)
-            # plot_id: int = 1
-            # plot_title: str = "t"
-            # x_label: str = "x"
-            # y_label: str = "y"
-            # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
-            # plot.show()
-            # CommonUtil.press_enter_to_exit()
-
 
             closing_img = ImageUtil.closing(high_contrast_img, se_one_side_length, se_shape)
             file_name = image_name + "_closing_img_" + shape + "_" + str(se_length) + ".tif"
@@ -55,7 +44,12 @@ if __name__ == '__main__':
             file_name = image_name + "_black_hat_icmg_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
+            ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
 
+            # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(black_hat_img);
+            # plot_id: int = 1; plot_title: str = "t"; x_label: str = "x"; y_label: str = "y"
+            # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
+            # plot.show()
 
 
 
@@ -71,18 +65,8 @@ if __name__ == '__main__':
             CommonUtil.save_image_to_folder(high_contrast_img, output_dir_str, image_name + "_original_img.tif")
 
 
-            se_one_side_length: int = se_length #7
+            se_one_side_length: int = se_length
             se_shape: str = shape
-
-            # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(high_contrast_img)
-            # plot_id: int = 1
-            # plot_title: str = "t"
-            # x_label: str = "x"
-            # y_label: str = "y"
-            # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
-            # plot.show()
-            # CommonUtil.press_enter_to_exit()
-
 
             closing_img = ImageUtil.closing(high_contrast_img, se_one_side_length, se_shape)
             file_name = image_name + "_closing_img_" + shape + "_" + str(se_length) + ".tif"
@@ -93,7 +77,12 @@ if __name__ == '__main__':
             file_name = image_name + "_black_hat_icmg_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
+            ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
 
+            # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(black_hat_img);
+            # plot_id: int = 1; plot_title: str = "t"; x_label: str = "x"; y_label: str = "y"
+            # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
+            # plot.show()
 
 
 
@@ -109,18 +98,8 @@ if __name__ == '__main__':
             CommonUtil.save_image_to_folder(high_contrast_img, output_dir_str, image_name + "_original_img.tif")
 
 
-            se_one_side_length: int = se_length #7
+            se_one_side_length: int = se_length
             se_shape: str = shape
-
-            # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(high_contrast_img)
-            # plot_id: int = 1
-            # plot_title: str = "t"
-            # x_label: str = "x"
-            # y_label: str = "y"
-            # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
-            # plot.show()
-            # CommonUtil.press_enter_to_exit()
-
 
             closing_img = ImageUtil.closing(high_contrast_img, se_one_side_length, se_shape)
             file_name = image_name + "_closing_img_" + shape + "_" + str(se_length) + ".tif"
@@ -131,7 +110,12 @@ if __name__ == '__main__':
             file_name = image_name + "_black_hat_icmg_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
+            ImageUtil.show_image_in_dip_view(black_hat_img, title=image_name)
 
+            # obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(black_hat_img);
+            # plot_id: int = 1; plot_title: str = "t"; x_label: str = "x"; y_label: str = "y"
+            # plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
+            # plot.show()
 
 
     print("output_dir_str", output_dir_str)
