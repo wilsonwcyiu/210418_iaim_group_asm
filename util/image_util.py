@@ -414,3 +414,26 @@ class ImageUtil:
         perimeter_list = numpy.array(px_measure['Perimeter']).transpose()
 
         return size_list, perimeter_list
+
+
+    @staticmethod
+    def threshold(image: PyDIPjavaio.ImageRead):
+        _, threshold = diplib.Threshold(image, method='otsu')
+
+        return threshold
+
+
+    @staticmethod
+    def segment_image_white(image: PyDIPjavaio.ImageRead):
+        # function for segmentation of white shapes on black background
+        threshold = ImageUtil.threshold(image)
+
+        return image > threshold
+
+
+    @staticmethod
+    def segment_image_black(image: PyDIPjavaio.ImageRead):
+        # function for segmentation of black shapes on white background
+        threshold = ImageUtil.threshold(image)
+
+        return image < threshold

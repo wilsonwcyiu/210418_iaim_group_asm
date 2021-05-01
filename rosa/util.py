@@ -4,6 +4,8 @@ from datetime import datetime
 import diplib
 from diplib import PyDIPjavaio
 
+import matplotlib.pyplot as plt
+
 import numpy
 
 class UtilFunctions:
@@ -27,7 +29,7 @@ class UtilFunctions:
 
     @staticmethod
     def obtain_image(image_name: str):
-        image_file_path = "../image_files/" + image_name
+        image_file_path = "../image_files/asm3/" + image_name
         print(image_file_path)
 
         img: PyDIPjavaio.ImageRead = diplib.ImageRead(image_file_path)
@@ -36,7 +38,7 @@ class UtilFunctions:
 
 
     @staticmethod
-    def get_mean_std(values: []):
+    def get_mean_std(values: list):
         mean = numpy.mean(values)
         std = numpy.std(values)
 
@@ -44,35 +46,17 @@ class UtilFunctions:
 
 
     @staticmethod
-    def print_largest_measurements(sizes: [], perimeters: []):
-        index_sorted = numpy.flip((numpy.argsort(sizes)))
+    def threshold(img: PyDIPjavaio.ImageRead):
+        _, threshold = diplib.Threshold(img, method='otsu')
 
-        sizes_top = []
-        perimeters_top = []
-
-        for i in index_sorted:
-            if sizes[i] > 400:
-                sizes_top.append(sizes[i])
-                perimeters_top.append(perimeters[i])
-
-        print("Only relevant objects:")
-        print(sizes_top)
-        print(perimeters_top)
-        mean, std = UtilFunctions.get_mean_std(sizes_top)
-        print("sizes mean ", mean, " | sizes std ", std)
-
-        mean, std = UtilFunctions.get_mean_std(perimeters_top)
-        print("perimeters mean ", mean, " | perimeters std ", std)
-        print("----------------------------------")
-
-        return sizes_top
+        return threshold
 
 
     @staticmethod
-    def threshold(img: PyDIPjavaio.ImageRead):
-        _, threshold = diplib.Threshold(img)
-
-        return threshold
+    def segment_image(img: PyDIPjavaio.ImageRead):
+        threshold_value = UtilFunctions.threshold(img)
+        print(threshold_value)
+        return img > threshold_value
 
 
     @staticmethod
@@ -90,3 +74,35 @@ class UtilFunctions:
             pixel_value_list = numpy.append(pixel_value_list, int(list_entry[0]))
 
         return pixel_value_list
+
+
+    @staticmethod
+    def get_intensity_range(pixel_values: list):
+        return max(pixel_values), min(pixel_values)
+
+    @staticmethod
+    def get_histogram(pixel_values: list, image_name: str):
+        #max_value, min_value = UtilFunctions.get_intensity_range(pixel_values)
+        bin_list = list(range(0, 255))
+        plt.hist(pixel_values, bins=bin_list)
+        plt.title('Histogram of ' + image_name)
+        plt.xlabel('Intensity values')
+        plt.ylabel('Frequency')
+        plt.show()
+
+
+    @staticmethod
+    def get_numerical_statistics(pixel_values: list, image_name: str):
+        max_value, min_value = UtilFunctions.get_intensity_range(pixel_values)
+        mean_value = numpy.mean(pixel_values)
+
+        print("Minimum intensity value of ", image_name, ": ", min_value)
+        print("Maximum intensity value of ", image_name, ": ", max_value)
+
+        print("Average intensity value of ", image_name, ": ", mean_value)
+
+
+    @staticmethod
+    def black_hat_transf(img: PyDIPjavaio.ImageRead):
+        struct_elem = diplib.PyDIP_bin.SE(shape='elliptic', param=71)
+        return diplib.Tophat(img, struct_elem, polarity="black")

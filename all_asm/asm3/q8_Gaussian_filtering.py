@@ -1,0 +1,36 @@
+import diplib as dip
+import numpy as np
+import matplotlib.pyplot as plt
+
+from util.common_util import CommonUtil
+from util.image_util import ImageUtil
+
+
+
+
+if __name__ == '__main__':
+
+    image_name = 'scale-img'
+
+    input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
+    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + "q8/"
+    CommonUtil.create_missing_dir(output_dir_str)
+
+    # different sigma values
+    sigma = [1, 2, 3, 4, 5, 10, 15, 20]
+
+    for value in sigma:
+        print("sigma:", sigma)
+
+        original_image = ImageUtil.obtain_image(image_name, input_dir_str)
+
+        gauss_image = ImageUtil.gauss_filter(original_image, value)
+
+        file_name = image_name + "_gauss_" + str(value) + ".tif"
+        print(file_name)
+
+        ImageUtil.show_image_in_dip_view(gauss_image, 10, file_name)
+        # CommonUtil.save_image_to_folder(gauss_image, output_dir_str, file_name)
+
+
+
