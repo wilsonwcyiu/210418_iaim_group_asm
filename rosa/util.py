@@ -56,13 +56,14 @@ class UtilFunctions:
     def segment_image(img: PyDIPjavaio.ImageRead):
         threshold_value = UtilFunctions.threshold(img)
         print(threshold_value)
-        return img > threshold_value
+        segm_img = img > threshold_value
+        return segm_img
 
 
     @staticmethod
     def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int):
-        #diplib.PyDIPviewer.Show(img)
-        diplib.Show(img)
+        diplib.PyDIPviewer.Show(img)
+        #diplib.Show(img)
         time.sleep(sleep_sec)
 
 
@@ -112,3 +113,8 @@ class UtilFunctions:
     @staticmethod
     def gaussian_filter(img: PyDIPjavaio.ImageRead, sigma: int):
         return diplib.Gauss(img, sigma)
+
+
+    @staticmethod
+    def calibrate(img: PyDIPjavaio.ImageRead):
+        print(img.Sizes())

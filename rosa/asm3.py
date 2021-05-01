@@ -13,6 +13,7 @@ from util import UtilFunctions
 if __name__ == '__main__':
     sleep_sec: int = 10
 
+    '''
     # Part 3.2
     image_name_list: list = ["scale-img.ics"]
 
@@ -28,27 +29,29 @@ if __name__ == '__main__':
 
         #UtilFunctions.save_image_to_default_project_folder(img, "test")
 
-
-
-
-    # Part 3.1
     '''
-    image_name_list = ["AxioCamIm02.tif"]
+    # Part 3.1
+
+    image_name_list = ["AxioCamIm01.tif"]
 
     for image_name in image_name_list:
         img = UtilFunctions.obtain_image(image_name)
+        print(img)
         #UtilFunctions.show_image_in_dip_view(img, sleep_sec)
 
-        img = UtilFunctions.black_hat_transf(img)
-
-        UtilFunctions.show_image_in_dip_view(img, sleep_sec)
+        even_background_img = UtilFunctions.black_hat_transf(img)
+        #UtilFunctions.show_image_in_dip_view(even_background_img, sleep_sec)
 
         kernel = dip.PyDIP_bin.Kernel(shape='rectangular', param=[30])
-        img = dip.MedianFilter(img, kernel)
+        no_noise_img = dip.MedianFilter(even_background_img, kernel)
+        #UtilFunctions.show_image_in_dip_view(no_noise_img, sleep_sec)
 
-        img = UtilFunctions.segment_image(img)
-        UtilFunctions.show_image_in_dip_view(img, sleep_sec)
-    '''
+        segm_img = UtilFunctions.segment_image(no_noise_img)
+        UtilFunctions.show_image_in_dip_view(segm_img, sleep_sec)
+
+        UtilFunctions.calibrate(segm_img)
+
+
     '''
     # Part 3.3
     image_name_list = ["scale-img.tif"]
