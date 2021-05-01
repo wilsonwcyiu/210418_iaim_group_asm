@@ -1,6 +1,7 @@
 import diplib as dip
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
@@ -26,7 +27,7 @@ if __name__ == '__main__':
 
         # Gaussian filtering
         gauss_image = ImageUtil.gauss_filter(original_image, value)
-        file_name = image_name + "_gauss_" + str(value)
+        file_name = image_name + "_gauss_" + str(value) + '.tif'
         print(file_name)
         ImageUtil.show_image_in_dip_view(gauss_image, 10, file_name + ".tif")
         CommonUtil.save_image_to_folder(gauss_image, output_dir_str, file_name)
@@ -35,8 +36,9 @@ if __name__ == '__main__':
         # subtracting the original image from output of gaussian filter on original image
         # to get similar filter as black top-hat filter
         difference = gauss_image - original_image
-        file_name = image_name + "_gauss_" + str(value) + "_difference"
-        ImageUtil.show_image_in_dip_view(difference, 20, file_name + ".tif")
+        file_name = image_name + "_gauss_" + str(value) + "_difference" + '.tif'
+        print(file_name)
+        ImageUtil.show_image_in_dip_view(difference, 10, file_name + ".tif")
         CommonUtil.save_image_to_folder(difference, output_dir_str, file_name)
 
 
