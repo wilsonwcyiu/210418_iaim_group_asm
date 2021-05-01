@@ -127,7 +127,17 @@ class UtilFunctions:
 
     @staticmethod
     def get_pattern_of_column(column_values: list):
-        # Get pattern
+        pattern = []
+        # Already count the first pixel value
+        count = 1
+        for i in range(1, len(column_values)-1):
+            if column_values[i] == column_values[i-1]:
+                count += 1
+            else:
+                pattern.append(count)
+                count = 1
+        return pattern
+
 
     @staticmethod
     def calibrate(img: PyDIPjavaio.ImageRead):
@@ -140,7 +150,6 @@ class UtilFunctions:
         column_patterns = []
 
         for i in range(width - 1):
-            # found_first_white_pixel = 0
             column_pixels = []
             for j in range(height - 1):
                 pixel_value = int(img.At(i, j)[0])
@@ -149,6 +158,10 @@ class UtilFunctions:
             new_column_pixels = UtilFunctions.remove_irrelevant_parts(column_pixels)
 
             if len(new_column_pixels) > 1:
-                print(new_column_pixels)
                 # Get pattern
-                # Then save it to column patterns
+                column_pattern = UtilFunctions.get_pattern_of_column(new_column_pixels)
+                column_patterns.append(column_pattern)
+
+        column_patterns.sort(key=len)
+        print("Column with highest transition rate:")
+        print(column_patterns[-1])
