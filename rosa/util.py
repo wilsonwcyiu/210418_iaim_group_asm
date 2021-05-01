@@ -55,7 +55,6 @@ class UtilFunctions:
     @staticmethod
     def segment_image(img: PyDIPjavaio.ImageRead):
         threshold_value = UtilFunctions.threshold(img)
-        print(threshold_value)
         segm_img = img > threshold_value
         return segm_img
 
@@ -116,5 +115,49 @@ class UtilFunctions:
 
 
     @staticmethod
+    def get_pattern(column_values: list):
+        if len(column_values) > 0:
+            while column_values[-1] == 0:
+                column_values.pop()
+            print(column_values)
+
+
+    @staticmethod
     def calibrate(img: PyDIPjavaio.ImageRead):
-        print(img.Sizes())
+        width, height = img.Sizes()
+
+        print("Width: ", width)
+        print("Height: ", height)
+
+        column_candidates = []
+
+        '''
+        for i in range(width - 1):
+            found_white_pixel = 0
+            for j in range(height - 1):
+                pixel_value = int(img.At(i, j)[0])
+                if pixel_value == 1:
+                    found_white_pixel = 1
+            if found_white_pixel == 1:
+                column_candidates.append(i)
+
+        print(column_candidates)
+        '''
+
+        columns = []
+
+        for i in range(width - 1):
+            # found_first_white_pixel = 0
+            column_pixels = []
+            for j in range(height - 1):
+                pixel_value = int(img.At(i, j)[0])
+
+                if pixel_value == 1 and found_first_white_pixel == 0:
+                    found_first_white_pixel = 1
+                    column_pixels.append(pixel_value)
+
+                if found_first_white_pixel == 1:
+                    column_pixels.append(pixel_value)
+
+            print("column ", i)
+            UtilFunctions.get_pattern(column_pixels)

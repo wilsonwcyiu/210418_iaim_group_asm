@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from util import UtilFunctions
 
 if __name__ == '__main__':
-    sleep_sec: int = 10
+    sleep_sec: int = 20
 
     '''
     # Part 3.2
@@ -36,15 +36,14 @@ if __name__ == '__main__':
 
     for image_name in image_name_list:
         img = UtilFunctions.obtain_image(image_name)
-        print(img)
-        #UtilFunctions.show_image_in_dip_view(img, sleep_sec)
+        # UtilFunctions.show_image_in_dip_view(img, sleep_sec)
 
         even_background_img = UtilFunctions.black_hat_transf(img)
-        #UtilFunctions.show_image_in_dip_view(even_background_img, sleep_sec)
+        #  UtilFunctions.show_image_in_dip_view(even_background_img, sleep_sec)
 
         kernel = dip.PyDIP_bin.Kernel(shape='rectangular', param=[30])
         no_noise_img = dip.MedianFilter(even_background_img, kernel)
-        #UtilFunctions.show_image_in_dip_view(no_noise_img, sleep_sec)
+        # UtilFunctions.show_image_in_dip_view(no_noise_img, sleep_sec)
 
         segm_img = UtilFunctions.segment_image(no_noise_img)
         UtilFunctions.show_image_in_dip_view(segm_img, sleep_sec)
