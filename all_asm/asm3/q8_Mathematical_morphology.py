@@ -1,3 +1,5 @@
+import os
+
 import diplib as dip
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +17,8 @@ if __name__ == '__main__':
     image_name = 'scale-img'
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
-    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + "q8/"
+    date_time_str: str = CommonUtil.generate_date_time_str()
+    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "_q8_Math_morp/"
     CommonUtil.create_missing_dir(output_dir_str)
 
     se_shape = ['elliptic', 'diamond', 'rectangular']
