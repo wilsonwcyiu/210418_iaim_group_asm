@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
     date_time_str: str = CommonUtil.generate_date_time_str()
-    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "/q9_gauss/"
+    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "_q9_gauss/"
     CommonUtil.create_missing_dir(output_dir_str)
 
     # different sigma values
