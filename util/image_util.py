@@ -198,7 +198,7 @@ class ImageUtil:
         pixel_value_list: list = []
 
         for pixel_location in range(len(img)):
-            pixel_value: int = int(img[pixel_location][0])
+            pixel_value = img[pixel_location][0]
             pixel_value_list.append(pixel_value)
 
         return pixel_value_list

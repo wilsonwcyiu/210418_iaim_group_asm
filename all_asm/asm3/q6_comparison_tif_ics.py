@@ -15,14 +15,24 @@ if __name__ == '__main__':
     image_name_list: list = ["scale-img.tif", "scale-img.ics"]
 
     for image_name in image_name_list:
-        img = UtilFunctions.obtain_image(image_name, input_dir)
-        print(img)
+        print("Analysis of ", image_name)
+        curr_img = ImageUtil.obtain_image(image_name, input_dir)
+        print(curr_img)
 
-        #UtilFunctions.show_image_in_dip_view(img, sleep_sec)
+        ImageUtil.show_image_in_dip_view(curr_img, sleep_sec, image_name)
 
-        #pixel_values = UtilFunctions.get_pixel_values(img)
-        #UtilFunctions.get_histogram(pixel_values, image_name)
+        pixel_values = ImageUtil.obtain_pixel_value_list(curr_img)
 
-        #UtilFunctions.get_numerical_statistics(pixel_values, image_name)
+        min_value = min(pixel_values)
+        max_value = max(pixel_values)
+        mean_value = np.mean(pixel_values)
 
-        #UtilFunctions.save_image_to_default_project_folder(img, "test")
+        print("Minimum intensity value of ", image_name, ": ", min_value)
+        print("Maximum intensity value of ", image_name, ": ", max_value)
+
+        print("Average intensity value of ", image_name, ": ", mean_value)
+
+        histogram = PlotUtil.create_histogram_plot(1, 'Histogram of ' + image_name, 'Intensity values', 'Frequency', pixel_values, list(range(int(min_value), int(max_value))))
+        histogram.show()
+
+        CommonUtil.save_image_to_default_project_folder(curr_img, "asm3", image_name)
