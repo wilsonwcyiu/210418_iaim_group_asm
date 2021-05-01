@@ -27,9 +27,8 @@ if __name__ == '__main__':
 
             original_image = ImageUtil.obtain_image(image_name, input_dir_str)
 
+            # Black Hat transformation
             black_hat_image = ImageUtil.black_hat(original_image, size, se)
-
             file_name = image_name + "_black_hat_" + se + "_" + str(size) + ".tif"
-            ImageUtil.show_image_in_dip_view(black_hat_image, 10, file_name)
-
-            # CommonUtil.save_image_to_folder(black_hat_image, output_dir_str, file_name)
+            ImageUtil.show_image_in_dip_view(black_hat_image, 20, file_name)
+            CommonUtil.save_image_to_folder(black_hat_image, output_dir_str, file_name)

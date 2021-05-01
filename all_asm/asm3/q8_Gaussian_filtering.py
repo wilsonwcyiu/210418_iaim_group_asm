@@ -17,20 +17,30 @@ if __name__ == '__main__':
     CommonUtil.create_missing_dir(output_dir_str)
 
     # different sigma values
-    sigma = [1, 2, 3, 4, 5, 10, 15, 20]
+    sigma = [1, 2, 3, 4, 5, 10, 15, 20, 30, 50]
 
     for value in sigma:
         print("sigma:", sigma)
 
         original_image = ImageUtil.obtain_image(image_name, input_dir_str)
 
+        # Gaussian filtering
         gauss_image = ImageUtil.gauss_filter(original_image, value)
-
-        file_name = image_name + "_gauss_" + str(value) + ".tif"
+        file_name = image_name + "_gauss_" + str(value)
         print(file_name)
+        ImageUtil.show_image_in_dip_view(gauss_image, 10, file_name + ".tif")
+        CommonUtil.save_image_to_folder(gauss_image, output_dir_str, file_name)
 
-        ImageUtil.show_image_in_dip_view(gauss_image, 10, file_name)
-        # CommonUtil.save_image_to_folder(gauss_image, output_dir_str, file_name)
+        # Difference
+        # subtracting the original image from output of gaussian filter on original image
+        # to get similar filter as black top-hat filter
+        difference = gauss_image - original_image
+        file_name = image_name + "_gauss_" + str(value) + "_difference"
+        ImageUtil.show_image_in_dip_view(difference, 20, file_name + ".tif")
+        CommonUtil.save_image_to_folder(difference, output_dir_str, file_name)
+
+
+
 
 
 
