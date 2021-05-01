@@ -364,7 +364,7 @@ class ImageUtil:
     @staticmethod
     def derive_threshold_value(img: PyDIPjavaio.ImageRead):
         threshold_value: float = None
-        _, threshold_value = diplib.Threshold(img)
+        _, threshold_value = diplib.Threshold(img, method = 'otsu')
 
         return threshold_value
 
