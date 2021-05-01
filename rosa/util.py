@@ -61,7 +61,8 @@ class UtilFunctions:
 
     @staticmethod
     def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int):
-        diplib.PyDIPviewer.Show(img)
+        #diplib.PyDIPviewer.Show(img)
+        diplib.Show(img)
         time.sleep(sleep_sec)
 
 
@@ -106,3 +107,8 @@ class UtilFunctions:
     def black_hat_transf(img: PyDIPjavaio.ImageRead):
         struct_elem = diplib.PyDIP_bin.SE(shape='elliptic', param=71)
         return diplib.Tophat(img, struct_elem, polarity="black")
+
+
+    @staticmethod
+    def gaussian_filter(img: PyDIPjavaio.ImageRead, sigma: int):
+        return diplib.Gauss(img, sigma)
