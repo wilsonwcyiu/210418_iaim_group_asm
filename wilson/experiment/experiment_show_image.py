@@ -28,7 +28,7 @@ if __name__ == '__main__':
     print("starting...")
     sleep_sec: int = 0
 
-    image_name_list: list = ["AxioCamIm01"] #, "AxioCamIm02", "AxioCamIm03"]
+    image_name_list: list = ["AxioCamIm02"] #, "AxioCamIm02", "AxioCamIm03"]
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
 
