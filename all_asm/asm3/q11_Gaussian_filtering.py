@@ -1,6 +1,8 @@
 import diplib as dip
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
@@ -77,6 +79,26 @@ if __name__ == '__main__':
     # Units per pixel
     units_per_pixel = number_of_units_on_longer_axis / max_feret
     print("Units  per pixel:", units_per_pixel, "[units/px]")
+
+
+    # Units per pixel with real distance 1 mm between two bars
+    image = difference
+    mm_per_pixel = units_per_pixel
+    units = "mm"
+
+    image.SetPixelSize(dip.PixelSize(dip.PhysicalQuantity(mm_per_pixel, units)))
+    print("Pixel size:", image.PixelSize())
+    image.Show()
+    time.sleep(20)
+
+    segmented_image_2 = ImageUtil.segment_image_white(image)
+    labeled_image = dip.Label(segmented_image_2)
+    feret_measurement = dip.MeasurementTool.Measure(labeled_image, image, ['Size', 'Feret'])
+    print(feret_measurement)
+
+
+
+
 
 
 
