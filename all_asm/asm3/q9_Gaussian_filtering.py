@@ -12,7 +12,7 @@ from util.image_util import ImageUtil
 
 if __name__ == '__main__':
 
-    image_name = 'scale-img'
+    image_name = 'scale-img.tif'
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
     date_time_str: str = CommonUtil.generate_date_time_str()
