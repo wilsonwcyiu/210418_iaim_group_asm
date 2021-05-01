@@ -15,7 +15,7 @@ if __name__ == '__main__':
     image_name = 'scale-img'
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
-    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + "q8/"
+    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + "q9/"
     CommonUtil.create_missing_dir(output_dir_str)
 
     se_shape = ['elliptic', 'diamond', 'rectangular']
