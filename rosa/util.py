@@ -115,12 +115,19 @@ class UtilFunctions:
 
 
     @staticmethod
-    def get_pattern(column_values: list):
-        if len(column_values) > 0:
-            while column_values[-1] == 0:
-                column_values.pop()
-            print(column_values)
+    def remove_irrelevant_parts(column_values: list):
+        while column_values[0] == 0 and len(column_values) > 1:
+            column_values.pop(0)
 
+        while column_values[-1] == 0 and len(column_values) > 1:
+            column_values.pop()
+
+        return column_values
+
+
+    @staticmethod
+    def get_pattern_of_column(column_values: list):
+        # Get pattern
 
     @staticmethod
     def calibrate(img: PyDIPjavaio.ImageRead):
@@ -129,35 +136,19 @@ class UtilFunctions:
         print("Width: ", width)
         print("Height: ", height)
 
-        column_candidates = []
-
-        '''
-        for i in range(width - 1):
-            found_white_pixel = 0
-            for j in range(height - 1):
-                pixel_value = int(img.At(i, j)[0])
-                if pixel_value == 1:
-                    found_white_pixel = 1
-            if found_white_pixel == 1:
-                column_candidates.append(i)
-
-        print(column_candidates)
-        '''
-
-        columns = []
+        # Odd are black pixels
+        column_patterns = []
 
         for i in range(width - 1):
             # found_first_white_pixel = 0
             column_pixels = []
             for j in range(height - 1):
                 pixel_value = int(img.At(i, j)[0])
+                column_pixels.append(pixel_value)
 
-                if pixel_value == 1 and found_first_white_pixel == 0:
-                    found_first_white_pixel = 1
-                    column_pixels.append(pixel_value)
+            new_column_pixels = UtilFunctions.remove_irrelevant_parts(column_pixels)
 
-                if found_first_white_pixel == 1:
-                    column_pixels.append(pixel_value)
-
-            print("column ", i)
-            UtilFunctions.get_pattern(column_pixels)
+            if len(new_column_pixels) > 1:
+                print(new_column_pixels)
+                # Get pattern
+                # Then save it to column patterns
