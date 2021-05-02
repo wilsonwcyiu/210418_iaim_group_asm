@@ -32,7 +32,7 @@ if __name__ == '__main__':
     '''
     # Part 3.1
 
-    image_name_list = ["AxioCamIm02.tif"]
+    image_name_list = ["AxioCamIm01.tif", "AxioCamIm02.tif", "AxioCamIm03.tif"]
 
     for image_name in image_name_list:
         img = UtilFunctions.obtain_image(image_name)
