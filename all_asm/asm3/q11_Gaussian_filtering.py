@@ -38,7 +38,7 @@ if __name__ == '__main__':
     gauss_image = ImageUtil.gauss_filter(original_image, sigma)
     file_name = image_name + "_gauss_" + str(sigma)
     print(file_name)
-    ImageUtil.show_image_in_dip_view(gauss_image, 10, file_name)
+    # ImageUtil.show_image_in_dip_view(gauss_image, 10, file_name)
     # CommonUtil.save_image_to_folder(gauss_image, output_dir_str, file_name + ".tif")
 
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     # to get similar filter as black top-hat filter
     difference = gauss_image - original_image
     file_name = file_name + "_difference"
-    ImageUtil.show_image_in_dip_view(difference, 10, file_name)
+    # ImageUtil.show_image_in_dip_view(difference, 10, file_name)
     # CommonUtil.save_image_to_folder(difference, output_dir_str, file_name)
 
 
@@ -55,20 +55,20 @@ if __name__ == '__main__':
     segmented_image = ImageUtil.segment_image_white(difference)
     file_name = file_name + '_segmented'
     print(file_name)
-    ImageUtil.show_image_in_dip_view(segmented_image, 10, file_name)
+    # ImageUtil.show_image_in_dip_view(segmented_image, 10, file_name)
     # CommonUtil.save_image_to_folder(segmented_image, output_dir_str, file_name + ".tif")
 
 
     # MEASUREMENT
-    labeled_image = dip.Label(segmented_image)
+    labeled_image = dip.Label(segmented_image, minSize=50)
     feret_measurement = dip.MeasurementTool.Measure(labeled_image, difference, ['Size', 'Feret'] )
     print(feret_measurement)
 
     # The biggest object has label 8
-    size_scale_object = feret_measurement[8]['Size']
+    size_scale_object = feret_measurement[3]['Size']
     print("Size of scale object:", size_scale_object)
 
-    feret_scale_object = feret_measurement[8]['Feret']
+    feret_scale_object = feret_measurement[3]['Feret']
     print("Feret:", feret_scale_object)
     max_feret = max(feret_scale_object)
     print("Max feret diameter:", max_feret, "[px]")
@@ -83,16 +83,18 @@ if __name__ == '__main__':
 
     # Units per pixel with real distance 1 mm between two bars
     image = difference
-    mm_per_pixel = units_per_pixel
+    mm_per_pixel = units_per_pixel # not rounded
+    mm_per_pixel_rounded = round(units_per_pixel, 3)
+    print("mm per pixel rounded:", mm_per_pixel_rounded)
     units = "mm"
 
-    image.SetPixelSize(dip.PixelSize(dip.PhysicalQuantity(mm_per_pixel, units)))
+    image.SetPixelSize(dip.PixelSize(dip.PhysicalQuantity(mm_per_pixel_rounded, units)))
     print("Pixel size:", image.PixelSize())
     image.Show()
-    time.sleep(20)
+    time.sleep(10)
 
     segmented_image_2 = ImageUtil.segment_image_white(image)
-    labeled_image = dip.Label(segmented_image_2)
+    labeled_image = dip.Label(segmented_image_2, minSize=50)
     feret_measurement = dip.MeasurementTool.Measure(labeled_image, image, ['Size', 'Feret'])
     print(feret_measurement)
 

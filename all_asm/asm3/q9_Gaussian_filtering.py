@@ -48,8 +48,8 @@ if __name__ == '__main__':
         segmented_image = ImageUtil.segment_image_white(difference)
         file_name = file_name + '_segmented'
         print(file_name)
-        ImageUtil.show_image_in_dip_view(segmented_image, 20, file_name)
-        CommonUtil.save_image_to_folder(segmented_image, output_dir_str, file_name + ".tif")
+        ImageUtil.show_image_in_dip_view(segmented_image, 10, file_name)
+        # CommonUtil.save_image_to_folder(segmented_image, output_dir_str, file_name + ".tif")
 
 
 

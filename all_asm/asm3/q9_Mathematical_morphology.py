@@ -31,7 +31,7 @@ if __name__ == '__main__':
             # Black Hat transformation
             black_hat_image = ImageUtil.black_hat(original_image, size, se)
             file_name = image_name + "_black_hat_" + se + "_" + str(size) + ".tif"
-            # ImageUtil.show_image_in_dip_view(black_hat_image, 20, file_name)
+            # ImageUtil.show_image_in_dip_view(black_hat_image, 10, file_name)
             # CommonUtil.save_image_to_folder(black_hat_image, output_dir_str, file_name)
 
 
@@ -39,6 +39,6 @@ if __name__ == '__main__':
             segmented_image = ImageUtil.segment_image_white(black_hat_image)
             file_name = file_name + '_segmented'
             print(file_name)
-            ImageUtil.show_image_in_dip_view(segmented_image, 20, file_name)
-            CommonUtil.save_image_to_folder(segmented_image, output_dir_str, file_name + ".tif")
+            ImageUtil.show_image_in_dip_view(segmented_image, 10, file_name)
+            # CommonUtil.save_image_to_folder(segmented_image, output_dir_str, file_name + ".tif")
 

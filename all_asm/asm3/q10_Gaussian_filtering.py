@@ -58,15 +58,16 @@ if __name__ == '__main__':
 
 
     # MEASUREMENT
-    labeled_image = dip.Label(segmented_image)
+    # Setting the minSize to 50, assuming that only the squares and the scale will remain in the image
+    labeled_image = dip.Label(segmented_image, minSize=50)
     feret_measurement = dip.MeasurementTool.Measure(labeled_image, difference, ['Size', 'Feret'] )
     print(feret_measurement)
 
-    # The biggest object has label 8
-    size_scale_object = feret_measurement[8]['Size']
+    # The biggest object has label 3
+    size_scale_object = feret_measurement[3]['Size']
     print("Size of scale object:", size_scale_object)
 
-    feret_scale_object = feret_measurement[8]['Feret']
+    feret_scale_object = feret_measurement[3]['Feret']
     print("Feret:", feret_scale_object)
     max_feret = max(feret_scale_object)
     print("Max feret diameter:", max_feret, "[px]")

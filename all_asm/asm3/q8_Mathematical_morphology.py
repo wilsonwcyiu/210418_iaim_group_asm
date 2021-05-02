@@ -21,7 +21,7 @@ if __name__ == '__main__':
     output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "_q8_Math_morp/"
     CommonUtil.create_missing_dir(output_dir_str)
 
-    se_shape = ['elliptic', 'diamond', 'rectangular']
+    se_shape = ['elliptic', 'rectangular']
     se_size = [5, 11, 21, 31, 51]
 
     for se in se_shape:
@@ -33,5 +33,6 @@ if __name__ == '__main__':
             # Black Hat transformation
             black_hat_image = ImageUtil.black_hat(original_image, size, se)
             file_name = image_name + "_black_hat_" + se + "_" + str(size) + ".tif"
-            ImageUtil.show_image_in_dip_view(black_hat_image, 20, file_name)
-            CommonUtil.save_image_to_folder(black_hat_image, output_dir_str, file_name)
+            print(file_name)
+            ImageUtil.show_image_in_dip_view(black_hat_image, 10, file_name)
+            # CommonUtil.save_image_to_folder(black_hat_image, output_dir_str, file_name)

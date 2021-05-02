@@ -40,19 +40,19 @@ if __name__ == '__main__':
     segmented_image = ImageUtil.segment_image_white(black_hat_image)
     file_name = file_name + '_segmented'
     print(file_name)
-    ImageUtil.show_image_in_dip_view(segmented_image, 20, file_name)
+    ImageUtil.show_image_in_dip_view(segmented_image, 10, file_name)
     # CommonUtil.save_image_to_folder(segmented_image, output_dir_str, file_name + ".tif")
 
     # MEASUREMENT
-    labeled_image = dip.Label(segmented_image)
+    labeled_image = dip.Label(segmented_image, minSize=50)
     feret_measurement = dip.MeasurementTool.Measure(labeled_image, black_hat_image, ['Size', 'Feret'])
     print(feret_measurement)
 
     # The biggest object has label 4
-    size_scale_object = feret_measurement[4]['Size']
+    size_scale_object = feret_measurement[3]['Size']
     print("Size of scale object:", size_scale_object)
 
-    feret_scale_object = feret_measurement[4]['Feret']
+    feret_scale_object = feret_measurement[3]['Feret']
     print("Feret:", feret_scale_object)
     max_feret = max(feret_scale_object)
     print("Max feret diameter:", max_feret, "[px]")

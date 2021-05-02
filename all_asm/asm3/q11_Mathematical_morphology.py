@@ -1,6 +1,7 @@
 import diplib as dip
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
@@ -33,26 +34,26 @@ if __name__ == '__main__':
     # Black hat transformation
     black_hat_image = ImageUtil.black_hat(original_image, se_size, se_shape)
     file_name = image_name + "_black_hat_" + se_shape + "_" + str(se_size)
-    ImageUtil.show_image_in_dip_view(black_hat_image, 10, file_name)
+    # ImageUtil.show_image_in_dip_view(black_hat_image, 10, file_name)
     # CommonUtil.save_image_to_folder(black_hat_image, output_dir_str, file_name + ".tif")
 
     # Segmentation
     segmented_image = ImageUtil.segment_image_white(black_hat_image)
     file_name = file_name + '_segmented'
     print(file_name)
-    ImageUtil.show_image_in_dip_view(segmented_image, 20, file_name)
+    # ImageUtil.show_image_in_dip_view(segmented_image, 20, file_name)
     # CommonUtil.save_image_to_folder(segmented_image, output_dir_str, file_name + ".tif")
 
     # MEASUREMENT
-    labeled_image = dip.Label(segmented_image)
+    labeled_image = dip.Label(segmented_image, minSize=50)
     feret_measurement = dip.MeasurementTool.Measure(labeled_image, black_hat_image, ['Size', 'Feret'])
     print(feret_measurement)
 
     # The biggest object has label 4
-    size_scale_object = feret_measurement[4]['Size']
+    size_scale_object = feret_measurement[3]['Size']
     print("Size of scale object:", size_scale_object)
 
-    feret_scale_object = feret_measurement[4]['Feret']
+    feret_scale_object = feret_measurement[3]['Feret']
     print("Feret:", feret_scale_object)
     max_feret = max(feret_scale_object)
     print("Max feret diameter:", max_feret, "[px]")
@@ -63,5 +64,23 @@ if __name__ == '__main__':
     # Units per pixel
     units_per_pixel = number_of_units_on_longer_axis / max_feret
     print("Units  per pixel:", units_per_pixel, "[units/px]")
+
+
+    # Units per pixel with real distance 1 mm between two bars
+    image = black_hat_image
+    mm_per_pixel = units_per_pixel
+    mm_per_pixel_rounded = round(units_per_pixel, 3)
+    print("mm per pixel rounded:", mm_per_pixel_rounded)
+    units = "mm"
+
+    image.SetPixelSize(dip.PixelSize(dip.PhysicalQuantity(mm_per_pixel_rounded, units)))
+    print("Pixel size:", image.PixelSize())
+    image.Show()
+    time.sleep(10)
+
+    segmented_image_2 = ImageUtil.segment_image_white(image)
+    labeled_image = dip.Label(segmented_image_2, minSize=50)
+    feret_measurement = dip.MeasurementTool.Measure(labeled_image, image, ['Size', 'Feret'])
+    print(feret_measurement)
 
 
