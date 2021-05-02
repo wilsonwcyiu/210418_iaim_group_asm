@@ -13,15 +13,6 @@ from util.image_util import ImageUtil
 
 
 
-@staticmethod
-def obtain_threshold_image_trial(img: PyDIPjavaio.ImageRead):
-    threshold_img: diplib.PyDIP_bin.Image = None
-    threshold_value: float = None
-    threshold_img = diplib.Threshold(img)[0]
-
-    return threshold_img
-
-
 
 # test_case
 if __name__ == '__main__':
@@ -29,6 +20,7 @@ if __name__ == '__main__':
     sleep_sec: int = 0
 
     image_name_list: list = ["AxioCamIm01"] #, "AxioCamIm02", "AxioCamIm03"]
+
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
 

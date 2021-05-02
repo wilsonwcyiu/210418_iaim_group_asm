@@ -12,6 +12,27 @@ from util.common_util import CommonUtil
 
 class ImageUtil:
 
+    @staticmethod
+    def obtain_column_pixel_value_list(img: diplib.PyDIP_bin.Image):
+        size_list: list = img.Sizes();
+        total_col: int = size_list[0]
+        total_row: int = size_list[1]
+
+        pixel_value_list: list = []
+        for col_idx in range (0, total_col):
+            col_list: list = []
+            for row_idx in range (0, total_row):
+                pixel = img.At(col_idx, row_idx)
+                pixel_value: int = int(pixel[0])
+                col_list.append(pixel_value)
+
+            pixel_value_list.append(col_list)
+
+        return pixel_value_list
+
+
+
+
     # method ("linear","signed linear","logarithmic","signed logarithmic","erf","decade","sigmoid")
     # https://qiftp.tudelft.nl/dipref/ContrastStretch.html
     @staticmethod
@@ -265,7 +286,7 @@ class ImageUtil:
 
 
     @staticmethod   # median_kernel_para_list = ['rectangular', 'elliptic']
-    def median_filter(img, median_kernel_side_length: str):
+    def median_filter(img, median_kernel_side_length: int):
         filtered_img = diplib.MedianFilter(img, median_kernel_side_length)
 
         return filtered_img
