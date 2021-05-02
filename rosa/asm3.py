@@ -32,21 +32,23 @@ if __name__ == '__main__':
     '''
     # Part 3.1
 
-    image_name_list = ["AxioCamIm01.tif"]
+    image_name_list = ["AxioCamIm02.tif"]
 
     for image_name in image_name_list:
         img = UtilFunctions.obtain_image(image_name)
-        # UtilFunctions.show_image_in_dip_view(img, sleep_sec)
+        img = dip.Opening(img)
+        UtilFunctions.save_image_to_default_project_folder(img, "asm3", "opening_" + image_name)
 
         even_background_img = UtilFunctions.black_hat_transf(img)
-        #  UtilFunctions.show_image_in_dip_view(even_background_img, sleep_sec)
+        UtilFunctions.save_image_to_default_project_folder(even_background_img, "asm3", "black_hat_" + image_name)
 
         kernel = dip.PyDIP_bin.Kernel(shape='rectangular', param=[30])
         no_noise_img = dip.MedianFilter(even_background_img, kernel)
-        # UtilFunctions.show_image_in_dip_view(no_noise_img, sleep_sec)
+        UtilFunctions.save_image_to_default_project_folder(no_noise_img, "asm3", "median_filter_" + image_name)
 
         segm_img = UtilFunctions.segment_image(no_noise_img)
-        UtilFunctions.show_image_in_dip_view(segm_img, sleep_sec)
+
+        UtilFunctions.save_image_to_default_project_folder(segm_img, "asm3", "segm_" + image_name)
 
         UtilFunctions.calibrate(segm_img)
 
