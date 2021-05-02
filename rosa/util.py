@@ -1,6 +1,9 @@
 import time
 from datetime import datetime
 
+import os
+from os import path
+
 import diplib
 from diplib import PyDIPjavaio
 
@@ -18,8 +21,15 @@ class UtilFunctions:
 
 
     @staticmethod
-    def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, image_name: str):
-        PyDIPjavaio.ImageWrite(img, "../../image_output/" + image_name)
+    def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, dir_name: str, file_name: str):
+        project_dir: str = "../image_output/"
+        dir_path_str: str = os.path.join(project_dir, dir_name)
+        full_file_path: str = os.path.join(dir_path_str, file_name)
+
+        if dir_name is not None and not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+
+        PyDIPjavaio.ImageWrite(img, full_file_path)
 
 
     @staticmethod
@@ -128,7 +138,6 @@ class UtilFunctions:
     @staticmethod
     def get_pattern_of_column(column_values: list):
         pattern = []
-        # Already count the first pixel value
         count = 1
         for i in range(1, len(column_values)-1):
             if column_values[i] == column_values[i-1]:
@@ -136,15 +145,13 @@ class UtilFunctions:
             else:
                 pattern.append(count)
                 count = 1
+
         return pattern
 
 
     @staticmethod
     def calibrate(img: PyDIPjavaio.ImageRead):
         width, height = img.Sizes()
-
-        print("Width: ", width)
-        print("Height: ", height)
 
         # Odd are black pixels
         column_patterns = []
@@ -163,5 +170,22 @@ class UtilFunctions:
                 column_patterns.append(column_pattern)
 
         column_patterns.sort(key=len)
-        print("Column with highest transition rate:")
-        print(column_patterns[-1])
+        #print("Columns with highest transition rate (odd index = scale bar lines width):")
+
+        total_columns = len(column_patterns)
+        scale_bar_columns = []
+        sum_of_measurements = 0
+
+        for i in range(total_columns - 11, total_columns - 1):
+            print(column_patterns[i])
+            total_pixels = sum(column_patterns[i])
+
+            # One white pixel part and one black pixel part are equal to 0.01 mm. Get length of pattern:
+            length = (len(column_patterns[i]) / 2) * 0.01
+
+            unit_one_pixel = length / total_pixels
+            print(unit_one_pixel)
+            sum_of_measurements += unit_one_pixel
+
+        measurement_one_pixel = sum_of_measurements / 10
+        print("One pixel measures ", measurement_one_pixel, " mm")
