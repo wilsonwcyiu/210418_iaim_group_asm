@@ -31,7 +31,7 @@ if __name__ == '__main__':
         file_name = image_name + "_gauss_" + str(value) + '.tif'
         print(file_name)
         ImageUtil.show_image_in_dip_view(gauss_image, 10, file_name + ".tif")
-        CommonUtil.save_image_to_folder(gauss_image, output_dir_str, file_name)
+        # CommonUtil.save_image_to_folder(gauss_image, output_dir_str, file_name)
 
         # Difference
         # subtracting the original image from output of gaussian filter on original image
@@ -40,7 +40,7 @@ if __name__ == '__main__':
         file_name = image_name + "_gauss_" + str(value) + "_difference" + '.tif'
         print(file_name)
         ImageUtil.show_image_in_dip_view(difference, 10, file_name + ".tif")
-        CommonUtil.save_image_to_folder(difference, output_dir_str, file_name)
+        # CommonUtil.save_image_to_folder(difference, output_dir_str, file_name)
 
 
 
