@@ -14,6 +14,12 @@ from diplib import PyDIPjavaio
 
 class CommonUtil:
 
+    # @staticmethod
+    # def find_closest_numeric(input_numeric_data, integer_d):
+
+
+
+
 
     @staticmethod
     def press_enter_to_exit():
