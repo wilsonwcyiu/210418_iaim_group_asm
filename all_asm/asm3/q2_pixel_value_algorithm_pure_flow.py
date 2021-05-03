@@ -12,9 +12,9 @@ if __name__ == '__main__':
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
 
 
-    image_name_list: str = "AxioCamIm01";    se_one_side_length: int = 71;    se_shape: str = "elliptic";    median_kernel_length: int = 5
-    # image_name_list: str = "AxioCamIm02";    se_one_side_length: int = 91;    se_shape: str = "elliptic";    median_kernel_length: int = 5
-    # image_name_list: str = "AxioCamIm03";    se_one_side_length: int = 181;   se_shape: str = "elliptic";    median_kernel_length: int = 10
+    image_name: str = "AxioCamIm01";    se_one_side_length: int = 71;    se_shape: str = "elliptic";    median_kernel_length: int = 5
+    # image_name: str = "AxioCamIm02";    se_one_side_length: int = 91;    se_shape: str = "elliptic";    median_kernel_length: int = 5
+    # image_name: str = "AxioCamIm03";    se_one_side_length: int = 181;   se_shape: str = "elliptic";    median_kernel_length: int = 10
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
     original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(original_img, title="original img")
