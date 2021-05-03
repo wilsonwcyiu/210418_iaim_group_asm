@@ -1,43 +1,40 @@
-import pprint
-
 import diplib
 from diplib import PyDIPjavaio
+from diplib.PyDIP_bin import SE
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 
 # test_case
-from util.plot_util import PlotUtil
 
 if __name__ == '__main__':
     print("starting...")
-    sleep_sec: int = 0
+    input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
+
+
+    image_name_list: str = "AxioCamIm01";    se_one_side_length: int = 71;    se_shape: str = "elliptic";    median_kernel_length: int = 5
+    # image_name_list: str = "AxioCamIm02";    se_one_side_length: int = 91;    se_shape: str = "elliptic";    median_kernel_length: int = 5
+    # image_name_list: str = "AxioCamIm03";    se_one_side_length: int = 181;   se_shape: str = "elliptic";    median_kernel_length: int = 10
 
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
-    date_time_str: str = CommonUtil.generate_date_time_str()
-    output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "/"
-    CommonUtil.create_missing_dir(output_dir_str)
+    original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(original_img, title="original img")
 
+    high_contrast_image = diplib.ContrastStretch(original_img, method="linear")
 
-    image_name: str = "AxioCamIm01_high_contrast_threshold_img_elliptic_71.tif"
-    # image_name: str = "AxioCamIm02_high_contrast_threshold_img_elliptic_91.tif"
-    # image_name: str = "AxioCamIm03_high_contrast_threshold_img_elliptic_181.tif"
+    structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
+    black_hat_img = diplib.Tophat(high_contrast_image, se=structuring_element, polarity="black");        #ImageUtil.show_image_in_dip_view(original_img, title="original img")
 
+    median_filtered_img = diplib.MedianFilter(black_hat_img, median_kernel_length)
 
-    threshold_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str)
+    _, threshold_value = diplib.Threshold(median_filtered_img, method = 'otsu')
+    threshold_img: diplib.PyDIP_bin.Image = median_filtered_img < threshold_value
 
     column_pixel_tuple_list: list = ImageUtil.obtain_column_pixel_value_list(threshold_img)    # print("col cnt", len(pixel_column_tuple_list));  print("row cnt", len(pixel_column_tuple_list[0]))
+
 
     # extract right most 20% region of the image by column
     start_col = int(len(column_pixel_tuple_list) * 0.8)
     column_pixel_tuple_list = column_pixel_tuple_list[start_col:]
-
-
-    # column_mixed_pixel_tuple_list: list = []
-    # for column_pixel_tuple in column_pixel_tuple_list:
-    #     if 1 in column_pixel_tuple:
-    #         column_mixed_pixel_tuple_list.append(column_pixel_tuple)
-
 
     pixel_change_count_tuple_dict: {} = {}    #key: change count. value: pixel_value_tuple_list
     for col_idx in range(0, len(column_pixel_tuple_list)):
@@ -56,28 +53,12 @@ if __name__ == '__main__':
 
         pixel_change_count_tuple_dict[change_cnt].append(column_pixel_tuple)
 
-
-    for key, item in pixel_change_count_tuple_dict.items():
-        print("change_count:", key, ". total_col_count", len(item)) #, "->> columns idx: ", str(item))
-
-
-    # for column_pixel_tuple in column_pixel_tuple_list:
-    #     for column_pixel in column_pixel_tuple:
-    #         print(column_pixel, end="")
-    #     print()
-
-
-    most_same_cnt_column_tuple_list: list = []    # list of column_idx that has the same change coun
+    most_same_cnt_column_tuple_list: list = []    # list of column_idx that has the same pixel value change count
     most_same_column_cnt: int = 0
     for change_cnt, column_tuple_list in pixel_change_count_tuple_dict.items():
         if len(column_tuple_list) > most_same_column_cnt:
             most_same_column_cnt = len(column_tuple_list)
             most_same_cnt_column_tuple_list = column_tuple_list
-
-    print("most_same_column_cnt", most_same_column_cnt)
-    # print("most_same_cnt_column_list", most_same_cnt_column_tuple_list)
-
-
 
     scale_pixel_column_tuple: tuple = most_same_cnt_column_tuple_list[0]
 
@@ -97,7 +78,6 @@ if __name__ == '__main__':
 
         last_pixel_value = current_pixel
 
-    print("scale_pixel_width_list", scale_pixel_width_list)
 
     pixel_length_value: float = 0.01 / CommonUtil.calc_mean(scale_pixel_width_list)
     print("pixel_length_value", pixel_length_value)
