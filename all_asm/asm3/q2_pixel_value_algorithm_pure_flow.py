@@ -5,8 +5,6 @@ from diplib.PyDIP_bin import SE
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 
-# test_case
-
 if __name__ == '__main__':
     print("starting...")
     input_dir_str: str = CommonUtil.obtain_project_default_input_dir_path() + "asm3/"
