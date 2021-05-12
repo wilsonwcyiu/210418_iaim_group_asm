@@ -45,9 +45,11 @@ if __name__ == '__main__':
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
             median_kernel_side_length = 5
-            median_img = ImageUtil.median_filter(black_hat_img, median_kernel_side_length);         ImageUtil.show_image_in_dip_view(median_img, title=image_name + "_median_img")
+            median_img = ImageUtil.median_filter(black_hat_img, median_kernel_side_length);         #ImageUtil.show_image_in_dip_view(median_img, title=image_name + "_median_img")
+            file_name = image_name + "_median_filter_img_" + shape + "_" + str(se_length) + ".tif"
+            CommonUtil.save_image_to_folder(median_img, output_dir_str, file_name)
 
-            threshold_img = ImageUtil.segment_image_white(median_img);            ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_threshold_img")
+            threshold_img = ImageUtil.segment_image_white(median_img);            #ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_threshold_img")
             file_name = image_name + "_threshold_img_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(threshold_img, output_dir_str, file_name)
 
@@ -79,8 +81,10 @@ if __name__ == '__main__':
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
             median_img = ImageUtil.median_filter(black_hat_img, 10)
+            file_name = image_name + "_median_filter_img_" + shape + "_" + str(se_length) + ".tif"
+            CommonUtil.save_image_to_folder(median_img, output_dir_str, file_name)
 
-            threshold_img = ImageUtil.segment_image_white(median_img);            ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_threshold_img")
+            threshold_img = ImageUtil.segment_image_white(median_img);            #ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_threshold_img")
             file_name = image_name + "_threshold_img_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(threshold_img, output_dir_str, file_name)
 
@@ -112,8 +116,10 @@ if __name__ == '__main__':
             CommonUtil.save_image_to_folder(black_hat_img, output_dir_str, file_name)
 
             median_img = ImageUtil.median_filter(black_hat_img, 40)
+            file_name = image_name + "_median_filter_img_" + shape + "_" + str(se_length) + ".tif"
+            CommonUtil.save_image_to_folder(median_img, output_dir_str, file_name)
 
-            threshold_img = ImageUtil.segment_image_white(median_img);            ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_median_threshold_img")
+            threshold_img = ImageUtil.segment_image_white(median_img);            #ImageUtil.show_image_in_dip_view(threshold_img, title=image_name + "_median_threshold_img")
             file_name = image_name + "_threshold_img_" + shape + "_" + str(se_length) + ".tif"
             CommonUtil.save_image_to_folder(threshold_img, output_dir_str, file_name)
 
