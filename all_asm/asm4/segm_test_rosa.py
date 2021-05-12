@@ -9,6 +9,23 @@ from util.plot_util import PlotUtil
 from all_asm.asm4.model.cell import Cell
 
 
+# Save images that display past and current center position of every selected cell
+def save_image_cell_movement_per_transition(image_sizes_values, x_1_value, y_1_value, x_2_value, y_2_value, series_name, cells_list, sequence_number):
+    # Create new empty image
+    selected_cell_image = dip.Image((image_sizes_values[0], image_sizes_values[1]), 1)
+    selected_cell_image.Fill(0)
+
+    # Draw past position and current position of cell
+    dip.DrawBox(selected_cell_image, [1, 1], [x_1_value, y_1_value])
+    dip.DrawBox(selected_cell_image, [2, 2], [x_2_value, y_2_value])
+
+    CommonUtil.save_image_to_default_project_folder(selected_cell_image, "asm4",
+                                                    "track_" + series_name + "_" + cells_list[
+                                                        i].cell_display_name + "_from_" + str(
+                                                        sequence_number - 1) + "_to_" + str(sequence_number) + ".tif")
+
+
+# Segment to retrieve brightest cells in image
 def segment_brightest_cells(img, image_file_name):
     img = dip.ContrastStretch(img, 97, 100)
 
@@ -22,6 +39,7 @@ def segment_brightest_cells(img, image_file_name):
     return labeled_img
 
 
+# Save image that shows all initial center positions of selected cells
 def save_image_initial_selection(sorted_measurements, image_name):
     # Create new empty image
     selected_cells_image = dip.Image((image_sizes[0], image_sizes[1]), 1)
@@ -37,6 +55,22 @@ def save_image_initial_selection(sorted_measurements, image_name):
     CommonUtil.save_image_to_default_project_folder(selected_cells_image, "asm4", image_name)
 
 
+def create_new_empty_images_for_selected_cells(image_sizes_values):
+    image_list = []
+
+    for _ in range(15):
+        new_image = dip.Image((image_sizes_values[0], image_sizes_values[1]), 1)
+        new_image.Fill(0)
+        image_list.append(new_image)
+
+    return image_list
+
+
+def save_movement_images_selected_cells_series(image_series, series_name):
+    for i in range(15):
+        CommonUtil.save_image_to_default_project_folder(image_series[i], "asm4", "track_" + series_name + "_cell" + str(i) + ".tif")
+
+
 if __name__ == '__main__':
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm4/'
 
@@ -48,6 +82,8 @@ if __name__ == '__main__':
         image_sizes = first_image.Sizes()
 
         selected_cells = []
+
+        images_movement_trajectories_list = create_new_empty_images_for_selected_cells(image_sizes)
 
         for sequence in range(30):
             image_file_name = image_series_name + str(sequence).zfill(4)
@@ -80,11 +116,13 @@ if __name__ == '__main__':
 
                     selected_cells.append(current_cell)
 
+                    # Draw square for starting position of current selected cell
+                    dip.DrawBox(images_movement_trajectories_list[i], [4, 4], [x_coord, y_coord])
+
             # Consecutive images of the series
             else:
-
                 for i in range(len(selected_cells)):
-                    #print(selected_cells[i].cell_display_name, ", ", selected_cells[i].area, ", ", selected_cells[i].perimeter, ", ", selected_cells[i].cell_xy_coord_tuple)
+                    # print(selected_cells[i].cell_display_name, ", ", selected_cells[i].area, ", ", selected_cells[i].perimeter, ", ", selected_cells[i].cell_xy_coord_tuple)
 
                     # Past position
                     x_1 = selected_cells[i].cell_xy_coord_tuple[0]
@@ -105,7 +143,7 @@ if __name__ == '__main__':
                             lowest_eucl_dist = eucl_dist
                             index_lowest_dist = j
 
-                    #print(sorted_measurements[index_lowest_dist])
+                    # print(sorted_measurements[index_lowest_dist])
 
                     # Current position
                     x_2 = sorted_measurements[index_lowest_dist][2]
@@ -115,15 +153,11 @@ if __name__ == '__main__':
                     selected_cells[i].area = sorted_measurements[index_lowest_dist][0]
                     selected_cells[i].perimeter = sorted_measurements[index_lowest_dist][1]
 
-                    # Create new empty image
-                    selected_cell_image = dip.Image((image_sizes[0], image_sizes[1]), 1)
-                    selected_cell_image.Fill(0)
+                    dip.DrawLine(images_movement_trajectories_list[i], [int(x_1), int(y_1)], [int(x_2), int(y_2)])
 
-                    # Draw past position and current position of cell
-                    dip.DrawBox(selected_cell_image, [1, 1], [x_1, y_1])
-                    dip.DrawBox(selected_cell_image, [2, 2], [x_2, y_2])
+                    # save_image_cell_movement_per_transition(image_sizes, x_1, y_1, x_2, y_2, image_series_name, selected_cells, sequence)
 
-                    CommonUtil.save_image_to_default_project_folder(selected_cell_image, "asm4", "track_" + image_series_name + "_" + selected_cells[i].cell_display_name + "_from_" + str(sequence-1) + "_to_" + str(sequence) + ".tif")
+        save_movement_images_selected_cells_series(images_movement_trajectories_list, image_series_name)
 
 
 
