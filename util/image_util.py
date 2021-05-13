@@ -12,6 +12,17 @@ from util.common_util import CommonUtil
 
 class ImageUtil:
 
+
+
+    @staticmethod
+    def obtain_image_width_height(dip_image: diplib.Image):
+        width: int = dip_image.Sizes()[0]
+        height: int = dip_image.Sizes()[1]
+
+        return width, height
+
+
+
     @staticmethod
     def obtain_column_pixel_value_list(img: diplib.PyDIP_bin.Image):
         size_list: list = img.Sizes();
