@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm4/'
 
-    image_series_names = ['MTLn3+EGF', 'MTLn3-ctrl']
+    image_series_names = ['MTLn3+EGF'] #, 'MTLn3-ctrl']
 
     for image_series_name in image_series_names:
         first_image = ImageUtil.obtain_image(image_series_name + '0000', input_dir)
