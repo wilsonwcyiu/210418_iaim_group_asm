@@ -29,7 +29,11 @@ def save_image_cell_movement_per_transition(image_sizes_values, x_1_value, y_1_v
 def segment_brightest_cells(img, image_file_name):
     img = dip.ContrastStretch(img, 97, 100)
 
+    print(img.Sizes())
+
     segm_img = ImageUtil.segment_image_white(img)
+
+    print(segm_img.Sizes())
 
     file_name = image_file_name + '_segmented.tif'
     CommonUtil.save_image_to_default_project_folder(segm_img, "asm4", file_name)
