@@ -76,14 +76,12 @@ def save_movement_images_selected_cells_series(image_series, series_name):
 
 
 if __name__ == '__main__':
-    first_image = ImageUtil.obtain_image('AxioCamIm01', CommonUtil.obtain_project_default_input_dir_path() + 'asm3/')
-    ImageUtil.show_image_in_dip_view(first_image)
-
-    first_image = ImageUtil.obtain_image("MTLn3+EGF0000", CommonUtil.obtain_project_default_input_dir_path() + 'asm4/')
-    ImageUtil.show_image_in_dip_view(first_image)
-
-
-    CommonUtil.press_enter_to_continue()
+    # first_image = ImageUtil.obtain_image('AxioCamIm01', CommonUtil.obtain_project_default_input_dir_path() + 'asm3/')
+    # ImageUtil.show_image_in_dip_view(first_image)
+    #
+    # first_image = ImageUtil.obtain_image("MTLn3+EGF0000", CommonUtil.obtain_project_default_input_dir_path() + 'asm4/')
+    # ImageUtil.show_image_in_dip_view(first_image)
+    # CommonUtil.press_enter_to_continue()
 
 
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm4/'
@@ -91,7 +89,6 @@ if __name__ == '__main__':
     image_series_names = ['MTLn3+EGF', 'MTLn3-ctrl']
 
     for image_series_name in image_series_names:
-        first_image = ImageUtil.obtain_image('AxioCamIm01', CommonUtil.obtain_project_default_input_dir_path() + 'asm3/')
         first_image = ImageUtil.obtain_image(image_series_name + '0000', input_dir)
         image_sizes = first_image.Sizes()
 
@@ -101,7 +98,8 @@ if __name__ == '__main__':
 
         for sequence in range(30):
             image_file_name = image_series_name + str(sequence).zfill(4)
-            curr_img = ImageUtil.obtain_image(image_file_name + '.png', input_dir)
+            curr_img = ImageUtil.obtain_image(image_file_name, input_dir)
+            # curr_img = ImageUtil.obtain_image(image_file_name + '.png', input_dir)
 
             # Segment to get only brightest cells in foreground
             labeled_img = segment_brightest_cells(curr_img, image_file_name)

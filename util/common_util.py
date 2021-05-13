@@ -19,6 +19,35 @@ class CommonUtil:
 
 
 
+    @staticmethod
+    def obtain_project_default_output_dir_path(project_file_output_dir_name: str = "image_output", max_layers: int = 20):
+        parent_dir: str = os.getcwd()
+
+        project_default_input_dir_path: str = ""
+        layer_idx: int = 0
+        while True:
+            for root, sub_dir_name_list, files in os.walk(parent_dir):
+                for sub_dir_name in sub_dir_name_list:
+                    if sub_dir_name == project_file_output_dir_name:
+                        project_default_input_dir_path += project_file_output_dir_name + "/"
+                        return project_default_input_dir_path
+
+
+            parent_dir, dir_name = os.path.split(parent_dir)
+            if dir_name != project_file_output_dir_name:
+                project_default_input_dir_path += "../"
+
+            elif dir_name == project_file_output_dir_name:
+                project_default_input_dir_path += dir_name + "/"
+                return project_default_input_dir_path
+
+
+            layer_idx += 1
+            if layer_idx == max_layers:
+                err_msg: str = "directory " + project_file_output_dir_name + " not exist in the " + str(max_layers) + " layer above"
+                raise Exception(err_msg)
+
+
 
 
     @staticmethod
@@ -193,8 +222,11 @@ class CommonUtil:
 
 
     @staticmethod
-    def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, dir_name: str, file_name: str):
-        project_dir: str = "../../image_output/"
+    def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, dir_name: str, file_name: str, project_dir: str = None):
+        if project_dir is None:
+            # project_dir: str = "../../image_output/"
+            project_dir = CommonUtil.obtain_project_default_output_dir_path()
+
         dir_path_str: str = os.path.join(project_dir, dir_name)
         full_file_path: str = os.path.join(dir_path_str, file_name)
 
