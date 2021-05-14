@@ -88,8 +88,8 @@ def convert_labeled_img_to_cell_list(labeled_img: diplib.Image, original_img: di
 if __name__ == '__main__':
     # Initialize cell tracking parameters
     number_of_cells_to_trace: int = 15
-    cell_size_variation_rate: float = 0.2
-    cell_max_pixel_movement_distance: int = 100
+    cell_size_variation_rate: float = 0.3
+    cell_max_pixel_movement_distance: int = 40
 
 
     # Configure files and directories
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
 
         # Use this method of segmentation to ensure selection of brightest cells
-        segm_img: diplib.Image = segm_for_brightest_cells(first_image, first_image_name, proj_dir_path, 97, 100)
+        segm_img: diplib.Image = segm_for_brightest_cells(first_image, first_image_name, proj_dir_path, 80, 100)
 
         # Label the found brightest cells excluding the cells positioned at border of image
         labeled_img: diplib.Image = diplib.Label(segm_img, boundaryCondition=["remove"])
@@ -129,8 +129,8 @@ if __name__ == '__main__':
         # Sort the list of candidate cells based on size
         all_candidate_cells_list.sort(key=lambda x: x.area, reverse=True)
         # Select the largest cells that will be tracked
-
         selected_cell_list: list = all_candidate_cells_list[0: number_of_cells_to_trace]
+
 
 
         # Generate and save image that shows the initial selection of cells to be tracked
@@ -194,6 +194,7 @@ if __name__ == '__main__':
                     # Calculate euclidean distance
                     eucl_dist = math.sqrt((x_2 - x_1)**2 + (y_2 - y_1)**2)
 
+                    # Check if distance is within maximum distance
                     if eucl_dist <= cell_max_pixel_movement_distance:
                         within_eucl_cell_list.append(candidate_cell)
 
@@ -250,7 +251,7 @@ if __name__ == '__main__':
         cell_id: int = 0
 
         for image in images_movement_trajectory_list:
-            CommonUtil.save_image_to_default_project_folder(image, 'asm4', image_series_name_list[i] + '_cell_' + str(cell_id) + '.tif', proj_dir_path)
+            CommonUtil.save_image_to_default_project_folder(image, 'asm4', image_series_name_list[i] + '_tracking_cell_' + str(cell_id) + '.tif', proj_dir_path)
             cell_id += 1
 
 
