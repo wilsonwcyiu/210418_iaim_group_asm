@@ -245,7 +245,7 @@ if __name__ == '__main__':
 
             if len(within_eucl_cell_list) == 0:
                 selected_cell.last_cell_states = "no cell is detected within max movement distance"
-
+                continue
 
             lowest_size_change_rate = 99999999999
             best_match_cell: Cell = None         # Save index of cell information with lowest euclidean distance
