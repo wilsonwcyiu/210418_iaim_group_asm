@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
 
     number_of_cells_to_trace: int = 20
-    cell_size_variation_rate: float = 20
+    cell_size_variation_rate: float = 0.2
     cell_max_pixel_movement_distance: int = 100
 
     # min_cell_pixel_area: int = 0
