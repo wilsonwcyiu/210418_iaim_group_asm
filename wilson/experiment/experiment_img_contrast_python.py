@@ -56,7 +56,7 @@ if __name__ == '__main__':
         plot_title: str = file_name
         x_label: str = "x"
         y_label: str = "y"
-        plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
+        plot = PlotUtil.create_histogram_plot_depricated(plot_id, plot_title, x_label, y_label, obtain_pixel_value_list)
         plot.pause(10)
 
 

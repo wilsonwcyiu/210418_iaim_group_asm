@@ -1,3 +1,6 @@
+from util.common_util import CommonUtil
+
+
 class Cell():
 
 
@@ -9,3 +12,10 @@ class Cell():
 
         self.perimeter: float = perimeter
         self.area: float = area
+
+
+    def __str__(self):
+        return '%s(%s)' % (
+            type(self).__name__,', '.join('%s=%s' % item for item in vars(self).items())
+        )
+        # CommonUtil.auto_str(self)

@@ -18,7 +18,7 @@ class PlotUtil():
 
 
     @staticmethod       # xy_tuple_list = [(0,0), (3,5), (5,5)]
-    def create_histogram_plot(plot_id: int, plot_title: str, x_label: str, y_label: str, data_list: list, bins:int=None):
+    def create_histogram_plot_depricated(plot_id: int, plot_title: str, x_label: str, y_label: str, data_list: list, bins:int=None):
         pyplot.figure(plot_id)
         pyplot.clf()
         pyplot.title(plot_title)
@@ -32,6 +32,21 @@ class PlotUtil():
 
         return pyplot
 
+
+    staticmethod       # xy_tuple_list = [(0,0), (3,5), (5,5)]
+    def create_histogram_plot(data_list: list, plot_id: int = 1, plot_title: str = "title", x_label: str = "x label", y_label: str = "y label", bins:int=None):
+        pyplot.figure(plot_id)
+        pyplot.clf()
+        pyplot.title(plot_title)
+        pyplot.xlabel(x_label)
+        pyplot.ylabel(y_label)
+
+        if bins is None:
+            bins = int(max(data_list) + 1)
+
+        pyplot.hist(data_list, bins=bins)
+
+        return pyplot
 
 
 

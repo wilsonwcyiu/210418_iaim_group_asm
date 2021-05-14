@@ -113,7 +113,11 @@ if __name__ == '__main__':
 
 
     number_of_cells_to_trace: int = 15
+    cell_size_variation_rate: float = 0.1
+    cell_max_pixel_movement_distance: int = 25
 
+    min_cell_pixel_area: int = 30
+    max_cell_pixel_area: int = 40
 
 
     image_series_name: str = "MTLn3+EGF"    #'MTLn3-ctrl'
@@ -137,6 +141,7 @@ if __name__ == '__main__':
 
     measurement_list: np.ndarray = np.array(diplib.MeasurementTool.Measure(labeled_img, first_image, ['Size', 'Perimeter', 'Center']))      # Measure size and centers of cells
     sorted_measurement_list: np.flipud = np.flipud(measurement_list[np.argsort(measurement_list[:, 0])])        # Sort array based on size of cells (descending)
+
 
 
 

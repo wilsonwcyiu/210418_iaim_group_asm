@@ -18,6 +18,16 @@ class CommonUtil:
     # def find_closest_numeric(input_numeric_data, integer_d):
 
 
+    @staticmethod
+    def auto_str(cls):
+        def __str__(self):
+            return '%s(%s)' % (
+                type(self).__name__,
+                ', '.join('%s=%s' % item for item in vars(self).items())
+            )
+        # cls.__str__ = __str__
+        return __str__
+
 
     @staticmethod
     def obtain_project_default_output_dir_path(project_file_output_dir_name: str = "image_output", max_layers: int = 20):
@@ -185,7 +195,7 @@ class CommonUtil:
 
     @staticmethod
     def press_enter_to_continue():
-        input("Press enter to end the process...")
+        input("Press enter to continue...")
 
 
 

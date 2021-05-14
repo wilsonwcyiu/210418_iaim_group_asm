@@ -49,7 +49,7 @@ if __name__ == '__main__':
         plot_title: str = ""
         x_label: str = "x"
         y_label: str = "y"
-        plot = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, histogram_list)
+        plot = PlotUtil.create_histogram_plot_depricated(plot_id, plot_title, x_label, y_label, histogram_list)
 
         file_name = image_name + "_histrogram"
         PlotUtil.save_plot_to_folder(plot, output_dir_str, file_name)

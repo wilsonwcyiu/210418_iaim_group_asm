@@ -36,5 +36,5 @@ if __name__ == '__main__':
         print("Average intensity value of ", image_name, ": ", mean_value)
 
         # Generate histogram of current image and show the plot
-        histogram = PlotUtil.create_histogram_plot(1, 'Histogram of ' + image_name, 'Intensity values', 'Frequency', pixel_values, list(range(int(min_value), int(max_value))))
+        histogram = PlotUtil.create_histogram_plot_depricated(1, 'Histogram of ' + image_name, 'Intensity values', 'Frequency', pixel_values, list(range(int(min_value), int(max_value))))
         histogram.show()

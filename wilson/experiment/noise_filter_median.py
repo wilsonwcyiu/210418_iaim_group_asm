@@ -55,7 +55,7 @@ if __name__ == '__main__':
         plot_title: str = "Image Histogram"
         x_label: str = "Intensity value"
         y_label: str = "Count"
-        plt = PlotUtil.create_histogram_plot(plot_id, plot_title, x_label, y_label, pixel_value_list)
+        plt = PlotUtil.create_histogram_plot_depricated(plot_id, plot_title, x_label, y_label, pixel_value_list)
         plt.show()
 
 

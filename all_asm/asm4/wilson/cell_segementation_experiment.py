@@ -30,6 +30,7 @@ if __name__ == '__main__':
         image_suffix: str = CommonUtil.format_int_to_str_length(idx, to_length=4)
         image_series_name_list.append(image_series_name + image_suffix)
 
+
     for image_series_name in image_series_name_list:
         # img_name = "MTLn3+EGF0001"
         img = ImageUtil.obtain_image(image_series_name, input_dir);    #ImageUtil.show_image_in_dip_view(img)
@@ -38,6 +39,38 @@ if __name__ == '__main__':
         file_name: str = image_series_name + "_threshold_img" + ".tif"
         CommonUtil.save_image_to_folder(threshold_img, output_dir_path, file_name)
 
+        segment_size: int = 4
+        erosion_img = ImageUtil.erosion(threshold_img, segment_size, se_shape="elliptic")
+        file_name: str = image_series_name + "_erosion_img" + ".tif"
+        CommonUtil.save_image_to_folder(erosion_img, output_dir_path, file_name)
+
+        # dilation_img = ImageUtil.dilation(erosion_img, segment_size, se_shape="elliptic")
+        # file_name: str = image_series_name + "_dilation_img" + ".tif"
+        # CommonUtil.save_image_to_folder(dilation_img, output_dir_path, file_name)
+
+
+        # median_kernel_side_length=3
+        # median_filter_img = ImageUtil.median_filter(threshold_img, median_kernel_side_length);     #ImageUtil.show_image_in_dip_view(threshold_img)
+        # file_name: str = image_series_name + "_median_img" + ".tif"
+        # CommonUtil.save_image_to_folder(median_filter_img, output_dir_path, file_name)
+
+
+
+
+
+    #
+    # for image_series_name in image_series_name_list:
+    #     # img_name = "MTLn3+EGF0001"
+    #     img = ImageUtil.obtain_image(image_series_name, input_dir);    #ImageUtil.show_image_in_dip_view(img)
+    #
+    #     threshold_img = ImageUtil.segment_image_white(img);     #ImageUtil.show_image_in_dip_view(threshold_img)
+    #     file_name: str = image_series_name + "_threshold_img" + ".tif"
+    #     CommonUtil.save_image_to_folder(threshold_img, output_dir_path, file_name)
+    #
+    #     median_kernel_side_length=3
+    #     median_filter_img = ImageUtil.median_filter(threshold_img, median_kernel_side_length);     #ImageUtil.show_image_in_dip_view(threshold_img)
+    #     file_name: str = image_series_name + "_median_img" + ".tif"
+    #     CommonUtil.save_image_to_folder(median_filter_img, output_dir_path, file_name)
 
     CommonUtil.press_enter_to_exit()
 
