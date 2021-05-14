@@ -13,6 +13,10 @@ class Cell():
         self.perimeter: float = perimeter
         self.area: float = area
 
+        self.cell_trajectory_data_tuple_list: list = []
+        self.similar_area_cell_data_dict: dict = {}
+
+
 
     def __str__(self):
         return '%s(%s)' % (

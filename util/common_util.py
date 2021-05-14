@@ -18,6 +18,8 @@ class CommonUtil:
     # def find_closest_numeric(input_numeric_data, integer_d):
 
 
+
+
     @staticmethod
     def auto_str(cls):
         def __str__(self):
