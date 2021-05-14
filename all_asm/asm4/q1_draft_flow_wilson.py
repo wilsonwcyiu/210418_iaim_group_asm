@@ -22,7 +22,7 @@ if __name__ == '__main__':
         next_img_cell_dict: dict = {}
         for cell_id, cell in last_img_cell_dict.items():
             print(cell_id)
-            print(cell.cell_xy_coord_tuple)
+            print(cell.x_y_coord_tuple)
             print(cell.area)
             print(cell.perimeter)
             # find next cell info

@@ -67,8 +67,8 @@ def generate_initial_cell_img(cell_list: list, img_width: int, img_height: int):
 
     for cell in cell_list:
         # Get coordinates of centers of current cell
-        x_coord = cell.cell_xy_coord_tuple[0]
-        y_coord = cell.cell_xy_coord_tuple[1]
+        x_coord = cell.x_y_coord_tuple[0]
+        y_coord = cell.x_y_coord_tuple[1]
         # Draw center of current cell
         diplib.DrawBox(selected_cells_image, [2, 2], [x_coord, y_coord])
 
@@ -94,20 +94,38 @@ def create_new_empty_images_for_selected_cells(img_width: int, img_height: int, 
 
 
 def save_movement_images_selected_cells_series(image_series, series_name, dir_name: str = "asm4", proj_dir_path: str = None):
-    for i in range(15):
+    for i in range(len(image_series)):
         CommonUtil.save_image_to_default_project_folder(image_series[i], dir_name, "track_" + series_name + "_cell" + str(i) + ".tif", proj_dir_path)
 
 
 
 
-def convert_measurement_list_to_cell(cell_id: int, measurement):
-    cell: Cell = Cell(cell_id)
-    cell.cell_display_name = "cell_" + str(cell_id)
-    cell.area = measurement[0]
-    cell.perimeter = measurement[1]
-    cell.cell_xy_coord_tuple = (measurement[2], measurement[3])
+# def convert_measurement_list_to_cell(cell_id: int, measurement):
+#     cell: Cell = Cell(cell_id)
+#     cell.cell_display_name = "cell_" + str(cell_id)
+#     cell.area = measurement[0]
+#     cell.perimeter = measurement[1]
+#     cell.cell_xy_coord_tuple = (measurement[2], measurement[3])
+#
+#     return cell
 
-    return cell
+def convert_labeled_img_to_cell_list(labeled_img: diplib.Image):
+    measurement_list: np.ndarray = np.array(diplib.MeasurementTool.Measure(labeled_img, first_image, ['Size', 'Perimeter', 'Center']))      # Measure size and centers of cells
+
+    cell_list: list = [];
+    cell_id: int = 1;
+    for measurement in measurement_list:
+        cell: Cell = Cell(cell_id)
+        cell.cell_display_name = "cell_" + str(cell_id)
+        cell.area = measurement[0]
+        cell.perimeter = measurement[1]
+        cell.x_y_coord_tuple = (measurement[2], measurement[3])
+        cell_list.append(cell)
+
+        cell_id += 1
+
+    return cell_list
+
 
 
 
@@ -126,12 +144,12 @@ if __name__ == '__main__':
     dir_name: str = CommonUtil.generate_date_time_str()
 
 
-    number_of_cells_to_trace: int = 15
-    cell_size_variation_rate: float = 0.1
-    cell_max_pixel_movement_distance: int = 30
+    number_of_cells_to_trace: int = 20
+    cell_size_variation_rate: float = 20
+    cell_max_pixel_movement_distance: int = 100
 
-    min_cell_pixel_area: int = 0
-    max_cell_pixel_area: int = 99999
+    # min_cell_pixel_area: int = 0
+    # max_cell_pixel_area: int = 99999
 
 
 
@@ -153,17 +171,16 @@ if __name__ == '__main__':
     CommonUtil.save_image_to_default_project_folder(segm_img, dir_name, file_name, project_dir=proj_dir_path)
 
     labeled_img: diplib.Image = diplib.Label(segm_img, boundaryCondition=["remove"]);              #ImageUtil.show_image_in_dip_view(labeled_img)
+    #
+    # measurement_list: np.ndarray = np.array(diplib.MeasurementTool.Measure(labeled_img, first_image, ['Size', 'Perimeter', 'Center']))      # Measure size and centers of cells
 
-    measurement_list: np.ndarray = np.array(diplib.MeasurementTool.Measure(labeled_img, first_image, ['Size', 'Perimeter', 'Center']))      # Measure size and centers of cells
+    all_candidate_cell_list: list = convert_labeled_img_to_cell_list(labeled_img)
 
-    all_cell_list: list = [];  cell_id = 1
-    for measurement in measurement_list:
-        cell: Cell = convert_measurement_list_to_cell(cell_id, measurement);    cell_id += 1
-        all_cell_list.append(cell)
 
-    all_cell_list.sort(key=lambda x: x.area, reverse=True)    # sorted_measurement_list: np.flipud = np.flipud(measurement_list[np.argsort(measurement_list[:, 0])])        # Sort array based on size of cells (descending)
-    selected_cell_list: list = all_cell_list[0: number_of_cells_to_trace]
 
+    all_candidate_cell_list.sort(key=lambda x: x.area, reverse=True)    # sorted_measurement_list: np.flipud = np.flipud(measurement_list[np.argsort(measurement_list[:, 0])])        # Sort array based on size of cells (descending)
+
+    selected_cell_list: list = all_candidate_cell_list[0: number_of_cells_to_trace]
 
     init_cell_img: diplib.Image = generate_initial_cell_img(selected_cell_list, img_width, img_height)
     image_name = first_img_name + '_initial_selection.tif'
@@ -171,12 +188,16 @@ if __name__ == '__main__':
 
 
 
+    for selected_cell in selected_cell_list:
+        selected_cell.cell_trajectory_data_tuple_list.append(selected_cell.x_y_coord_tuple)
+
+
     num_of_img_to_create = len(selected_cell_list)
     images_movement_trajectories_list: list = create_new_empty_images_for_selected_cells(img_width, img_height, num_of_img_to_create)  #:list(diplib.Image)
     for i in range(len(selected_cell_list)):
-        cell = selected_cell_list[i]
+        candidate_cell = selected_cell_list[i]
         out_img: diplib.Image = images_movement_trajectories_list[i];      start_pixel_dimension: list = [4, 4]
-        diplib.DrawBox(out_img, start_pixel_dimension, list(cell.cell_xy_coord_tuple))
+        diplib.DrawBox(out_img, start_pixel_dimension, list(candidate_cell.x_y_coord_tuple))
 
 
 
@@ -192,48 +213,73 @@ if __name__ == '__main__':
 
         labeled_img = diplib.Label(segm_img, boundaryCondition=["remove"]);              #ImageUtil.show_image_in_dip_view(labeled_img)
 
-
-
-        measurement_list: np.ndarray = np.array(diplib.MeasurementTool.Measure(labeled_img, curr_img, ['Size', 'Perimeter', 'Center']))     # Measure size and centers of cells
-        all_cell_list: list = [];  cell_id = None
-        for measurement in measurement_list:
-            cell: Cell = convert_measurement_list_to_cell(cell_id, measurement);
-            all_cell_list.append(cell)
-
-        all_cell_list.sort(key=lambda x: x.area, reverse=True)    # sorted_measurement_list: np.flipud = np.flipud(measurement_list[np.argsort(measurement_list[:, 0])])        # Sort array based on size of cells (descending)
+        all_candidate_cell_list: list = convert_labeled_img_to_cell_list(labeled_img)
+        all_candidate_cell_list.sort(key=lambda x: x.area, reverse=True)    # sorted_measurement_list: np.flipud = np.flipud(measurement_list[np.argsort(measurement_list[:, 0])])        # Sort array based on size of cells (descending)
 
 
 
         for i in range(len(selected_cell_list)):
-            selected_cell = selected_cell_list[i];            # print(selected_cells[i].cell_display_name, ", ", selected_cells[i].area, ", ", selected_cells[i].perimeter, ", ", selected_cells[i].cell_xy_coord_tuple)
+            selected_cell: Cell = selected_cell_list[i];            # print(selected_cells[i].cell_display_name, ", ", selected_cells[i].area, ", ", selected_cells[i].perimeter, ", ", selected_cells[i].cell_xy_coord_tuple)
+
+            if selected_cell.last_cell_states != "normal":
+                continue
+
 
             # Past position
-            x_1 = selected_cell.cell_xy_coord_tuple[0]
-            y_1 = selected_cell.cell_xy_coord_tuple[1]
+            x_1 = selected_cell.x_y_coord_tuple[0]
+            y_1 = selected_cell.x_y_coord_tuple[1]
 
 
-            lowest_eucl_dist = 9999999999   #img_width #image_size_list[0]      # Save lowest euclidean distance
-            lowest_dist_cell = None         # Save index of cell information with lowest euclidean distance
 
-
-            for cell in all_cell_list:
-                x_2 = cell.cell_xy_coord_tuple[0]
-                y_2 = cell.cell_xy_coord_tuple[1]
+            # in_distance_cell_list: list = []
+            within_eucl_cell_list: list = []
+            for candidate_cell in all_candidate_cell_list:
+                x_2 = candidate_cell.x_y_coord_tuple[0]
+                y_2 = candidate_cell.x_y_coord_tuple[1]
                 eucl_dist = math.sqrt((x_2 - x_1)**2 + (y_2 - y_1)**2)
 
-                if eucl_dist < lowest_eucl_dist:
-                    lowest_eucl_dist = eucl_dist
-                    lowest_dist_cell = cell
+                # if eucl_dist < lowest_eucl_dist:
+                if eucl_dist <= cell_max_pixel_movement_distance:
+                    within_eucl_cell_list.append(candidate_cell)
+
+
+            if len(within_eucl_cell_list) == 0:
+                selected_cell.last_cell_states = "no cell is detected within max movement distance"
+
+
+            lowest_size_change_rate = 99999999999
+            best_match_cell: Cell = None         # Save index of cell information with lowest euclidean distance
+            within_change_rate_cell_cnt: int = 0
+            for within_eucl_cell in within_eucl_cell_list:
+                size_change_rate: float = (within_eucl_cell.area - selected_cell.area) / selected_cell.area
+                is_within_size_change_rate: bool = (-cell_size_variation_rate <= size_change_rate <= cell_size_variation_rate)
+
+                if is_within_size_change_rate:
+                    within_change_rate_cell_cnt += 1
+                    if size_change_rate < lowest_size_change_rate:
+                        lowest_size_change_rate = size_change_rate
+                        best_match_cell = within_eucl_cell
+
+
+            selected_cell.total_qualified_cell_count_list.append(within_change_rate_cell_cnt)
+
+            if within_change_rate_cell_cnt == 0:
+                selected_cell.last_cell_states = "no detected cell is within max area change rate"
+                continue
+
+
+
 
             # print(sorted_measurements[index_lowest_dist])
 
             # Current position
-            x_2 = lowest_dist_cell.cell_xy_coord_tuple[0]
-            y_2 = lowest_dist_cell.cell_xy_coord_tuple[1]
+            x_2 = best_match_cell.x_y_coord_tuple[0]
+            y_2 = best_match_cell.x_y_coord_tuple[1]
 
-            selected_cell.cell_xy_coord_tuple = (x_2, y_2)
-            selected_cell.area = lowest_dist_cell.area
-            selected_cell.perimeter = lowest_dist_cell.perimeter
+            selected_cell.x_y_coord_tuple = (x_2, y_2)
+            selected_cell.area = best_match_cell.area
+            selected_cell.perimeter = best_match_cell.perimeter
+            selected_cell.cell_trajectory_data_tuple_list.append((x_2, y_2))
 
             diplib.DrawLine(images_movement_trajectories_list[i], [int(x_1), int(y_1)], [int(x_2), int(y_2)])
 
@@ -242,7 +288,13 @@ if __name__ == '__main__':
     save_movement_images_selected_cells_series(images_movement_trajectories_list, image_series_name, dir_name, proj_dir_path)
 
 
+    selected_cell_list.sort(key=lambda x: x.cell_id, reverse=False)
+    for selected_cell in selected_cell_list:
+        print( "cell_id: ", selected_cell.cell_id, "\t",
+               "last_step: ", str(len(selected_cell.cell_trajectory_data_tuple_list)), "\t",
+               "last_states: ", selected_cell.last_cell_states
 
+               )
 
 
 

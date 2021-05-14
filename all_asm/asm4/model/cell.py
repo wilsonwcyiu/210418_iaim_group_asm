@@ -4,18 +4,20 @@ from util.common_util import CommonUtil
 class Cell():
 
 
-    def __init__(self, cell_id, cell_display_name = None, cell_xy_coord_tuple: tuple = None, perimeter: float = None, area: float = None):
+    def __init__(self, cell_id, cell_display_name = None, x_y_coord_tuple: tuple = None, perimeter: float = None, area: float = None):
         self.cell_id: int = cell_id
         self.cell_display_name: str = None
 
-        self.cell_xy_coord_tuple: tuple = cell_xy_coord_tuple
+        self.x_y_coord_tuple: tuple = x_y_coord_tuple
 
         self.perimeter: float = perimeter
         self.area: float = area
 
-        self.cell_trajectory_data_tuple_list: list = []
-        self.similar_area_cell_data_dict: dict = {}
 
+        # report data
+        self.cell_trajectory_data_tuple_list: list = []
+        self.total_qualified_cell_count_list: list = []
+        self.last_cell_states: str = "normal"
 
 
     def __str__(self):

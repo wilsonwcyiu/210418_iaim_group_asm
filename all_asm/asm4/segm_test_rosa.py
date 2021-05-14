@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
                     current_cell = Cell(i)
                     current_cell.cell_display_name = "cell" + str(i)
-                    current_cell.cell_xy_coord_tuple = (x_coord, y_coord)
+                    current_cell.x_y_coord_tuple = (x_coord, y_coord)
                     current_cell.perimeter = perimeter
                     current_cell.area = size
 
@@ -129,8 +129,8 @@ if __name__ == '__main__':
                     # print(selected_cells[i].cell_display_name, ", ", selected_cells[i].area, ", ", selected_cells[i].perimeter, ", ", selected_cells[i].cell_xy_coord_tuple)
 
                     # Past position
-                    x_1 = selected_cells[i].cell_xy_coord_tuple[0]
-                    y_1 = selected_cells[i].cell_xy_coord_tuple[1]
+                    x_1 = selected_cells[i].x_y_coord_tuple[0]
+                    y_1 = selected_cells[i].x_y_coord_tuple[1]
 
                     # Save lowest euclidean distance
                     lowest_eucl_dist = image_sizes[0]
@@ -153,7 +153,7 @@ if __name__ == '__main__':
                     x_2 = sorted_measurements[index_lowest_dist][2]
                     y_2 = sorted_measurements[index_lowest_dist][3]
 
-                    selected_cells[i].cell_xy_coord_tuple = (x_2, y_2)
+                    selected_cells[i].x_y_coord_tuple = (x_2, y_2)
                     selected_cells[i].area = sorted_measurements[index_lowest_dist][0]
                     selected_cells[i].perimeter = sorted_measurements[index_lowest_dist][1]
 

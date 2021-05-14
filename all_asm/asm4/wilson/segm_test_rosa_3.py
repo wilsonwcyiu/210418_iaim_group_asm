@@ -67,8 +67,8 @@ def generate_initial_cell_img(cell_list: list, img_width: int, img_height: int):
 
     for cell in cell_list:
         # Get coordinates of centers of current cell
-        x_coord = cell.cell_xy_coord_tuple[0]
-        y_coord = cell.cell_xy_coord_tuple[1]
+        x_coord = cell.x_y_coord_tuple[0]
+        y_coord = cell.x_y_coord_tuple[1]
         # Draw center of current cell
         diplib.DrawBox(selected_cells_image, [2, 2], [x_coord, y_coord])
 
@@ -105,7 +105,7 @@ def convert_measurement_list_to_cell(cell_id: int, measurement):
     cell.cell_display_name = "cell_" + str(cell_id)
     cell.area = measurement[0]
     cell.perimeter = measurement[1]
-    cell.cell_xy_coord_tuple = (measurement[2], measurement[3])
+    cell.x_y_coord_tuple = (measurement[2], measurement[3])
 
     return cell
 
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     for i in range(len(selected_cell_list)):
         cell = selected_cell_list[i]
         out_img: diplib.Image = images_movement_trajectories_list[i];      start_pixel_dimension: list = [4, 4]
-        diplib.DrawBox(out_img, start_pixel_dimension, list(cell.cell_xy_coord_tuple))
+        diplib.DrawBox(out_img, start_pixel_dimension, list(cell.x_y_coord_tuple))
 
 
 
@@ -208,8 +208,8 @@ if __name__ == '__main__':
             selected_cell = selected_cell_list[i];            # print(selected_cells[i].cell_display_name, ", ", selected_cells[i].area, ", ", selected_cells[i].perimeter, ", ", selected_cells[i].cell_xy_coord_tuple)
 
             # Past position
-            x_1 = selected_cell.cell_xy_coord_tuple[0]
-            y_1 = selected_cell.cell_xy_coord_tuple[1]
+            x_1 = selected_cell.x_y_coord_tuple[0]
+            y_1 = selected_cell.x_y_coord_tuple[1]
 
 
             lowest_eucl_dist = 9999999999   #img_width #image_size_list[0]      # Save lowest euclidean distance
@@ -217,8 +217,8 @@ if __name__ == '__main__':
 
 
             for cell in all_cell_list:
-                x_2 = cell.cell_xy_coord_tuple[0]
-                y_2 = cell.cell_xy_coord_tuple[1]
+                x_2 = cell.x_y_coord_tuple[0]
+                y_2 = cell.x_y_coord_tuple[1]
                 eucl_dist = math.sqrt((x_2 - x_1)**2 + (y_2 - y_1)**2)
 
                 if eucl_dist < lowest_eucl_dist:
@@ -228,10 +228,10 @@ if __name__ == '__main__':
             # print(sorted_measurements[index_lowest_dist])
 
             # Current position
-            x_2 = lowest_dist_cell.cell_xy_coord_tuple[0]
-            y_2 = lowest_dist_cell.cell_xy_coord_tuple[1]
+            x_2 = lowest_dist_cell.x_y_coord_tuple[0]
+            y_2 = lowest_dist_cell.x_y_coord_tuple[1]
 
-            selected_cell.cell_xy_coord_tuple = (x_2, y_2)
+            selected_cell.x_y_coord_tuple = (x_2, y_2)
             selected_cell.area = lowest_dist_cell.area
             selected_cell.perimeter = lowest_dist_cell.perimeter
 
