@@ -119,7 +119,7 @@ def convert_labeled_img_to_cell_list(labeled_img: diplib.Image):
         cell.cell_display_name = "cell_" + str(cell_id)
         cell.area = measurement[0]
         cell.perimeter = measurement[1]
-        cell.x_y_coord_tuple = (measurement[2], measurement[3])
+        cell.x_y_coord_tuple = (int(measurement[2]), int(measurement[3]))
         cell_list.append(cell)
 
         cell_id += 1
@@ -292,7 +292,9 @@ if __name__ == '__main__':
     for selected_cell in selected_cell_list:
         print( "cell_id: ", selected_cell.cell_id, "\t",
                "last_step: ", str(len(selected_cell.cell_trajectory_data_tuple_list)), "\t",
-               "last_states: ", selected_cell.last_cell_states
+               "last_states: ", selected_cell.last_cell_states, "\n",
+               "trajectory_data", selected_cell.cell_trajectory_data_tuple_list,  "\n",
+               "qualified_cell_cnt_in_each_image: ", selected_cell.total_qualified_cell_count_list, "\n"
 
                )
 
