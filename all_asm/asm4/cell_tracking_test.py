@@ -82,6 +82,7 @@ def convert_labeled_img_to_cell_list(labeled_img: diplib.Image, original_img: di
         cell.roundness = measurement[4]
         cell.mean = measurement[5]
         cell.std = measurement[6]
+        cell.smoothness = CommonUtil.calc_smoothness(cell.std)
 
         cell_list.append(cell)
 
@@ -157,6 +158,7 @@ if __name__ == '__main__':
             roundness: float = selected_cell.roundness
             std: float = selected_cell.std
             mean: float = selected_cell.mean
+            smoothness: float = selected_cell.smoothness
 
             selected_cell.cell_trajectory_data_tuple_list.append(coord)
             selected_cell.perimeter_list.append(perimeter)
@@ -164,6 +166,7 @@ if __name__ == '__main__':
             selected_cell.roundness_list.append(roundness)
             selected_cell.std_list.append(std)
             selected_cell.mean_list.append(mean)
+            selected_cell.smoothness_list.append(smoothness)
 
             diplib.DrawBox(images_movement_trajectory_list[j], [3, 3], list(coord))
 
@@ -260,6 +263,7 @@ if __name__ == '__main__':
                 selected_cell.roundness = best_match_cell.roundness
                 selected_cell.std = best_match_cell.std
                 selected_cell.mean = best_match_cell.mean
+                selected_cell.smoothness = best_match_cell.smoothness
                 # Add new values to list of past values of shape and movement features
                 selected_cell.cell_trajectory_data_tuple_list.append((x_2, y_2))
                 selected_cell.perimeter_list.append(best_match_cell.perimeter)
@@ -267,6 +271,7 @@ if __name__ == '__main__':
                 selected_cell.roundness_list.append(best_match_cell.roundness)
                 selected_cell.std_list.append(best_match_cell.std)
                 selected_cell.mean_list.append(best_match_cell.mean)
+                selected_cell.smoothness_list.append(best_match_cell.smoothness)
 
                 # Draw movement line in image of tracked cell
                 diplib.DrawLine(images_movement_trajectory_list[j], [int(x_1), int(y_1)], [int(x_2), int(y_2)])
@@ -293,6 +298,7 @@ if __name__ == '__main__':
                   "roundness_data", selected_cell.roundness_list, "\n",
                   "std_data", selected_cell.std_list, "\n",
                   "mean_data", selected_cell.mean_list, "\n",
+                  "smoothness_data", selected_cell.smoothness_list, "\n",
                   "qualified_cell_cnt_in_each_image: ", selected_cell.total_qualified_cell_count_list, "\n"
                   )
 
