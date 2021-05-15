@@ -1,9 +1,11 @@
 import numpy as np
 import diplib
 import math
+import matplotlib.pyplot as plt
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
+from util.plot_util import PlotUtil
 from all_asm.asm4.model.cell import Cell
 
 
@@ -11,7 +13,7 @@ from all_asm.asm4.model.cell import Cell
 def create_table_shape_texture_features(cell_list: list, image_series_name: str):
     line: str = '-' * 105
 
-    print("Shape and texture feature table of image series ", image_series_name)
+    print("\n\nShape and texture feature table of image series ", image_series_name)
     print(line)
     print('{:^10s}{:^10s}{:^10s}{:^15s}{:^10s}{:^20s}{:^15s}{:^15s}'.format("cell id", "area", "perimeter", "roundness", "mean", "standard deviation", "smoothness", "uniformity"))
     print(line)
@@ -21,6 +23,83 @@ def create_table_shape_texture_features(cell_list: list, image_series_name: str)
                 str(cell.cell_id), float(cell.area_list[0]), float(cell.perimeter_list[0]), float(cell.roundness_list[0]), float(cell.mean_list[0]),
                 float(cell.std_list[0]), float(cell.smoothness_list[0]), "-")
         )
+
+
+def create_total_distance_trajectory(trajectory_list: list):
+    # Total distance value saved
+    total_dist: float = 0
+    # Saves total distance per minute
+    distance_data: list = [total_dist]
+
+    # Go through movement trajectory
+    for step in range(1, len(trajectory_list)):
+        coord_tuple_prev: tuple = trajectory_list[step - 1]
+        coord_tuple_curr: tuple = trajectory_list[step]
+
+        # Calculate euclidean distance between previous and current position
+        eucl_dist: float = math.sqrt(
+            (coord_tuple_curr[0] - coord_tuple_prev[0]) ** 2 + (coord_tuple_curr[1] - coord_tuple_prev[1]) ** 2)
+
+        # Add to previous distance
+        total_dist += eucl_dist
+
+        distance_data.append(total_dist)
+
+    return distance_data
+
+
+# Create table showing velocity and distance of cells from image series
+def create_table_velocity_distance(cell_list: list, image_series_name: str):
+    line: str = '-' * 110
+
+    print("\n\nVelocity and total distance table of image series ", image_series_name)
+    print(line)
+    print('{:^10s}{:^30s}{:^30s}{:^40s}'.format("cell id", "velocity (in pixels/min)", "distance (in pixels)", "tracked movement transitions"))
+    print(line)
+
+    for cell in cell_list:
+        trajectory_list: list = cell.cell_trajectory_data_tuple_list
+
+        distance_data: list = create_total_distance_trajectory(trajectory_list)
+
+        total_dist: float = distance_data[-1]
+        velocity: float = total_dist / len(distance_data)
+
+        print(
+            '{:^10s}{:^30.2f}{:^30.2f}{:^40.0f}'.format(
+                str(cell.cell_id), float(velocity), float(total_dist), float(len(distance_data)))
+        )
+
+
+# Create a plot that shows the distance over time for every cell
+def create_graph_distance_over_time(cell_list: list, image_series_name: str):
+    # x-axis: time in minutes
+    x_axis = np.linspace(0, 29, 30)
+
+    ax = plt.axes()
+
+    # Go through every cell in list
+    for cell in cell_list:
+        trajectory_list: list = cell.cell_trajectory_data_tuple_list
+
+        # Get list with summed up distances
+        distance_data: list = create_total_distance_trajectory(trajectory_list)
+
+        data_total_number: int = len(distance_data)
+        # Check if length complies with number of x-axis values
+        if data_total_number != 30:
+            difference: int = 30 - data_total_number
+
+            for _ in range(difference):
+                distance_data.append(None)
+
+
+        ax.plot(x_axis, distance_data, label='cell ' + str(cell.cell_id))
+        ax.set(xlabel='time in minutes', ylabel='distance in pixels', title='Plot of Distance over Time of Image Series ' + image_series_name)
+        ax.legend()
+
+    PlotUtil.save_plot_to_project_folder(plt, 'asm4', image_series_name + '_dist_over_time.png')
+    plt.clf()
 
 
 # Segmentation resulting in foreground consisting of brightest cells (depending on parameters upper and lowerbound) -> saved in image output file
@@ -352,6 +431,8 @@ if __name__ == '__main__':
                   "qualified_cell_cnt_in_each_image: ", selected_cell.total_qualified_cell_count_list, "\n"
                   )
 
+        # Show results
         create_table_shape_texture_features(selected_cell_list, image_series_name_list[i])
-
+        create_table_velocity_distance(selected_cell_list, image_series_name_list[i])
+        create_graph_distance_over_time(selected_cell_list, image_series_name_list[i])
 
