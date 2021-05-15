@@ -336,4 +336,10 @@ class CommonUtil:
         return stddev
 
 
+    @staticmethod
+    def calc_smoothness(std: float):
+        r: float = 1 - (1 / (1 + (std ** 2)))
+
+        return r
+
 

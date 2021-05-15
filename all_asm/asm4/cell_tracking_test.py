@@ -66,7 +66,7 @@ def obtain_image_file_names_in_series(image_series_list: list, image_total: int)
 # Convert labeled image to list of candidate cells
 def convert_labeled_img_to_cell_list(labeled_img: diplib.Image, original_img: diplib.Image):
     # Generate list of measurements
-    measurement_list: np.ndarray = np.array(diplib.MeasurementTool.Measure(labeled_img, original_img, ['Size', 'Perimeter', 'Center']))
+    measurement_list: np.ndarray = np.array(diplib.MeasurementTool.Measure(labeled_img, original_img, ['Size', 'Perimeter', 'Center', 'Roundness', 'Mean', 'StandardDeviation']))
 
     cell_list: list = []
     cell_id: int = 0
@@ -74,9 +74,15 @@ def convert_labeled_img_to_cell_list(labeled_img: diplib.Image, original_img: di
     for measurement in measurement_list:
         cell: Cell = Cell(cell_id)
         cell.cell_display_name = "cell_" + str(cell_id)
+
+        # Location and shape features
         cell.area = measurement[0]
         cell.perimeter = measurement[1]
         cell.x_y_coord_tuple = (measurement[2], measurement[3])
+        cell.roundness = measurement[4]
+        cell.mean = measurement[5]
+        cell.std = measurement[6]
+
         cell_list.append(cell)
 
         cell_id += 1
@@ -141,13 +147,23 @@ if __name__ == '__main__':
         images_movement_trajectory_list: list = create_empty_images_for_selected_cells(img_width, img_height, number_of_cells_to_trace)
 
 
-        # Save initial position of selected cells and draw this location in the images
+        # Save initial position and shape feature values of selected cells and draw this location in the images
         for j in range(0, len(selected_cell_list)):
             selected_cell = selected_cell_list[j]
 
             coord: tuple = selected_cell.x_y_coord_tuple
+            perimeter: float = selected_cell.perimeter
+            area: float = selected_cell.area
+            roundness: float = selected_cell.roundness
+            std: float = selected_cell.std
+            mean: float = selected_cell.mean
 
             selected_cell.cell_trajectory_data_tuple_list.append(coord)
+            selected_cell.perimeter_list.append(perimeter)
+            selected_cell.area_list.append(area)
+            selected_cell.roundness_list.append(roundness)
+            selected_cell.std_list.append(std)
+            selected_cell.mean_list.append(mean)
 
             diplib.DrawBox(images_movement_trajectory_list[j], [3, 3], list(coord))
 
@@ -241,7 +257,16 @@ if __name__ == '__main__':
                 selected_cell.x_y_coord_tuple = (x_2, y_2)
                 selected_cell.area = best_match_cell.area
                 selected_cell.perimeter = best_match_cell.perimeter
+                selected_cell.roundness = best_match_cell.roundness
+                selected_cell.std = best_match_cell.std
+                selected_cell.mean = best_match_cell.mean
+                # Add new values to list of past values of shape and movement features
                 selected_cell.cell_trajectory_data_tuple_list.append((x_2, y_2))
+                selected_cell.perimeter_list.append(best_match_cell.perimeter)
+                selected_cell.area_list.append(best_match_cell.area)
+                selected_cell.roundness_list.append(best_match_cell.roundness)
+                selected_cell.std_list.append(best_match_cell.std)
+                selected_cell.mean_list.append(best_match_cell.mean)
 
                 # Draw movement line in image of tracked cell
                 diplib.DrawLine(images_movement_trajectory_list[j], [int(x_1), int(y_1)], [int(x_2), int(y_2)])
@@ -263,6 +288,11 @@ if __name__ == '__main__':
                   "last_step: ", str(len(selected_cell.cell_trajectory_data_tuple_list)), "\t",
                   "last_states: ", selected_cell.last_cell_states, "\n",
                   "trajectory_data", selected_cell.cell_trajectory_data_tuple_list, "\n",
+                  "perimeter_data", selected_cell.perimeter_list, "\n",
+                  "area_data", selected_cell.area_list, "\n",
+                  "roundness_data", selected_cell.roundness_list, "\n",
+                  "std_data", selected_cell.std_list, "\n",
+                  "mean_data", selected_cell.mean_list, "\n",
                   "qualified_cell_cnt_in_each_image: ", selected_cell.total_qualified_cell_count_list, "\n"
                   )
 
