@@ -7,6 +7,22 @@ from util.image_util import ImageUtil
 from all_asm.asm4.model.cell import Cell
 
 
+# Create table showing initial shape and texture features of cells from image series
+def create_table_shape_texture_features(cell_list: list, image_series_name: str):
+    line: str = '-' * 105
+
+    print("Shape and texture feature table of image series ", image_series_name)
+    print(line)
+    print('{:^10s}{:^10s}{:^10s}{:^15s}{:^10s}{:^20s}{:^15s}{:^15s}'.format("cell id", "area", "perimeter", "roundness", "mean", "standard deviation", "smoothness", "uniformity"))
+    print(line)
+    for cell in cell_list:
+        print(
+            '{:^10s}{:^10.0f}{:^10.2f}{:^15.2f}{:^10.2f}{:^20.2f}{:^15.2f}{:^15}'.format(
+                str(cell.cell_id), float(cell.area_list[0]), float(cell.perimeter_list[0]), float(cell.roundness_list[0]), float(cell.mean_list[0]),
+                float(cell.std_list[0]), float(cell.smoothness_list[0]), "-")
+        )
+
+
 # Segmentation resulting in foreground consisting of brightest cells (depending on parameters upper and lowerbound) -> saved in image output file
 def segm_for_brightest_cells(img: diplib.Image, image_file_name: str, proj_dir: str, lower_bound: int, upper_bound: int):
     # Get brightest cells
@@ -95,8 +111,8 @@ def convert_labeled_img_to_cell_list(labeled_img: diplib.Image, original_img: di
 if __name__ == '__main__':
     # Initialize cell tracking parameters
     number_of_cells_to_trace: int = 15
-    cell_size_variation_rate: float = 0.3
-    cell_max_pixel_movement_distance: int = 40
+    cell_size_variation_rate: float = 0.4
+    cell_max_pixel_movement_distance: int = 110
 
 
     # Configure files and directories
@@ -201,6 +217,39 @@ if __name__ == '__main__':
                 y_1: float = selected_cell.x_y_coord_tuple[1]
 
 
+                # Only collect cells that are within size change rate
+                within_size_change_range_list: list = []
+
+                for candidate_cell in all_candidate_cells_list:
+                    size_change_rate: float = (candidate_cell.area - selected_cell.area) / selected_cell.area
+
+                    if size_change_rate < cell_size_variation_rate:
+                        within_size_change_range_list.append(candidate_cell)
+
+                if len(within_size_change_range_list) == 0:
+                    selected_cell.last_cell_states = "no cell is detected within max size variation range"
+                    continue
+
+
+                lowest_eucl_dist: float = 999999.9
+                best_match_cell: Cell = None
+
+                for within_size_change_range_cell in within_size_change_range_list:
+                    x_2: float = within_size_change_range_cell.x_y_coord_tuple[0]
+                    y_2: float = within_size_change_range_cell.x_y_coord_tuple[1]
+
+                    eucl_dist = math.sqrt((x_2 - x_1) ** 2 + (y_2 - y_1) ** 2)
+
+                    if eucl_dist <= lowest_eucl_dist:
+                        lowest_eucl_dist = eucl_dist
+                        best_match_cell = within_size_change_range_cell
+
+
+                if lowest_eucl_dist > cell_max_pixel_movement_distance:
+                    selected_cell.last_cell_states = "no qualified cell is detected within max movement distance: " + str(lowest_eucl_dist)
+                    continue
+
+                '''
                 # Keep track of cells that are inside euclidean distance range of current tracked cell
                 within_eucl_cell_list: list = []
 
@@ -244,13 +293,14 @@ if __name__ == '__main__':
 
                 # Save in cell information how much cells have been qualified to be same cell in this transition
                 selected_cell.total_qualified_cell_count_list.append(within_size_change_rate_cnt)
-
+                
 
                 # Check if there are no cells within acceptable range of size change rate
                 if within_size_change_rate_cnt == 0:
                     selected_cell.last_cell_states = "no detected cell is within max area change rate"
                     continue
-
+                    
+                '''
 
                 # Current position best qualified cell
                 x_2: float = best_match_cell.x_y_coord_tuple[0]
@@ -302,5 +352,6 @@ if __name__ == '__main__':
                   "qualified_cell_cnt_in_each_image: ", selected_cell.total_qualified_cell_count_list, "\n"
                   )
 
+        create_table_shape_texture_features(selected_cell_list, image_series_name_list[i])
 
 
