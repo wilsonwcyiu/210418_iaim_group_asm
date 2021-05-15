@@ -2,6 +2,7 @@ import sys
 import time
 
 import diplib
+import imageio
 import numpy
 from diplib import PyDIPjavaio
 from diplib.PyDIP_bin import SE
@@ -424,6 +425,23 @@ class ImageUtil:
 
         try:
             img: PyDIPjavaio.ImageRead = diplib.ImageRead(image_file_path)
+        except Exception as e:
+            print("image_file_path", image_file_path)
+            raise e
+
+        return img
+
+
+    @staticmethod
+    def obtain_image_imageio(image_name: str, dir_path: str = None):
+        if dir_path is None:
+            dir_path = CommonUtil.obtain_project_default_input_dir_path()
+
+        image_file_path = dir_path + image_name
+        # image_file_path = "../../image_files/" + image_name
+
+        try:
+            img = imageio.imread(image_file_path)
         except Exception as e:
             print("image_file_path", image_file_path)
             raise e

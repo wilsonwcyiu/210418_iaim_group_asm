@@ -10,6 +10,8 @@ from turtle import pd
 
 import pandas
 from diplib import PyDIPjavaio
+import imageio
+import numpy as np
 
 
 class CommonUtil:
@@ -246,6 +248,30 @@ class CommonUtil:
             os.mkdir(dir_path_str, 0x0755)
 
         PyDIPjavaio.ImageWrite(img, full_file_path)
+
+
+    @staticmethod
+    def save_image_to_default_project_folder_imageio(img , dir_name: str, file_name: str, project_dir: str = None):
+        if project_dir is None:
+            # project_dir: str = "../../image_output/"
+            project_dir = CommonUtil.obtain_project_default_output_dir_path()
+
+        dir_path_str: str = os.path.join(project_dir, dir_name)
+        full_file_path: str = os.path.join(dir_path_str, file_name)
+
+        if dir_name is not None and not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+
+        image = np.array(img)
+        if image.dtype == 'bool':
+            image = np.array(image, dtype=np.uint8)
+            imageio.imwrite(full_file_path, image * 255, 'png')
+        else:
+            imageio.imwrite(full_file_path, image, 'png')
+
+        # print(image.dtype)
+        # im_uint8 = image.astype(np.uint8)
+
 
 
 
