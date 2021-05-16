@@ -369,3 +369,11 @@ class CommonUtil:
         return r
 
 
+    @staticmethod
+    def calc_uniformity(min_val: float, max_val: float):
+        u: float = 1 - ((max_val - min_val) / (max_val + min_val))
+
+        return u
+
+
+

@@ -442,11 +442,12 @@ class ImageUtil:
 
         try:
             img = imageio.imread(image_file_path)
+            image = diplib.PyDIP_bin.Image(img)
         except Exception as e:
             print("image_file_path", image_file_path)
             raise e
 
-        return img
+        return image
 
 
 
