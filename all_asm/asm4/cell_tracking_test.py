@@ -118,18 +118,23 @@ def segm_for_brightest_cells(img: diplib.Image, lower_bound: int, upper_bound: i
 
 
 def segm_for_tracking(img: diplib.Image, mask_img: diplib.Image, image_file_name: str, proj_dir: str):
-    img = ImageUtil.gauss_filter(img, 2)
+    correction_mask_img = diplib.BinaryClosing(mask_img)
+
+
+    gauss_img = ImageUtil.gauss_filter(img, 2)
+
 
     structuring_element: SE = diplib.PyDIP_bin.SE(shape='elliptic', param=5)
-    img = diplib.Closing(img, se=structuring_element)
+    closing_img = diplib.Closing(gauss_img, se=structuring_element)
 
-    watershed_img: diplib.Image = diplib.Watershed(img, mask_img, connectivity=2,
+    watershed_img: diplib.Image = diplib.Watershed(closing_img, correction_mask_img, connectivity=2,
                                                    flags={"binary", "high first"})
 
     segm_img: diplib.Image = diplib.Invert(watershed_img)
 
-    file_name_to_save: str = image_file_name + '_segm_brightest_cells.tif'
+    file_name_to_save: str = image_file_name + '_segm.tif'
     CommonUtil.save_image_to_default_project_folder(segm_img, 'asm4', file_name_to_save, proj_dir)
+
 
     return segm_img
 
@@ -251,7 +256,7 @@ if __name__ == '__main__':
 
 
         labeled_img: diplib.Image = diplib.Label(segm_img, boundaryCondition=["remove"])
-        ImageUtil.show_image_in_dip_view(labeled_img, 10)
+
 
         # Get all candidate (bright) cells in a list with information
         all_candidate_cells_list: list = convert_labeled_img_to_cell_list(labeled_img, first_image)
