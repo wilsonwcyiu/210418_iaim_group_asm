@@ -314,7 +314,10 @@ if __name__ == '__main__':
                 for candidate_cell in all_candidate_cells_list:
                     size_change_rate: float = (candidate_cell.area - selected_cell.area) / selected_cell.area
 
-                    if size_change_rate < cell_size_variation_rate:
+                    is_within_size_change_rate: bool = (
+                                -cell_size_variation_rate <= size_change_rate <= cell_size_variation_rate)
+
+                    if is_within_size_change_rate:
                         within_size_change_range_list.append(candidate_cell)
 
                 if len(within_size_change_range_list) == 0:
