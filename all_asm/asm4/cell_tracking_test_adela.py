@@ -116,7 +116,7 @@ def segm_for_brightest_cells(img: diplib.Image, image_file_name: str, proj_dir: 
     segmented_img: diplib.Image = ImageUtil.segment_image_white(img)
 
     file_name_to_save: str = image_file_name + '_segm_brightest_cells'
-    CommonUtil.save_image_to_default_project_folder(segmented_img, 'asm4', file_name_to_save, proj_dir)
+    CommonUtil.save_image_to_default_project_folder_imageio(segmented_img, 'asm4', file_name_to_save, proj_dir)
 
     return segmented_img
 
@@ -149,7 +149,7 @@ def generate_and_save_initial_cell_selection_img(selected_cells: list, img_width
         # Draw center of current cell
         diplib.DrawBox(new_img, [3, 3], [int(x_coord), int(y_coord)])
 
-    CommonUtil.save_image_to_default_project_folder(new_img, 'asm4', image_name + '_initial_selection.tif', proj_dir)
+    CommonUtil.save_image_to_default_project_folder_imageio(new_img, 'asm4', image_name + '_initial_selection', proj_dir)
 
 
 # Obtain the list of all image file names of every image series -> [[list of all images of series A][list of all images of series B]]
@@ -411,9 +411,9 @@ if __name__ == '__main__':
         cell_id: int = 0
 
         for image in images_movement_trajectory_list:
-            CommonUtil.save_image_to_default_project_folder(image, 'asm4',
-                                                            image_series_name_list[i] + '_tracking_cell_' + str(
-                                                                cell_id) + '.tif', proj_dir_path)
+            CommonUtil.save_image_to_default_project_folder_imageio(image, 'asm4',
+                                                                    image_series_name_list[i] + '_tracking_cell_' +
+                                                                    str(cell_id) + '.png', proj_dir_path)
             cell_id += 1
 
         # Print numerical information of tracked cells
