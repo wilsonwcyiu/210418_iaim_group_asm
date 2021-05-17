@@ -131,6 +131,9 @@ def segm_for_tracking(img: diplib.Image, mask_img: diplib.Image, image_file_name
     watershed_img: diplib.Image = diplib.Watershed(gauss_img, mask_img, connectivity=2,
                                                    flags={"binary", "high first"})
 
+    file_name_to_save: str = image_file_name + '_watershed.tif'
+    CommonUtil.save_image_to_default_project_folder(watershed_img, 'asm4', file_name_to_save, proj_dir)
+
     segm_img: diplib.Image = diplib.Invert(watershed_img)
 
     file_name_to_save: str = image_file_name + '_segm.tif'
@@ -252,7 +255,7 @@ if __name__ == '__main__':
         mask_img: diplib.Image = segm_for_brightest_cells(first_image, 80, 100)
 
         # Apply watershed to accurately obtain the cells
-        segm_img: diplib.Image = segm_for_tracking(first_image, mask_img, first_image_name, proj_dir_path, 1)
+        segm_img: diplib.Image = segm_for_tracking(first_image, mask_img, first_image_name, proj_dir_path, 0)
 
         # Label the segmented cells excluding the cells positioned at border of image
         labeled_img: diplib.Image = diplib.Label(segm_img, boundaryCondition=["remove"])
