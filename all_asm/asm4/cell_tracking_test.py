@@ -120,9 +120,7 @@ def segm_for_brightest_cells(img: diplib.Image, lower_bound: int, upper_bound: i
 def segm_for_tracking(img: diplib.Image, mask_img: diplib.Image, image_file_name: str, proj_dir: str):
     correction_mask_img = diplib.BinaryClosing(mask_img)
 
-
     gauss_img = ImageUtil.gauss_filter(img, 2)
-
 
     structuring_element: SE = diplib.PyDIP_bin.SE(shape='elliptic', param=5)
     closing_img = diplib.Closing(gauss_img, se=structuring_element)
