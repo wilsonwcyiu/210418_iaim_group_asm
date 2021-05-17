@@ -59,8 +59,7 @@ def create_table_velocity_distance(cell_list: list, image_series_name: str):
 
     print("\n\nVelocity and total distance table of image series ", image_series_name)
     print(line)
-    print('{:^10s}{:^30s}{:^30s}{:^40s}'.format("cell id", "velocity (in pixels/min)", "distance (in pixels)",
-                                                "tracked movement transitions"))
+    print('{:^10s}{:^30s}{:^30s}{:^40s}'.format("cell id", "velocity (in pixels/min)", "distance (in pixels)", "tracked movement transitions"))
     print(line)
 
     for cell in cell_list:
@@ -99,9 +98,9 @@ def create_graph_distance_over_time(cell_list: list, image_series_name: str):
             for _ in range(difference):
                 distance_data.append(None)
 
+
         ax.plot(x_axis, distance_data, label='cell ' + str(cell.cell_id))
-        ax.set(xlabel='time in minutes', ylabel='distance in pixels',
-               title='Plot of Distance over Time of Image Series ' + image_series_name)
+        ax.set(xlabel='time in minutes', ylabel='distance in pixels', title='Plot of Distance over Time of Image Series ' + image_series_name)
         ax.legend()
 
     PlotUtil.save_plot_to_project_folder(plt, 'asm4', image_series_name + '_dist_over_time.png')
@@ -109,17 +108,30 @@ def create_graph_distance_over_time(cell_list: list, image_series_name: str):
 
 
 # Segmentation resulting in foreground consisting of brightest cells (depending on parameters upper and lowerbound) -> saved in image output file
-def segm_for_brightest_cells(img: diplib.Image, image_file_name: str, proj_dir: str, lower_bound: int,
-                             upper_bound: int):
+def segm_for_brightest_cells(img: diplib.Image, lower_bound: int, upper_bound: int):
     # Get brightest cells
     img: diplib.Image = diplib.ContrastStretch(img, lower_bound, upper_bound)
     # Get binary image
     segmented_img: diplib.Image = ImageUtil.segment_image_white(img)
 
-    file_name_to_save: str = image_file_name + '_segm_brightest_cells'
-    CommonUtil.save_image_to_default_project_folder_imageio(segmented_img, 'asm4', file_name_to_save, proj_dir)
-
     return segmented_img
+
+
+def segm_for_tracking(img: diplib.Image, mask_img: diplib.Image, image_file_name: str, proj_dir: str):
+    img = ImageUtil.gauss_filter(img, 2)
+
+    structuring_element: SE = diplib.PyDIP_bin.SE(shape='elliptic', param=5)
+    img = diplib.Closing(img, se=structuring_element)
+
+    watershed_img: diplib.Image = diplib.Watershed(img, mask_img, connectivity=2,
+                                                   flags={"binary", "high first"})
+
+    segm_img: diplib.Image = diplib.Invert(watershed_img)
+
+    file_name_to_save: str = image_file_name + '_segm_brightest_cells.png'
+    CommonUtil.save_image_to_default_project_folder_imageio(segm_img, 'asm4', file_name_to_save, proj_dir)
+
+    return segm_img
 
 
 # Create a list of empty images for every selected cell in image series
@@ -136,8 +148,7 @@ def create_empty_images_for_selected_cells(img_width: int, img_height: int, tota
 
 
 # Generate and save image that shows centers of initially selected cells
-def generate_and_save_initial_cell_selection_img(selected_cells: list, img_width: int, img_height: int, image_name: str,
-                                                 proj_dir: str):
+def generate_and_save_initial_cell_selection_img(selected_cells: list, img_width: int, img_height: int, image_name: str, proj_dir: str):
     # Create new empty image
     new_img = diplib.Image((img_width, img_height), 1)
     new_img.Fill(0)
@@ -150,7 +161,7 @@ def generate_and_save_initial_cell_selection_img(selected_cells: list, img_width
         # Draw center of current cell
         diplib.DrawBox(new_img, [3, 3], [int(x_coord), int(y_coord)])
 
-    CommonUtil.save_image_to_default_project_folder_imageio(new_img, 'asm4', image_name + '_initial_selection', proj_dir)
+    CommonUtil.save_image_to_default_project_folder_imageio(new_img, 'asm4', image_name + '_initial_selection.png', proj_dir)
 
 
 # Obtain the list of all image file names of every image series -> [[list of all images of series A][list of all images of series B]]
@@ -200,21 +211,28 @@ def convert_labeled_img_to_cell_list(labeled_img: diplib.Image, original_img: di
     return cell_list
 
 
+
 if __name__ == '__main__':
     # Initialize cell tracking parameters
     number_of_cells_to_trace: int = 15
     cell_size_variation_rate: float = 0.4
     cell_max_pixel_movement_distance: int = 110
 
+
     # Configure files and directories
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm4/'
     proj_dir_path: str = '../../image_output/'
+
+    img_extension: str = ".png"
+    # img_extension: str = ".tif"
+
     image_series_name_list: list = ['MTLn3+EGF', 'MTLn3-ctrl']
 
     # Get list of images per series
     image_series_file_name_list = obtain_image_file_names_in_series(image_series_name_list, 30)
 
     total_amount_series: int = len(image_series_file_name_list)
+
 
     # Go through every image series
     for i in range(total_amount_series):
@@ -223,15 +241,21 @@ if __name__ == '__main__':
         # ---- Selection of cells that will be checked ----
 
         first_image_name: str = all_images[0]
-        first_image: diplib.Image = ImageUtil.obtain_image_imageio(first_image_name + '.png', input_dir)
+        first_image: diplib.Image = ImageUtil.obtain_image_imageio(first_image_name + img_extension, input_dir)
+
 
         img_width, img_height = ImageUtil.obtain_image_width_height(first_image)
 
-        # Use this method of segmentation to ensure selection of brightest cells
-        segm_img: diplib.Image = segm_for_brightest_cells(first_image, first_image_name, proj_dir_path, 80, 100)
 
-        # Label the found brightest cells excluding the cells positioned at border of image
+        # Use this method of segmentation to ensure selection of brightest cells
+        mask_img: diplib.Image = segm_for_brightest_cells(first_image, 80, 100)
+
+        # Label the found brightest cells excluding the cells positioned at border of image and also apply watershed
+        segm_img: diplib.Image = segm_for_tracking(first_image, mask_img, first_image_name, proj_dir_path)
+
+
         labeled_img: diplib.Image = diplib.Label(segm_img, boundaryCondition=["remove"])
+        # ImageUtil.show_image_in_dip_view(labeled_img, 10)
 
         # Get all candidate (bright) cells in a list with information
         all_candidate_cells_list: list = convert_labeled_img_to_cell_list(labeled_img, first_image)
@@ -241,13 +265,15 @@ if __name__ == '__main__':
         # Select the largest cells that will be tracked
         selected_cell_list: list = all_candidate_cells_list[0: number_of_cells_to_trace]
 
+
+
         # Generate and save image that shows the initial selection of cells to be tracked
-        generate_and_save_initial_cell_selection_img(selected_cell_list, img_width, img_height,
-                                                     image_series_name_list[i], proj_dir_path)
+        generate_and_save_initial_cell_selection_img(selected_cell_list, img_width, img_height, image_series_name_list[i], proj_dir_path)
+
 
         # Generate empty images for every tracked cell to save its movement tracks
-        images_movement_trajectory_list: list = create_empty_images_for_selected_cells(img_width, img_height,
-                                                                                       number_of_cells_to_trace)
+        images_movement_trajectory_list: list = create_empty_images_for_selected_cells(img_width, img_height, number_of_cells_to_trace)
+
 
         # Save initial position and shape feature values of selected cells and draw this location in the images
         for j in range(0, len(selected_cell_list)):
@@ -273,31 +299,41 @@ if __name__ == '__main__':
 
             diplib.DrawBox(images_movement_trajectory_list[j], [3, 3], list(coord))
 
+
         # ---- Track selected cells in next image series (0001 - 0029) ----
         for idx in range(1, 30):
             image_file_name: str = all_images[idx]
 
-            curr_img: diplib.Image = ImageUtil.obtain_image_imageio(image_file_name + '.png', input_dir)
+            curr_img: diplib.Image = ImageUtil.obtain_image_imageio(image_file_name + img_extension, input_dir)
 
             # Segment to get cells in foreground
-            segm_img: diplib.Image = segm_for_brightest_cells(curr_img, image_file_name, proj_dir_path, 80, 100)
+            mask_img: diplib.Image = segm_for_brightest_cells(curr_img, 80, 100)
+
+            # Segment properly with watershed
+            segm_img: diplib.Image = segm_for_tracking(curr_img, mask_img, image_file_name, proj_dir_path)
+
             # Label cells
             labeled_img: diplib.Image = diplib.Label(segm_img)
 
+
             # Get cell information and save these cells in list
             all_candidate_cells_list: list = convert_labeled_img_to_cell_list(labeled_img, curr_img)
+
 
             # Run through tracked/selected cells
             for j in range(len(selected_cell_list)):
                 selected_cell: Cell = selected_cell_list[j]
 
+
                 # Check if still tracking
                 if selected_cell.last_cell_states != "normal":
                     continue
 
+
                 # Past position of current tracked/selected cell
                 x_1: float = selected_cell.x_y_coord_tuple[0]
                 y_1: float = selected_cell.x_y_coord_tuple[1]
+
 
                 # Only collect cells that are within size change rate
                 within_size_change_range_list: list = []
@@ -306,7 +342,7 @@ if __name__ == '__main__':
                     size_change_rate: float = (candidate_cell.area - selected_cell.area) / selected_cell.area
 
                     is_within_size_change_rate: bool = (
-                            -cell_size_variation_rate <= size_change_rate <= cell_size_variation_rate)
+                                -cell_size_variation_rate <= size_change_rate <= cell_size_variation_rate)
 
                     if is_within_size_change_rate:
                         within_size_change_range_list.append(candidate_cell)
@@ -315,6 +351,8 @@ if __name__ == '__main__':
                     selected_cell.last_cell_states = "no cell is detected within max size variation range"
                     continue
 
+
+                # Select the cell from the candidate cells that is closest to the previous position of tracked cell
                 lowest_eucl_dist: float = 999999.9
                 best_match_cell: Cell = None
 
@@ -328,63 +366,11 @@ if __name__ == '__main__':
                         lowest_eucl_dist = eucl_dist
                         best_match_cell = within_size_change_range_cell
 
+
                 if lowest_eucl_dist > cell_max_pixel_movement_distance:
-                    selected_cell.last_cell_states = "no qualified cell is detected within max movement distance: " + str(
-                        lowest_eucl_dist)
+                    selected_cell.last_cell_states = "no qualified cell is detected within max movement distance: " + str(lowest_eucl_dist)
                     continue
 
-                '''
-                # Keep track of cells that are inside euclidean distance range of current tracked cell
-                within_eucl_cell_list: list = []
-
-                # Run through all cells in current image and select cells that are within acceptable range
-                for candidate_cell in all_candidate_cells_list:
-                    # Position of current cell
-                    x_2: float = candidate_cell.x_y_coord_tuple[0]
-                    y_2: float = candidate_cell.x_y_coord_tuple[1]
-
-                    # Calculate euclidean distance
-                    eucl_dist = math.sqrt((x_2 - x_1)**2 + (y_2 - y_1)**2)
-
-                    # Check if distance is within maximum distance
-                    if eucl_dist <= cell_max_pixel_movement_distance:
-                        within_eucl_cell_list.append(candidate_cell)
-
-
-                # Check if there are no cells within acceptable range
-                if len(within_eucl_cell_list) == 0:
-                    selected_cell.last_cell_states = "no cell is detected within max movement distance"
-                    continue
-
-
-                # Select cell with lowest size change with tracked cell
-                lowest_size_change_rate: int = 9999999
-                within_size_change_rate_cnt: int = 0
-                best_match_cell: Cell = None
-
-                for within_eucl_cell in within_eucl_cell_list:
-                    # Calculate size change rate
-                    size_change_rate: float = (within_eucl_cell.area - selected_cell.area) / selected_cell.area
-                    # Checks if cell is not too different of size
-                    is_within_size_change_rate: bool = (-cell_size_variation_rate <= size_change_rate <= cell_size_variation_rate)
-
-                    if is_within_size_change_rate:
-                        within_size_change_rate_cnt += 1
-                        if size_change_rate < lowest_size_change_rate:
-                            lowest_size_change_rate = size_change_rate
-                            best_match_cell = within_eucl_cell
-
-
-                # Save in cell information how much cells have been qualified to be same cell in this transition
-                selected_cell.total_qualified_cell_count_list.append(within_size_change_rate_cnt)
-                
-
-                # Check if there are no cells within acceptable range of size change rate
-                if within_size_change_rate_cnt == 0:
-                    selected_cell.last_cell_states = "no detected cell is within max area change rate"
-                    continue
-                    
-                '''
 
                 # Current position best qualified cell
                 x_2: float = best_match_cell.x_y_coord_tuple[0]
@@ -411,14 +397,14 @@ if __name__ == '__main__':
                 # Draw movement line in image of tracked cell
                 diplib.DrawLine(images_movement_trajectory_list[j], [int(x_1), int(y_1)], [int(x_2), int(y_2)])
 
+
         # Save images selected cells
         cell_id: int = 0
 
         for image in images_movement_trajectory_list:
-            CommonUtil.save_image_to_default_project_folder_imageio(image, 'asm4',
-                                                                    image_series_name_list[i] + '_tracking_cell_' +
-                                                                    str(cell_id) + '.png', proj_dir_path)
+            CommonUtil.save_image_to_default_project_folder_imageio(image, 'asm4', image_series_name_list[i] + '_tracking_cell_' + str(cell_id) + '.png', proj_dir_path)
             cell_id += 1
+
 
         # Print numerical information of tracked cells
         selected_cell_list.sort(key=lambda x: x.cell_id, reverse=False)
@@ -442,3 +428,4 @@ if __name__ == '__main__':
         create_table_shape_texture_features(selected_cell_list, image_series_name_list[i])
         create_table_velocity_distance(selected_cell_list, image_series_name_list[i])
         create_graph_distance_over_time(selected_cell_list, image_series_name_list[i])
+
