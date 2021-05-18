@@ -100,14 +100,15 @@ def create_graph_distance_over_time(cell_list: list, image_series_name: str):
 
 
         ax.plot(x_axis, distance_data, label='cell ' + str(cell.cell_id))
-        ax.set(xlabel='time in minutes', ylabel='distance in pixels', title='Plot of Distance over Time of Image Series ' + image_series_name)
+        ax.set(xlabel='time in minutes', ylabel='distance in pixels',
+               title='Plot of Distance over Time of Image Series ' + image_series_name)
         ax.legend()
 
     PlotUtil.save_plot_to_project_folder(plt, 'asm4', image_series_name + '_dist_over_time.png')
     plt.clf()
 
 
-# Segmentation resulting in foreground consisting of brightest cells (depending on parameters upper and lowerbound) -> saved in image output file
+# Segmentation resulting in foreground consisting of brightest cells
 def segm_for_brightest_cells(img: diplib.Image, lower_bound: int, upper_bound: int):
     img = ImageUtil.gauss_filter(img, 2)
 
@@ -119,6 +120,7 @@ def segm_for_brightest_cells(img: diplib.Image, lower_bound: int, upper_bound: i
     return segmented_img
 
 
+# Segmentation with watershed to track the cells
 def segm_for_tracking(img: diplib.Image, mask_img: diplib.Image, image_file_name: str, proj_dir: str, show: bool):
     file_name_to_save: str = image_file_name + '_mask.tif'
     CommonUtil.save_image_to_default_project_folder(mask_img, 'asm4', file_name_to_save, proj_dir)
