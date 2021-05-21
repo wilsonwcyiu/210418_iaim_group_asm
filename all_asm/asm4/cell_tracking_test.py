@@ -109,42 +109,46 @@ def create_graph_distance_over_time(cell_list: list, image_series_name: str):
 
 # Segmentation resulting in foreground consisting of brightest cells (depending on parameters upper and lowerbound) -> saved in image output file
 def segm_for_brightest_cells(img: diplib.Image, lower_bound: int, upper_bound: int):
+    img = ImageUtil.gauss_filter(img, 2)
+
     # Get brightest cells
-    img: diplib.Image = diplib.ContrastStretch(img, lower_bound, upper_bound)
+    img = diplib.ContrastStretch(img, lower_bound, upper_bound)
     # Get binary image
     segmented_img: diplib.Image = ImageUtil.segment_image_white(img)
 
     return segmented_img
 
 
-def segm_for_tracking(img: diplib.Image, mask_img: diplib.Image, image_file_name: str, proj_dir: str):
-    img = ImageUtil.gauss_filter(img, 2)
+def segm_for_tracking(img: diplib.Image, mask_img: diplib.Image, image_file_name: str, proj_dir: str, show: bool):
+    file_name_to_save: str = image_file_name + '_mask.tif'
+    CommonUtil.save_image_to_default_project_folder(mask_img, 'asm4', file_name_to_save, proj_dir)
 
-    structuring_element: SE = diplib.PyDIP_bin.SE(shape='elliptic', param=5)
-    img = diplib.Closing(img, se=structuring_element)
+    gauss_img = ImageUtil.gauss_filter(img, 2)
 
-    watershed_img: diplib.Image = diplib.Watershed(img, mask_img, connectivity=2,
+    if show:
+        ImageUtil.show_image_in_dip_view(gauss_img, 5, "image after gaussian")
+
+    watershed_img: diplib.Image = diplib.Watershed(gauss_img, mask_img, connectivity=2,
                                                    flags={"binary", "high first"})
+
+    file_name_to_save: str = image_file_name + '_watershed.tif'
+    CommonUtil.save_image_to_default_project_folder(watershed_img, 'asm4', file_name_to_save, proj_dir)
 
     segm_img: diplib.Image = diplib.Invert(watershed_img)
 
-    file_name_to_save: str = image_file_name + '_segm_brightest_cells.tif'
+    file_name_to_save: str = image_file_name + '_segm.tif'
     CommonUtil.save_image_to_default_project_folder(segm_img, 'asm4', file_name_to_save, proj_dir)
+
 
     return segm_img
 
 
 # Create a list of empty images for every selected cell in image series
-def create_empty_images_for_selected_cells(img_width: int, img_height: int, total_tracked_cells: int):
-    image_list = []
-
-    for _ in range(total_tracked_cells):
+def create_empty_image_for_selected_cell(img_width: int, img_height: int, cell: Cell):
         new_img: diplib.Image = diplib.Image((img_width, img_height), 1)
         new_img.Fill(0)
 
-        image_list.append(new_img)
-
-    return image_list
+        cell.cell_track_img = new_img
 
 
 # Generate and save image that shows centers of initially selected cells
@@ -247,15 +251,15 @@ if __name__ == '__main__':
         img_width, img_height = ImageUtil.obtain_image_width_height(first_image)
 
 
-        # Use this method of segmentation to ensure selection of brightest cells
+        # Use this method of segmentation to ensure selection of brightest cells for the mask
         mask_img: diplib.Image = segm_for_brightest_cells(first_image, 80, 100)
 
-        # Label the found brightest cells excluding the cells positioned at border of image and also apply watershed
-        segm_img: diplib.Image = segm_for_tracking(first_image, mask_img, first_image_name, proj_dir_path)
+        # Apply watershed to accurately obtain the cells
+        segm_img: diplib.Image = segm_for_tracking(first_image, mask_img, first_image_name, proj_dir_path, 0)
 
-
+        # Label the segmented cells excluding the cells positioned at border of image
         labeled_img: diplib.Image = diplib.Label(segm_img, boundaryCondition=["remove"])
-        ImageUtil.show_image_in_dip_view(labeled_img, 10)
+
 
         # Get all candidate (bright) cells in a list with information
         all_candidate_cells_list: list = convert_labeled_img_to_cell_list(labeled_img, first_image)
@@ -272,7 +276,8 @@ if __name__ == '__main__':
 
 
         # Generate empty images for every tracked cell to save its movement tracks
-        images_movement_trajectory_list: list = create_empty_images_for_selected_cells(img_width, img_height, number_of_cells_to_trace)
+        for selected_cell in selected_cell_list:
+            create_empty_image_for_selected_cell(img_width, img_height, selected_cell)
 
 
         # Save initial position and shape feature values of selected cells and draw this location in the images
@@ -297,7 +302,7 @@ if __name__ == '__main__':
             selected_cell.smoothness_list.append(smoothness)
             selected_cell.uniformity_list.append(uniformity)
 
-            diplib.DrawBox(images_movement_trajectory_list[j], [3, 3], list(coord))
+            diplib.DrawBox(selected_cell.cell_track_img, [3, 3], list(coord))
 
 
         # ---- Track selected cells in next image series (0001 - 0029) ----
@@ -306,11 +311,11 @@ if __name__ == '__main__':
 
             curr_img: diplib.Image = ImageUtil.obtain_image(image_file_name + img_extension, input_dir)
 
-            # Segment to get cells in foreground
+            # Segment to get cells in foreground for mask
             mask_img: diplib.Image = segm_for_brightest_cells(curr_img, 80, 100)
 
             # Segment properly with watershed
-            segm_img: diplib.Image = segm_for_tracking(curr_img, mask_img, image_file_name, proj_dir_path)
+            segm_img: diplib.Image = segm_for_tracking(curr_img, mask_img, image_file_name, proj_dir_path, 0)
 
             # Label cells
             labeled_img: diplib.Image = diplib.Label(segm_img)
@@ -395,21 +400,19 @@ if __name__ == '__main__':
                 selected_cell.uniformity_list.append(best_match_cell.uniformity)
 
                 # Draw movement line in image of tracked cell
-                diplib.DrawLine(images_movement_trajectory_list[j], [int(x_1), int(y_1)], [int(x_2), int(y_2)])
-
-
-        # Save images selected cells
-        cell_id: int = 0
-
-        for image in images_movement_trajectory_list:
-            CommonUtil.save_image_to_default_project_folder(image, 'asm4', image_series_name_list[i] + '_tracking_cell_' + str(cell_id) + '.tif', proj_dir_path)
-            cell_id += 1
+                diplib.DrawLine(selected_cell.cell_track_img, [int(x_1), int(y_1)], [int(x_2), int(y_2)])
 
 
         # Print numerical information of tracked cells
         selected_cell_list.sort(key=lambda x: x.cell_id, reverse=False)
         print("\n\n--- Tracked cells of image series " + image_series_name_list[i] + "---\n\n")
         for selected_cell in selected_cell_list:
+
+            # Save tracks of cells
+            CommonUtil.save_image_to_default_project_folder(selected_cell.cell_track_img, 'asm4',
+                                                            image_series_name_list[i] + '_tracking_cell_' + str(
+                                                                selected_cell.cell_id) + '.tif', proj_dir_path)
+
             print("cell_id: ", selected_cell.cell_id, "\t",
                   "last_step: ", str(len(selected_cell.cell_trajectory_data_tuple_list)), "\t",
                   "last_states: ", selected_cell.last_cell_states, "\n",
