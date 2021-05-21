@@ -7,11 +7,27 @@ import numpy
 from diplib import PyDIPjavaio
 from diplib.PyDIP_bin import SE
 from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
+from matplotlib import pyplot
 
 from util.common_util import CommonUtil
 
 
 class ImageUtil:
+
+
+
+    @staticmethod
+    def create_multi_img_plot(img_rgb_array_list: list, total_rows: int, total_col: int, window_size_tuple: tuple):
+        img_idx = 1
+
+        fig = pyplot.figure(figsize=window_size_tuple)
+        for img_rgb_array in img_rgb_array_list:
+            fig.add_subplot(total_rows, total_col, img_idx)
+            pyplot.imshow(img_rgb_array)
+
+            img_idx += 1
+
+        return pyplot
 
 
 
