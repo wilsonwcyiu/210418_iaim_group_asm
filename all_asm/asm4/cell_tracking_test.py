@@ -226,9 +226,11 @@ if __name__ == '__main__':
     # Configure files and directories
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm4/'
     proj_dir_path: str = '../../image_output/'
-
     img_extension: str = ".png"
+
+    # input_dir = input_dir + "/tif/"
     # img_extension: str = ".tif"
+    # proj_dir_path = CommonUtil.obtain_project_default_output_dir_path(project_file_output_dir_name="file_output")
 
     image_series_name_list: list = ['MTLn3+EGF', 'MTLn3-ctrl']
 
