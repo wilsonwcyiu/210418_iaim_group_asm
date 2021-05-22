@@ -17,7 +17,11 @@ from matplotlib import pyplot
 
 class CommonUtil:
 
+    @staticmethod
+    def obtain_file_extension(path_or_name: str):
+        ext: str = path_or_name.split(".")[-1]
 
+        return ext
 
 
 

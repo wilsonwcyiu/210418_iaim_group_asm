@@ -454,15 +454,20 @@ class ImageUtil:
             dir_path = CommonUtil.obtain_project_default_input_dir_path()
 
         image_file_path = dir_path + image_name
-        # image_file_path = "../../image_files/" + image_name
 
+        diplib_img: PyDIPjavaio.ImageRead = None
         try:
-            img: PyDIPjavaio.ImageRead = diplib.ImageRead(image_file_path)
+            img_extension: str = CommonUtil.obtain_file_extension(image_name)
+            if img_extension.lower() in ("jpeg", "jpg"):     diplib_img = diplib.ImageReadJPEG(image_file_path)
+            elif img_extension.lower() in ("png"):           diplib_img = diplib.ImageRead(image_file_path)
+            elif img_extension.lower() in ("tif", "tiff"):   diplib_img = diplib.ImageReadTIFF(image_file_path)
+            else: diplib_img = diplib.ImageRead(image_file_path)
+
         except Exception as e:
             print("image_file_path", image_file_path)
             raise e
 
-        return img
+        return diplib_img
 
 
     @staticmethod

@@ -43,16 +43,13 @@ if __name__ == '__main__':
 
 
     # reading the image
-    img_rgb_array = ImageUtil.obtain_image_rgb_array(input_dir + img_relative_path_list[0])
-    print(type(img_rgb_array))
+    # img_rgb_array = ImageUtil.obtain_image_rgb_array(input_dir + img_relative_path_list[0])
+    # print(type(img_rgb_array))
 
-    # ImageUtil.obtain_image
-    tmp_img_path: str = input_dir + img_relative_path_list[0]
-    # img = diplib.ImageReadJPEG(tmp_img_path)
-    img = ImageUtil.obtain_diplib_image(tmp_img_path)
+    img_relative_path: str = img_relative_path_list[0]
+    img = ImageUtil.obtain_diplib_image(img_relative_path, input_dir)
 
     ImageUtil.show_image_in_dip_view(img)
-    ImageUtil.obtain_diplib_image(tmp_img_path)
 
 
 
