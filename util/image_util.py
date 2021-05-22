@@ -16,6 +16,33 @@ from skimage.io import imread
 class ImageUtil:
 
     @staticmethod
+    def watershed(img: diplib.PyDIP_bin.Image, mask_img: diplib.PyDIP_bin.Image):
+        watershed_img: diplib.Image = diplib.Watershed(img, mask_img, connectivity=2, flags={"binary", "high first"})
+
+        return watershed_img
+
+
+    #https://notebook.community/DIPlib/diplib/examples/python/pydip_basics
+    @staticmethod
+    def diplib_convert(diplib_img: diplib.PyDIP_bin.Image, convert_str: str):
+        if convert_str not in ['Lab', 'gray', 'sRGB', 'RGB']:
+            raise Exception()
+
+        convert_img: diplib.PyDIP_bin.Image = diplib.ColorSpaceManager.Convert(diplib_img, convert_str)
+
+        return convert_img
+
+
+
+    @staticmethod
+    def convert_to_gray_scale(diplib_img: diplib.PyDIP_bin.Image):
+        gray_scale_img: diplib.PyDIP_bin.Image = diplib.ColorSpaceManager.Convert(diplib_img, 'gray')
+
+        return gray_scale_img
+
+
+
+    @staticmethod
     def obtain_image_gray_array(image_path: str):
         image_gray_array: numpy.ndarray = imread(image_path, as_gray=True)
 
@@ -128,11 +155,11 @@ class ImageUtil:
     @staticmethod
     def white_top_hat(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
         structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-        # top_hat_img = diplib.Tophat(threshold_img, structuring_element)
+        top_hat_img = diplib.Tophat(img, structuring_element, polarity="white")
 
         # works the same
-        opening_img = ImageUtil.opening(img, se_one_side_length, se_shape)
-        top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.subtraction_img1_minus_img2(img, opening_img)
+        # opening_img = ImageUtil.opening(img, se_one_side_length, se_shape)
+        # top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.subtraction_img1_minus_img2(img, opening_img)
 
         return top_hat_img
 
@@ -462,6 +489,7 @@ class ImageUtil:
             elif img_extension.lower() in ("png"):           diplib_img = diplib.ImageRead(image_file_path)
             elif img_extension.lower() in ("tif", "tiff"):   diplib_img = diplib.ImageReadTIFF(image_file_path)
             else: diplib_img = diplib.ImageRead(image_file_path)
+
 
         except Exception as e:
             print("image_file_path", image_file_path)
