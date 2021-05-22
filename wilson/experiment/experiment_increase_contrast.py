@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     for image_name in image_name_list:
         print(image_name)
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str);        #ImageUtil.show_image_in_dip_view(original_img, title="original_img")
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, dir_path=input_dir_str);        #ImageUtil.show_image_in_dip_view(original_img, title="original_img")
 
         img = ImageUtil.increase_image_contrast(original_img)
         ImageUtil.show_image_in_dip_view(img)

@@ -29,7 +29,7 @@ if __name__ == '__main__':
     sigma = 10
     print("sigma:", sigma)
 
-    original_image = ImageUtil.obtain_image(image_name, input_dir_str)
+    original_image = ImageUtil.obtain_diplib_image(image_name, input_dir_str)
 
 
     # Gaussian filtering

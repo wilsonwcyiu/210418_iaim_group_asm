@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     for image_series_name in image_series_name_list:
         # img_name = "MTLn3+EGF0001"
-        img = ImageUtil.obtain_image(image_series_name, input_dir);    #ImageUtil.show_image_in_dip_view(img)
+        img = ImageUtil.obtain_diplib_image(image_series_name, input_dir);    #ImageUtil.show_image_in_dip_view(img)
 
         threshold_img = ImageUtil.segment_image_white(img);     #ImageUtil.show_image_in_dip_view(threshold_img)
         file_name: str = image_series_name + "_threshold_img" + ".tif"

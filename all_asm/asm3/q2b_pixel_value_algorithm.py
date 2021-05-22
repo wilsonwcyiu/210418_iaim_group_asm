@@ -24,7 +24,7 @@ if __name__ == '__main__':
     # image_name: str = "AxioCamIm03_high_contrast_threshold_img_elliptic_181.tif"
 
 
-    threshold_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str)
+    threshold_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir_str)
 
     column_pixel_tuple_list: list = ImageUtil.obtain_column_pixel_value_list(threshold_img)    # print("col cnt", len(pixel_column_tuple_list));  print("row cnt", len(pixel_column_tuple_list[0]))
 

@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     for image_name in image_name_list:
         print("Analysis of ", image_name)
-        curr_img = ImageUtil.obtain_image(image_name, input_dir)
+        curr_img = ImageUtil.obtain_diplib_image(image_name, input_dir)
         # Get general information about the image
         print(curr_img)
 

@@ -35,7 +35,7 @@ if __name__ == '__main__':
     for img_group_name, img_list in image_name_dict.items():
         xy_tuple_list: list = []
         for image_name in img_list:
-            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
             snr: float = ImageUtil.calculate_signal_to_noise_ratio_SNR(original_img)
             log_snr: float = math.log(snr)

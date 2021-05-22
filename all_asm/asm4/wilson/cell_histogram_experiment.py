@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     for image_series_name in image_series_name_list:
         # img_name = "MTLn3+EGF0001"
-        img = ImageUtil.obtain_image(image_series_name, input_dir);    #ImageUtil.show_image_in_dip_view(img)
+        img = ImageUtil.obtain_diplib_image(image_series_name, input_dir);    #ImageUtil.show_image_in_dip_view(img)
         # segment_brightest = segment_brightest_cells(img)
         contrast_stretch_img = diplib.ContrastStretch(img, 97, 100);        ImageUtil.show_image_in_dip_view(contrast_stretch_img)
 

@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # filter 1 para 1
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         sigma_value: int = 3.2
         gauss_img = ImageUtil.gauss_filter(original_img, sigma_value)

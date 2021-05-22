@@ -1,4 +1,4 @@
-# Compute the HOG feature vector for all of your images and store these in one comma separated file – for cell sizes use 16 and 64, resulting in two sets.
+# (2) Compute the average hue feature all berries in the images.
 import PIL
 import diplib
 
@@ -16,8 +16,7 @@ from skimage import exposure
 import matplotlib.pyplot as plt
 
 
-# https://www.thepythoncode.com/article/hog-feature-extraction-in-python
-# https://www.analyticsvidhya.com/blog/2019/09/feature-engineering-images-introduction-hog-feature-descriptor/
+
 if __name__ == '__main__':
 
     # Configure files and directories
@@ -48,24 +47,9 @@ if __name__ == '__main__':
     print(type(img_rgb_array))
 
 
-    plt.axis("off")
-    plt.imshow(img_rgb_array)
-    print(img_rgb_array.shape)
-
-    # resizing image
-    resized_img = resize(img_rgb_array, (128 * 4, 64 * 4))
-    plt.axis("off")
-    plt.imshow(resized_img)
-    print(resized_img.shape)
 
 
-    #creating hog features
-    fd, hog_image = hog(resized_img, orientations=9,
-                        pixels_per_cell=(8, 8),
-                        cells_per_block=(2, 2), visualize=True, multichannel=True)
 
-    plt.axis("off")
-    plt.imshow(hog_image, cmap="gray")
 
-    plt.show()
+
     CommonUtil.press_enter_to_exit()

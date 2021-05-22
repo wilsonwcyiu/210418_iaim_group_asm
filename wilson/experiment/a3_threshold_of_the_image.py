@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     for image_name in image_name_list:
 
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(original_img, title="original img")
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(original_img, title="original img")
         to_show_name_img_tuple_list.append(("original img " + image_name, original_img))
 
 

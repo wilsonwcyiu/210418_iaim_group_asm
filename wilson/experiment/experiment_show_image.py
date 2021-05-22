@@ -35,7 +35,7 @@ if __name__ == '__main__':
     date_time_str: str = CommonUtil.generate_date_time_str()
     output_dir_str: str = CommonUtil.obtain_project_default_output_dir_path() + date_time_str + "_" + os.path.basename(__file__) + "/"
 
-    original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name_list[0], dir_path=input_dir_str);
+    original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name_list[0], dir_path=input_dir_str);
     ImageUtil.show_image_in_dip_view(original_img, title="original_img")
 
     # invert = diplib.Invert(original_img)

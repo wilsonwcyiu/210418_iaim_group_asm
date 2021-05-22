@@ -24,7 +24,7 @@ if __name__ == '__main__':
     for value in sigma:
         print("sigma:", sigma)
 
-        original_image = ImageUtil.obtain_image(image_name, input_dir_str)
+        original_image = ImageUtil.obtain_diplib_image(image_name, input_dir_str)
 
         # Gaussian filtering
         gauss_image = ImageUtil.gauss_filter(original_image, value)

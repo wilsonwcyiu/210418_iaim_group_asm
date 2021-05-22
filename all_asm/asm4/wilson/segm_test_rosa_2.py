@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
 
     first_img_name: str = image_series_name_list[0]
-    first_image: diplib.Image = ImageUtil.obtain_image(first_img_name, input_dir)
+    first_image: diplib.Image = ImageUtil.obtain_diplib_image(first_img_name, input_dir)
 
     img_width, img_height = ImageUtil.obtain_image_width_height(first_image)
 
@@ -170,7 +170,7 @@ if __name__ == '__main__':
     for idx in range(1, 30):
         image_file_name: str = image_series_name_list[idx]
 
-        curr_img: diplib.Image = ImageUtil.obtain_image(image_file_name, input_dir)
+        curr_img: diplib.Image = ImageUtil.obtain_diplib_image(image_file_name, input_dir)
 
         # Segment to get only brightest cells in foreground
         segm_img: diplib.Image = segment_brightest_cells_ver2(curr_img);            #ImageUtil.show_image_in_dip_view(segm_img)

@@ -96,7 +96,7 @@ if __name__ == '__main__':
     image_series_name_list: list = ['MTLn3+EGF'] #, 'MTLn3-ctrl']
 
     for image_series_name in image_series_name_list:
-        first_image: dip.Image = ImageUtil.obtain_image(image_series_name + '0000', input_dir)
+        first_image: dip.Image = ImageUtil.obtain_diplib_image(image_series_name + '0000', input_dir)
 
         image_size_list: list = first_image.Sizes()
         images_movement_trajectories_list: list = create_new_empty_images_for_selected_cells(image_size_list)  #:list(list)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         selected_cell_list: list = []
         for idx in range(30):
             image_file_name: str = image_series_name + str(idx).zfill(4)
-            curr_img: dip.Image = ImageUtil.obtain_image(image_file_name, input_dir)
+            curr_img: dip.Image = ImageUtil.obtain_diplib_image(image_file_name, input_dir)
 
             # Segment to get only brightest cells in foreground
             labeled_img: dip.Image = segment_brightest_cells(curr_img, image_file_name);            ImageUtil.show_image_in_dip_view(labeled_img)

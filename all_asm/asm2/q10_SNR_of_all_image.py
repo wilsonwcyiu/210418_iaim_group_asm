@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # original image SNR
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
         threshold_img = ImageUtil.obtain_threshold_image(original_img)
 
         file_name = image_name + "_original_" + ".tif"
@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     # filter 1 para 1
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         sigma_value: int = 2
         gauss_img = ImageUtil.gauss_filter(original_img, sigma_value)
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
     # filter 1 para 2
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         sigma_value: int = 3
         gauss_img = ImageUtil.gauss_filter(original_img, sigma_value)
@@ -146,7 +146,7 @@ if __name__ == '__main__':
 
     # filter 2 para 1
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         median_para: str = 'rectangular'
         median_img = ImageUtil.median_filter(original_img, median_para)
@@ -188,7 +188,7 @@ if __name__ == '__main__':
 
     # filter 2 para 2
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         median_para: str = 'elliptic'
         median_img = ImageUtil.median_filter(original_img, median_para)

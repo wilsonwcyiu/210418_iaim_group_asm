@@ -11,8 +11,25 @@ from matplotlib import pyplot
 
 from util.common_util import CommonUtil
 
+from skimage.io import imread
 
 class ImageUtil:
+
+    @staticmethod
+    def obtain_image_gray_array(image_path: str):
+        image_gray_array: numpy.ndarray = imread(image_path, as_gray=True)
+
+        return image_gray_array
+
+
+
+
+    @staticmethod
+    def obtain_image_rgb_array(image_path: str):
+        img_rgb_array: numpy.ndarray = imread(image_path)
+
+        return img_rgb_array
+
 
 
 
@@ -432,7 +449,7 @@ class ImageUtil:
 
 
     @staticmethod
-    def obtain_image(image_name: str, dir_path: str = None):
+    def obtain_diplib_image(image_name: str, dir_path: str = None):
         if dir_path is None:
             dir_path = CommonUtil.obtain_project_default_input_dir_path()
 
