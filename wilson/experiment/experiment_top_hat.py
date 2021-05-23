@@ -39,7 +39,7 @@ if __name__ == '__main__':
     # , "AxioCamIm02", "AxioCamIm03"]
 
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str)
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, dir_path=input_dir_str)
         threshold_img = ImageUtil.obtain_threshold_image(original_img);             ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
 
         se_one_side_length: int = 9

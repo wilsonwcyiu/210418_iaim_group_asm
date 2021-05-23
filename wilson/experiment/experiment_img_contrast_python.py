@@ -45,12 +45,12 @@ if __name__ == '__main__':
         file_path = output_dir_str + file_name
         im_output.save(file_path)
 
-        img = ImageUtil.obtain_image(file_path, "")
+        img = ImageUtil.obtain_diplib_image(file_path, "")
         ImageUtil.show_image_in_dip_view(img)
 
 
 
-        original_img = ImageUtil.obtain_image(file_name, input_dir_str)
+        original_img = ImageUtil.obtain_diplib_image(file_name, input_dir_str)
         obtain_pixel_value_list = ImageUtil.obtain_pixel_value_list(original_img)
         plot_id: int = 1
         plot_title: str = file_name

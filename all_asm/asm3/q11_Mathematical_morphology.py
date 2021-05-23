@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     print("SE:", se_shape, "size:", se_size)
 
-    original_image = ImageUtil.obtain_image(image_name, input_dir_str)
+    original_image = ImageUtil.obtain_diplib_image(image_name, input_dir_str)
 
     # Black hat transformation
     black_hat_image = ImageUtil.black_hat(original_image, se_size, se_shape)

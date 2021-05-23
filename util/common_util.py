@@ -12,13 +12,24 @@ import pandas
 from diplib import PyDIPjavaio
 import imageio
 import numpy as np
+from matplotlib import pyplot
 
 
 class CommonUtil:
 
-    # @staticmethod
-    # def find_closest_numeric(input_numeric_data, integer_d):
+    @staticmethod
+    def obtain_file_extension(path_or_name: str):
+        ext: str = path_or_name.split(".")[-1]
 
+        return ext
+
+
+
+    @staticmethod
+    def obtain_file_name_list(dir_path: str):
+        file_name_list: list = os.listdir(dir_path)
+
+        return file_name_list
 
 
 

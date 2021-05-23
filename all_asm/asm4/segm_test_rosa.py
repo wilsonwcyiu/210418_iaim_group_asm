@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
     for image_series_name in image_series_names:
 
-        first_image = ImageUtil.obtain_image(image_series_name + '0000.png', input_dir)
+        first_image = ImageUtil.obtain_diplib_image(image_series_name + '0000.png', input_dir)
         image_sizes = first_image.Sizes()
 
         selected_cells = []
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
         for sequence in range(30):
             image_file_name = image_series_name + str(sequence).zfill(4)
-            curr_img = ImageUtil.obtain_image(image_file_name + '.png', input_dir)
+            curr_img = ImageUtil.obtain_diplib_image(image_file_name + '.png', input_dir)
 
             # Segment to get only brightest cells in foreground
             labeled_img = segment_brightest_cells(curr_img, image_file_name)

@@ -43,7 +43,7 @@ if __name__ == '__main__':
     # original_img1: PyDIPjavaio.ImageRead = ImageUtil.obtain_image("AxioCamIm02", dir_path=input_dir_str);
     # t1 = ImageUtil.obtain_threshold_image(original_img1)
     for image_name in image_name_list:
-        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=input_dir_str);        ImageUtil.show_image_in_dip_view(original_img, title="original_img")
+        original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, dir_path=input_dir_str);        ImageUtil.show_image_in_dip_view(original_img, title="original_img")
         median_filter = ImageUtil.median_filter(original_img, "rectangular");                                    ImageUtil.show_image_in_dip_view(median_filter, title="median_filter")
         threshold_img = ImageUtil.obtain_threshold_image(median_filter);                                         ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
 

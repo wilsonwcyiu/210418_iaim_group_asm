@@ -37,7 +37,7 @@ if __name__ == '__main__':
     print("gauss, sigma_value: 2")
     for image_name in image_name_list:
         # filter image
-        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         sigma_value: int = 2
         original_image: diplib.PyDIP_bin.Image = ImageUtil.gauss_filter(original_image, sigma_value)
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     print("gauss, sigma_value: 3")
     for image_name in image_name_list:
         # filter image
-        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         sigma_value: int = 3
         original_image: diplib.PyDIP_bin.Image = ImageUtil.gauss_filter(original_image, sigma_value)
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     print("median, para: rectangular")
     for image_name in image_name_list:
         # filter image
-        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         median_para: str = 'rectangular'
         median_img = ImageUtil.median_filter(original_image, median_para)
@@ -203,7 +203,7 @@ if __name__ == '__main__':
     print("median, para: elliptic")
     for image_name in image_name_list:
         # filter image
-        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name)
+        original_image: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name)
 
         median_para: str = 'elliptic'
         median_img = ImageUtil.median_filter(original_image, median_para)

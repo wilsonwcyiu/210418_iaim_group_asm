@@ -29,7 +29,7 @@ if __name__ == '__main__':
         for se_length in se_length_list:
             print(shape, se_length, image_name)
 
-            high_contrast_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(high_contrast_img, title="high_contrast_img")
+            high_contrast_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(high_contrast_img, title="high_contrast_img")
             CommonUtil.save_image_to_folder(high_contrast_img, output_dir_str, image_name + "_original_img.tif")
 
             se_one_side_length: int = se_length
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         for se_length in se_length_list:
             print(shape, se_length, image_name)
 
-            high_contrast_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(high_contrast_img, title="high_contrast_img")
+            high_contrast_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(high_contrast_img, title="high_contrast_img")
             CommonUtil.save_image_to_folder(high_contrast_img, output_dir_str, image_name + "_original_img.tif")
 
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
         for se_length in se_length_list:
             print(shape, se_length, image_name)
 
-            high_contrast_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(high_contrast_img, title="high_contrast_img")
+            high_contrast_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir_str);   #ImageUtil.show_image_in_dip_view(high_contrast_img, title="high_contrast_img")
             CommonUtil.save_image_to_folder(high_contrast_img, output_dir_str, image_name + "_original_img.tif")
 
 

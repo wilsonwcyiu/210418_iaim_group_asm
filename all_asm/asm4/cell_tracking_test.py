@@ -228,9 +228,11 @@ if __name__ == '__main__':
     # Configure files and directories
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm4/'
     proj_dir_path: str = '../../image_output/'
-
     img_extension: str = ".png"
+
+    # input_dir = input_dir + "/tif/"
     # img_extension: str = ".tif"
+    # proj_dir_path = CommonUtil.obtain_project_default_output_dir_path(project_file_output_dir_name="file_output")
 
     image_series_name_list: list = ['MTLn3+EGF', 'MTLn3-ctrl']
 
@@ -247,7 +249,7 @@ if __name__ == '__main__':
         # ---- Selection of cells that will be checked ----
 
         first_image_name: str = all_images[0]
-        first_image: diplib.Image = ImageUtil.obtain_image(first_image_name + img_extension, input_dir)
+        first_image: diplib.Image = ImageUtil.obtain_diplib_image(first_image_name + img_extension, input_dir)
 
 
         img_width, img_height = ImageUtil.obtain_image_width_height(first_image)
@@ -311,7 +313,7 @@ if __name__ == '__main__':
         for idx in range(1, 30):
             image_file_name: str = all_images[idx]
 
-            curr_img: diplib.Image = ImageUtil.obtain_image(image_file_name + img_extension, input_dir)
+            curr_img: diplib.Image = ImageUtil.obtain_diplib_image(image_file_name + img_extension, input_dir)
 
             # Segment to get cells in foreground for mask
             mask_img: diplib.Image = segm_for_brightest_cells(curr_img, 80, 100)

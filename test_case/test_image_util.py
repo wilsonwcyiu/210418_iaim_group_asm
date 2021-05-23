@@ -15,7 +15,7 @@ class TestImageUtil:
 
 
         for image_name in image_name_list:
-            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=dir_path_str)
+            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, dir_path=dir_path_str)
             threshold_img = ImageUtil.obtain_threshold_image(original_img);             ImageUtil.show_image_in_dip_view(threshold_img, title="threshold_img")
 
             segment_size: int = 9
@@ -33,7 +33,7 @@ class TestImageUtil:
         dir_path_str: int = CommonUtil.obtain_project_default_input_dir_path()
 
         for image_name in image_name_list:
-            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=dir_path_str)
+            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, dir_path=dir_path_str)
 
             threshold_img_1 = ImageUtil.obtain_threshold_image(original_img)
             ImageUtil.show_image_in_dip_view(threshold_img_1, title="threshold_img_1")
@@ -69,7 +69,7 @@ class TestImageUtil:
         image_name: str = ""
 
         for image_name in image_name_list:
-            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=dir_path_str)
+            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, dir_path=dir_path_str)
             threshold_img = ImageUtil.obtain_threshold_image(original_img)
 
             segment_size: int = 9
@@ -88,7 +88,7 @@ class TestImageUtil:
         image_name: str = ""
 
         for image_name in image_name_list:
-            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, dir_path=dir_path_str)
+            original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, dir_path=dir_path_str)
             threshold_img = ImageUtil.obtain_threshold_image(original_img)
 
             segment_size: int = 9

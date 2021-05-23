@@ -28,7 +28,7 @@ if __name__ == '__main__':
             for image_name in image_name_list:
                 print(shape, se_length, image_name)
 
-                original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_image(image_name, input_dir_str);   ImageUtil.show_image_in_dip_view(original_img, title="original img")
+                original_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir_str);   ImageUtil.show_image_in_dip_view(original_img, title="original img")
                 CommonUtil.save_image_to_folder(original_img, output_dir_str, "original_img.tif")
 
                 high_contrast_image = ImageUtil.increase_image_contrast(original_img)

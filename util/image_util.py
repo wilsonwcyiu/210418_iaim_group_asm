@@ -7,11 +7,71 @@ import numpy
 from diplib import PyDIPjavaio
 from diplib.PyDIP_bin import SE
 from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
+from matplotlib import pyplot
 
 from util.common_util import CommonUtil
 
+from skimage.io import imread
 
 class ImageUtil:
+
+    @staticmethod
+    def watershed(img: diplib.PyDIP_bin.Image, mask_img: diplib.PyDIP_bin.Image):
+        watershed_img: diplib.Image = diplib.Watershed(img, mask_img, connectivity=2, flags={"binary", "high first"})
+
+        return watershed_img
+
+
+    #https://notebook.community/DIPlib/diplib/examples/python/pydip_basics
+    @staticmethod
+    def diplib_convert(diplib_img: diplib.PyDIP_bin.Image, convert_str: str):
+        if convert_str not in ['Lab', 'gray', 'sRGB', 'RGB']:
+            raise Exception()
+
+        convert_img: diplib.PyDIP_bin.Image = diplib.ColorSpaceManager.Convert(diplib_img, convert_str)
+
+        return convert_img
+
+
+
+    @staticmethod
+    def convert_to_gray_scale(diplib_img: diplib.PyDIP_bin.Image):
+        gray_scale_img: diplib.PyDIP_bin.Image = diplib.ColorSpaceManager.Convert(diplib_img, 'gray')
+
+        return gray_scale_img
+
+
+
+    @staticmethod
+    def obtain_image_gray_array(image_path: str):
+        image_gray_array: numpy.ndarray = imread(image_path, as_gray=True)
+
+        return image_gray_array
+
+
+
+
+    @staticmethod
+    def obtain_image_rgb_array(image_path: str):
+        img_rgb_array: numpy.ndarray = imread(image_path)
+
+        return img_rgb_array
+
+
+
+
+    @staticmethod
+    def create_multi_img_plot(img_rgb_array_list: list, total_rows: int, total_col: int, window_size_tuple: tuple):
+        img_idx = 1
+
+        fig = pyplot.figure(figsize=window_size_tuple)
+        for img_rgb_array in img_rgb_array_list:
+            fig.add_subplot(total_rows, total_col, img_idx)
+            pyplot.imshow(img_rgb_array)
+
+            img_idx += 1
+
+        return pyplot
 
 
 
@@ -95,11 +155,11 @@ class ImageUtil:
     @staticmethod
     def white_top_hat(img : diplib.PyDIP_bin.Image, se_one_side_length: int, se_shape: str):
         structuring_element: SE = diplib.PyDIP_bin.SE(shape=se_shape, param=se_one_side_length)
-        # top_hat_img = diplib.Tophat(threshold_img, structuring_element)
+        top_hat_img = diplib.Tophat(img, structuring_element, polarity="white")
 
         # works the same
-        opening_img = ImageUtil.opening(img, se_one_side_length, se_shape)
-        top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.subtraction_img1_minus_img2(img, opening_img)
+        # opening_img = ImageUtil.opening(img, se_one_side_length, se_shape)
+        # top_hat_img: diplib.PyDIP_bin.Image = ImageUtil.subtraction_img1_minus_img2(img, opening_img)
 
         return top_hat_img
 
@@ -416,20 +476,26 @@ class ImageUtil:
 
 
     @staticmethod
-    def obtain_image(image_name: str, dir_path: str = None):
+    def obtain_diplib_image(image_name: str, dir_path: str = None):
         if dir_path is None:
             dir_path = CommonUtil.obtain_project_default_input_dir_path()
 
         image_file_path = dir_path + image_name
-        # image_file_path = "../../image_files/" + image_name
 
+        diplib_img: PyDIPjavaio.ImageRead = None
         try:
-            img: PyDIPjavaio.ImageRead = diplib.ImageRead(image_file_path)
+            img_extension: str = CommonUtil.obtain_file_extension(image_name)
+            if img_extension.lower() in ("jpeg", "jpg"):     diplib_img = diplib.ImageReadJPEG(image_file_path)
+            elif img_extension.lower() in ("png"):           diplib_img = diplib.ImageRead(image_file_path)
+            elif img_extension.lower() in ("tif", "tiff"):   diplib_img = diplib.ImageReadTIFF(image_file_path)
+            else: diplib_img = diplib.ImageRead(image_file_path)
+
+
         except Exception as e:
             print("image_file_path", image_file_path)
             raise e
 
-        return img
+        return diplib_img
 
 
     @staticmethod
