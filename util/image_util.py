@@ -16,6 +16,18 @@ from skimage.io import imread
 
 class ImageUtil:
 
+
+
+    @staticmethod
+    def extract_blue_pixel_values(rgb_tuple_list: numpy.ndarray):
+        blue_pixel_list: list = []
+        for rgb_tuple in rgb_tuple_list:
+            blue_pixel_list.append(rgb_tuple[2])
+
+        return blue_pixel_list
+
+
+
     # https://www.programmersought.com/article/54406295171/
     # Takes an image file name, calculates the average hue value of the whole image and returns the value
     # image needs to be in the directory the notebook is running in.

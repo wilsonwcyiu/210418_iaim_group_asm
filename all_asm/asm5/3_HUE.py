@@ -41,6 +41,8 @@ if __name__ == '__main__':
     image_rgb_array_list: list = []
     for img_relative_path in img_relative_path_list:
         image_rgb_array: PIL.JpegImagePlugin.JpegImageFile = Image.open(input_dir + img_relative_path)
+
+
         # print(image_rgb_array)
         # print(type(image_rgb_array))
         image_rgb_array_list.append(image_rgb_array)
@@ -84,6 +86,9 @@ if __name__ == '__main__':
 
     segmentation_pixel_list = ImageUtil.obtain_pixel_value_list(segment_img)
     img_rgb_tuple_list: list = ImageUtil.obtain_rgb_tuple_list(img)
+
+    blue_pixel_list: list = ImageUtil.extract_blue_pixel_values(img_rgb_tuple_list)
+
 
     # print(segmentation_pixel_list)
 
