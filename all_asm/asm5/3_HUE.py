@@ -51,29 +51,29 @@ if __name__ == '__main__':
     img_path = "1_white/1.j_Mulberry_1.tif"
     # img_path = "../asm4/tif/MTLn3+EGF0000.tif"
 
-    img: diplib.ImageRead = ImageUtil.obtain_diplib_image(img_path, input_dir);    #ImageUtil.show_image_in_dip_view(img)
-    # contrasted_img = diplib.ContrastStretch(img);    ImageUtil.show_image_in_dip_view(contrasted_img)
+    img: diplib.ImageRead = ImageUtil.obtain_diplib_image(img_path, input_dir);    ImageUtil.show_image_in_dip_view(img)
 
 
 
     # print(img.ColorSpace())
 
-    gray_scale_img = ImageUtil.convert_to_gray_scale(img);      #ImageUtil.show_image_in_dip_view(gray_scale_img)
+    gray_scale_img = ImageUtil.convert_to_gray_scale(img);      ImageUtil.show_image_in_dip_view(gray_scale_img)
     contrasted_img = diplib.ContrastStretch(gray_scale_img);    #ImageUtil.show_image_in_dip_view(contrasted_img)
 
     se_one_side_length = 50;    se_shape="elliptic"
-    o = ImageUtil.opening(contrasted_img, se_one_side_length, se_shape);        ImageUtil.show_image_in_dip_view(o)
+    o = ImageUtil.opening(contrasted_img, se_one_side_length, se_shape);        #ImageUtil.show_image_in_dip_view(o)
 
 
-    black_top_hat = ImageUtil.black_hat(contrasted_img, se_one_side_length, se_shape);      ImageUtil.show_image_in_dip_view(black_top_hat)
+    black_top_hat = ImageUtil.black_hat(contrasted_img, se_one_side_length, se_shape);      #ImageUtil.show_image_in_dip_view(black_top_hat)
     # pix_list = ImageUtil.obtain_pixel_value_list(black_top_hat)
     # p = PlotUtil.create_histogram_plot(pix_list)
     # p.show()
 
-    segment_img = ImageUtil.segment_image_white(black_top_hat);      #ImageUtil.show_image_in_dip_view(segment_img)
+    segment_img = ImageUtil.segment_image_white(black_top_hat);      ImageUtil.show_image_in_dip_view(segment_img)
 
     ws_img = diplib.Watershed(contrasted_img, segment_img, connectivity=2, flags={"binary", "high first"});      ImageUtil.show_image_in_dip_view(ws_img)
     # ImageUtil.watershed(contrasted_img, segment_img)
+
 
 
     # histogram = ImageUtil.obtain_pixel_value_list(contrasted_img)

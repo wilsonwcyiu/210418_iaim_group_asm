@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 
 # https://www.thepythoncode.com/article/hog-feature-extraction-in-python
 # https://www.analyticsvidhya.com/blog/2019/09/feature-engineering-images-introduction-hog-feature-descriptor/
+# https://lilianweng.github.io/lil-log/2017/10/29/object-recognition-for-dummies-part-1.html
 if __name__ == '__main__':
 
     # Configure files and directories
@@ -60,12 +61,16 @@ if __name__ == '__main__':
 
 
     #creating hog features
-    fd, hog_image = hog(resized_img, orientations=9,
-                        pixels_per_cell=(8, 8),
-                        cells_per_block=(2, 2), visualize=True, multichannel=True)
+    fd, hog_image_rgb_array = hog(resized_img,
+                                  orientations=9,
+                                  pixels_per_cell=(8, 8),
+                                  cells_per_block=(1, 1), visualize=True, multichannel=True)
 
-    plt.axis("off")
-    plt.imshow(hog_image, cmap="gray")
+    print(type(hog_image_rgb_array))
+    ImageUtil.show_image_in_dip_view(hog_image_rgb_array)
 
-    plt.show()
+    # plt.axis("off")
+    # plt.imshow(hog_image, cmap="gray")
+
+    # plt.show()
     CommonUtil.press_enter_to_exit()
