@@ -13,9 +13,77 @@ from diplib import PyDIPjavaio
 import imageio
 import numpy as np
 from matplotlib import pyplot
+import csv
 
 
 class CommonUtil:
+
+
+    @staticmethod
+    def insert_to_list(data_list: list, position_idx: int, data):
+        new_date_list: list = np.insert(data_list, position_idx, data)
+
+        return new_date_list
+
+
+
+    @staticmethod
+    def is_dir_exist(dir_str: str):
+        is_path_exist: bool = os.path.exists(dir_str)
+
+        if is_path_exist:
+            is_dir: bool = os.path.isdir(dir_str)
+
+            if is_dir:
+                return True
+
+        return False
+
+
+
+    @staticmethod
+    def is_path_exist(path_str: str):
+        is_path_exist: bool = os.path.exists(path_str)
+
+        return is_path_exist
+
+
+
+    @staticmethod
+    def join_tuple(data_tuple: tuple, delimiter = ","):
+        joined_str: str = ""
+        for data in data_tuple:
+            joined_str += str(data) + delimiter
+
+        joined_str = joined_str[:-len(delimiter)]
+
+        return joined_str
+
+
+
+    @staticmethod
+    def join_path(parent_path: str, child_path: str):
+        joined_path: str = parent_path + child_path
+
+        return joined_path
+
+
+
+    @staticmethod
+    def write_csv_file(data_tuple_list: list, dir_path: str, file_name: str, delimiter: str = ",", quote_char = None, is_auto_make_dir: bool = True, newline=''):
+        joined_path: str = CommonUtil.join_path(dir_path, file_name)
+
+        if is_auto_make_dir and not CommonUtil.is_dir_exist(dir_path):
+            CommonUtil.make_dir(dir_path)
+
+        with open(joined_path, 'w', newline = newline) as csv_file:
+            if quote_char is None:   writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quote_char, quoting=csv.QUOTE_NONE)
+            else:                    writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quote_char, quoting=csv.QUOTE_MINIMAL)
+
+            for data_tuple in data_tuple_list:
+                writer.writerow(data_tuple)
+
+
 
     @staticmethod
     def obtain_file_extension(path_or_name: str):

@@ -22,6 +22,31 @@ if __name__ == '__main__':
 
     print("start")
 
+    o = CommonUtil.obtain_project_default_output_dir_path()
+    d = CommonUtil.generate_date_time_str()
+
+    o1 = o + d + "/"
+
+    CommonUtil.make_dir(o1)
+    data_t_l = [("0", "2", "4"), ("1", "1")]
+    CommonUtil.write_csv_file(data_t_l, o1, "test.csv")
+
+
+    if run_case_idx == max_run_case:    exit();
+    else: run_case_idx += 1
+
+
+
+    data_t = ("1", "2", "3")
+    print(CommonUtil.join_tuple(data_t, ","))
+
+
+
+
+    if run_case_idx == max_run_case:    exit();
+    else: run_case_idx += 1
+
+
     path_name = "wagegw/wabrb.jpeg"
     ext = CommonUtil.obtain_file_extension(path_name)
 

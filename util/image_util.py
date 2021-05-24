@@ -463,6 +463,7 @@ class ImageUtil:
 
 
 
+    # img: PyDIPjavaio.ImageRead; img: ndarray
     @staticmethod
     def show_image_in_dip_view(img: PyDIPjavaio.ImageRead, sleep_sec: int = 0, title="No title", position_tuple=None):
         if position_tuple is not None:
