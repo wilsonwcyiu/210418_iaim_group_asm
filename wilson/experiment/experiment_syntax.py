@@ -22,6 +22,18 @@ if __name__ == '__main__':
 
     print("start")
 
+
+
+    # data = [("1","2","3"), ("4","5","6")]
+    data = [["1","2","3"], ["4","5","6"]]
+    nlis = numpy.ndarray(data)
+    print(nlis)
+
+
+
+    if run_case_idx == max_run_case:    exit();
+    else: run_case_idx += 1
+
     o = CommonUtil.obtain_project_default_output_dir_path()
     d = CommonUtil.generate_date_time_str()
 

@@ -8,12 +8,64 @@ from diplib import PyDIPjavaio
 from diplib.PyDIP_bin import SE
 from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
 from matplotlib import pyplot
+from skimage import color
 
 from util.common_util import CommonUtil
 
 from skimage.io import imread
 
 class ImageUtil:
+
+    # https://www.programmersought.com/article/54406295171/
+    # Takes an image file name, calculates the average hue value of the whole image and returns the value
+    # image needs to be in the directory the notebook is running in.
+    @staticmethod
+    def avg_hue_value(rgb_tuple_list: numpy.ndarray):
+        if isinstance(rgb_tuple_list, list):
+            rgb_tuple_list = CommonUtil.list_to_ndarray(rgb_tuple_list)
+
+
+        img_hsv: numpy.ndarray = color.rgb2hsv(rgb_tuple_list)
+
+        sum: float = 0
+
+        for i in range(0, len(img_hsv)):
+            for j in range(0, len(img_hsv[0])):
+                sum = sum + img_hsv[i][j]#[0]
+
+        avg_hue_value: float = sum / (len(img_hsv)*len(img_hsv[0]))
+
+
+        return avg_hue_value
+
+
+
+
+
+    @staticmethod
+    def obtain_rgb_tuple_list(img: PyDIPjavaio.ImageRead):
+        pixel_value_tuple_list: list = []
+
+        for pixel_location in range(len(img)):
+            rgb_tuple: tuple = (img[pixel_location][0], img[pixel_location][1], img[pixel_location][2])
+            pixel_value_tuple_list.append(rgb_tuple)
+
+        return pixel_value_tuple_list
+
+
+
+    @staticmethod
+    def obtain_rgb_tuple_list_list(img: PyDIPjavaio.ImageRead):
+        pixel_value_tuple_list: list = []
+
+        for pixel_location in range(len(img)):
+            rgb_tuple: tuple = [img[pixel_location][0], img[pixel_location][1], img[pixel_location][2]]
+            pixel_value_tuple_list.append(rgb_tuple)
+
+        return pixel_value_tuple_list
+
+
+
 
     @staticmethod
     def watershed(img: diplib.PyDIP_bin.Image, mask_img: diplib.PyDIP_bin.Image):
@@ -295,7 +347,6 @@ class ImageUtil:
             pixel_value_list.append(pixel_value)
 
         return pixel_value_list
-
 
 
 
