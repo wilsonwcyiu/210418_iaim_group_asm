@@ -28,7 +28,7 @@ if __name__ == '__main__':
     o1 = o + d + "/"
 
     CommonUtil.make_dir(o1)
-    data_t_l = [("0", "2", "4")]
+    data_t_l = [("0", "2", "4"), ("1", "1")]
     CommonUtil.write_csv_file(data_t_l, o1, "test.csv")
 
 

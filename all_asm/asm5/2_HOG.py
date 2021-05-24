@@ -27,58 +27,42 @@ if __name__ == '__main__':
     img_extension: str = ""
 
 
-    folder_list: list = ["1_white"] #, "2_white", "3_white", "4_white"]
+    folder_list: list = ["1_white", "2_white", "3_white", "4_white"]
 
     img_relative_path_list: list = []
     for folder in folder_list:
-        file_list: list = CommonUtil.obtain_file_name_list(input_dir + folder + "/")[:1]
+        file_list: list = CommonUtil.obtain_file_name_list(input_dir + folder + "/")#[:2]
         for file in file_list:
             img_relative_path_list.append(folder + "/" + file)
 
 
-    image_rgb_array_list: list = []
+    # image_rgb_array_list: list = []
+    # for img_relative_path in img_relative_path_list:
+    #     image_rgb_array: PIL.JpegImagePlugin.JpegImageFile = Image.open(input_dir + img_relative_path)
+    #     image_rgb_array_list.append(image_rgb_array)
+
+    hog_data_list: list = []
     for img_relative_path in img_relative_path_list:
-        image_rgb_array: PIL.JpegImagePlugin.JpegImageFile = Image.open(input_dir + img_relative_path)
-        print(image_rgb_array)
-        print(type(image_rgb_array))
-        image_rgb_array_list.append(image_rgb_array)
+        print("img_relative_path: ", img_relative_path)
 
+        img_rgb_array = ImageUtil.obtain_image_rgb_array(input_dir + img_relative_path);     #print(type(img_rgb_array)); ImageUtil.show_image_in_dip_view(img_rgb_array)
 
-    # reading the image
-    img_rgb_array = ImageUtil.obtain_image_rgb_array(input_dir + img_relative_path_list[0])
-    print(type(img_rgb_array))
+        resized_img = resize(img_rgb_array, (128 * 4, 64 * 4))
 
-    ImageUtil.show_image_in_dip_view(img_rgb_array)
+        fd_hog_desc_list, hog_image_rgb_array = hog(resized_img, orientations=9,
+                                                    pixels_per_cell=(8, 8), cells_per_block=(1, 1),
+                                                    visualize=True, multichannel=True)
 
+        fd_hog_desc_str_list = [str(float) for float in fd_hog_desc_list]
+        fd_hog_desc_str_list = CommonUtil.insert_to_list(fd_hog_desc_str_list, 0, img_relative_path)
 
-    plt.axis("off")
-    plt.imshow(img_rgb_array)
-    print(img_rgb_array.shape)
-
-    # resizing image
-    resized_img = resize(img_rgb_array, (128 * 4, 64 * 4))
-    plt.axis("off")
-    plt.imshow(resized_img)
-    print(resized_img.shape)
-
-
-    #creating hog features
-    fd_hog_desc_list, hog_image_rgb_array = hog(resized_img, orientations=9,
-                                                pixels_per_cell=(8, 8), cells_per_block=(1, 1),
-                                                visualize=True, multichannel=True)
-
+        hog_data_list.append(tuple(fd_hog_desc_str_list))
 
     CommonUtil.make_dir(output_dir)
-    CommonUtil.write_csv_file([fd_hog_desc_list], output_dir, "test1.csv")
+    CommonUtil.write_csv_file(hog_data_list, output_dir, "test1.csv")
 
-    print(fd_hog_desc_list.size)
-    print(type(fd_hog_desc_list))
-
-    # print(type(hog_image_rgb_array))
-    ImageUtil.show_image_in_dip_view(hog_image_rgb_array)
-
-    # plt.axis("off")
-    # plt.imshow(hog_image, cmap="gray")
-
+    # print(fd_hog_desc_list.size)
+    # print(type(fd_hog_desc_list))
+    # ImageUtil.show_image_in_dip_view(hog_image_rgb_array)
     # plt.show()
     CommonUtil.press_enter_to_exit()
