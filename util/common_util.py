@@ -373,7 +373,11 @@ class CommonUtil:
 
 
     @staticmethod
-    def make_dir(abs_dir_path):
+    def make_dir(abs_dir_path: str, is_throw_error_if_exist: bool = False):
+        if os.path.exists(abs_dir_path):
+            if is_throw_error_if_exist:         raise Exception("exist")
+            else:                               return
+
         os.mkdir(abs_dir_path)
 
 

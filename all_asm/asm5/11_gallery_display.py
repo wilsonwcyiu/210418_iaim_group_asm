@@ -14,11 +14,12 @@ if __name__ == '__main__':
     img_extension: str = ""
 
 
-    folder_list: list = ["1_white", "2_white", "3_white", "4_white"]
+    folder_list: list = ["1_black", "2_black", "3_black", "4_black"]
+    pic_in_each_category: int = 8
 
     img_relative_path_list: list = []
     for folder in folder_list:
-        file_list: list = CommonUtil.obtain_file_name_list(input_dir + folder + "/")
+        file_list: list = CommonUtil.obtain_file_name_list(input_dir + folder + "/")[:pic_in_each_category]
         for file in file_list:
             img_relative_path_list.append(folder + "/" + file)
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
         image_rgb_array_list.append(image_rgb_array)
 
 
-    total_row: int = 8;    total_col: int = 25
+    total_row: int = 4;    total_col: int = pic_in_each_category
     size_tuple: tuple = (16, 8)
     plot = ImageUtil.create_multi_img_plot(image_rgb_array_list, total_row, total_col, size_tuple)
     plot.show()

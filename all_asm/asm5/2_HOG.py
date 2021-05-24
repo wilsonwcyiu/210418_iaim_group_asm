@@ -41,13 +41,40 @@ if __name__ == '__main__':
     #     image_rgb_array: PIL.JpegImagePlugin.JpegImageFile = Image.open(input_dir + img_relative_path)
     #     image_rgb_array_list.append(image_rgb_array)
 
+
+    img_resize_dimention_tuple: tuple = (128*4, 64*4)
+
     hog_data_list: list = []
     for img_relative_path in img_relative_path_list:
         print("img_relative_path: ", img_relative_path)
 
         img_rgb_array = ImageUtil.obtain_image_rgb_array(input_dir + img_relative_path);     #print(type(img_rgb_array)); ImageUtil.show_image_in_dip_view(img_rgb_array)
 
-        resized_img = resize(img_rgb_array, (128 * 4, 64 * 4))
+        resized_img = resize(img_rgb_array, img_resize_dimention_tuple)
+
+        fd_hog_desc_list, hog_image_rgb_array = hog(resized_img, orientations=9,
+                                                    pixels_per_cell=(4, 4), cells_per_block=(1, 1),
+                                                    visualize=True, multichannel=True)
+
+        fd_hog_desc_str_list = [str(float) for float in fd_hog_desc_list]
+        fd_hog_desc_str_list = CommonUtil.insert_to_list(fd_hog_desc_str_list, 0, img_relative_path)
+
+        hog_data_list.append(tuple(fd_hog_desc_str_list))
+
+    # CommonUtil.make_dir(output_dir)
+    CommonUtil.write_csv_file(hog_data_list, output_dir, "hog_16_all_while_img.csv")
+
+
+
+
+
+    hog_data_list: list = []
+    for img_relative_path in img_relative_path_list:
+        print("img_relative_path: ", img_relative_path)
+
+        img_rgb_array = ImageUtil.obtain_image_rgb_array(input_dir + img_relative_path);     #print(type(img_rgb_array)); ImageUtil.show_image_in_dip_view(img_rgb_array)
+
+        resized_img = resize(img_rgb_array, img_resize_dimention_tuple)
 
         fd_hog_desc_list, hog_image_rgb_array = hog(resized_img, orientations=9,
                                                     pixels_per_cell=(8, 8), cells_per_block=(1, 1),
@@ -58,8 +85,8 @@ if __name__ == '__main__':
 
         hog_data_list.append(tuple(fd_hog_desc_str_list))
 
-    CommonUtil.make_dir(output_dir)
-    CommonUtil.write_csv_file(hog_data_list, output_dir, "test1.csv")
+    # CommonUtil.make_dir(output_dir)
+    CommonUtil.write_csv_file(hog_data_list, output_dir, "hog_64_all_while_img.csv")
 
     # print(fd_hog_desc_list.size)
     # print(type(fd_hog_desc_list))
