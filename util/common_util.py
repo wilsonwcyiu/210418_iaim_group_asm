@@ -13,9 +13,45 @@ from diplib import PyDIPjavaio
 import imageio
 import numpy as np
 from matplotlib import pyplot
+import csv
 
 
 class CommonUtil:
+
+
+    @staticmethod
+    def join_tuple(data_tuple: tuple, delimiter = ","):
+        joined_str: str = ""
+        for data in data_tuple:
+            joined_str += str(data) + delimiter
+
+        joined_str = joined_str[:-len(delimiter)]
+
+        return joined_str
+
+
+
+    @staticmethod
+    def join_path(parent_path: str, child_path: str):
+        joined_path: str = parent_path + child_path
+
+        return joined_path
+
+
+
+    @staticmethod
+    def write_csv_file(data_tuple_list: list, dir_path: str, file_name: str, delimiter: str = ",", quotechar = None):
+        joined_path: str = CommonUtil.join_path(dir_path, file_name)
+        with open(joined_path, 'w') as csv_file:
+            if quotechar is None:   writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quotechar, quoting=csv.QUOTE_NONE)
+            else:                   writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quotechar, quoting=csv.QUOTE_MINIMAL)
+
+            for data_tuple in data_tuple_list:
+                # line_str: str = CommonUtil.join_tuple(data_tuple)
+                writer.writerow(data_tuple)
+
+
+
 
     @staticmethod
     def obtain_file_extension(path_or_name: str):

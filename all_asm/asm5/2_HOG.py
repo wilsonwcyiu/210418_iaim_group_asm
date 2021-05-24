@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     # Configure files and directories
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm5/'
-    proj_dir_path: str = '../../image_output/'
+    output_dir: str = '../../file_output/' + CommonUtil.generate_date_time_str() + "/"
     img_extension: str = ""
 
 
@@ -48,6 +48,8 @@ if __name__ == '__main__':
     img_rgb_array = ImageUtil.obtain_image_rgb_array(input_dir + img_relative_path_list[0])
     print(type(img_rgb_array))
 
+    ImageUtil.show_image_in_dip_view(img_rgb_array)
+
 
     plt.axis("off")
     plt.imshow(img_rgb_array)
@@ -61,12 +63,18 @@ if __name__ == '__main__':
 
 
     #creating hog features
-    fd, hog_image_rgb_array = hog(resized_img,
-                                  orientations=9,
-                                  pixels_per_cell=(8, 8),
-                                  cells_per_block=(1, 1), visualize=True, multichannel=True)
+    fd_hog_desc_list, hog_image_rgb_array = hog(resized_img, orientations=9,
+                                                pixels_per_cell=(8, 8), cells_per_block=(1, 1),
+                                                visualize=True, multichannel=True)
 
-    print(type(hog_image_rgb_array))
+
+    CommonUtil.make_dir(output_dir)
+    CommonUtil.write_csv_file([fd_hog_desc_list], output_dir, "test1.csv")
+
+    print(fd_hog_desc_list.size)
+    print(type(fd_hog_desc_list))
+
+    # print(type(hog_image_rgb_array))
     ImageUtil.show_image_in_dip_view(hog_image_rgb_array)
 
     # plt.axis("off")
