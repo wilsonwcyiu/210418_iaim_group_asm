@@ -8,6 +8,7 @@ from decimal import Decimal
 from os import path
 from turtle import pd
 
+import numpy
 import pandas
 from diplib import PyDIPjavaio
 import imageio
@@ -17,6 +18,15 @@ import csv
 
 
 class CommonUtil:
+
+
+    @staticmethod
+    def list_to_ndarray(data_list: list):
+        # converting list to array
+        ndarray_list = numpy.array(data_list)
+
+        return ndarray_list
+
 
 
     @staticmethod

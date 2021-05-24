@@ -13,11 +13,14 @@ import os
 from skimage.io import imread
 from skimage.transform import resize
 from skimage.feature import hog
-from skimage import exposure
+
+from skimage import data
 import matplotlib.pyplot as plt
 
 from util.plot_util import PlotUtil
 
+
+# https://www.programmersought.com/article/54406295171/
 if __name__ == '__main__':
 
     # Configure files and directories
@@ -38,6 +41,8 @@ if __name__ == '__main__':
     image_rgb_array_list: list = []
     for img_relative_path in img_relative_path_list:
         image_rgb_array: PIL.JpegImagePlugin.JpegImageFile = Image.open(input_dir + img_relative_path)
+
+
         # print(image_rgb_array)
         # print(type(image_rgb_array))
         image_rgb_array_list.append(image_rgb_array)
@@ -48,7 +53,7 @@ if __name__ == '__main__':
     # print(type(img_rgb_array))
 
     # img_relative_path: str = img_relative_path_list[0]
-    img_path = "1_white/1.j_Mulberry_1.tif"
+    img_path = "1_white/1.j_Mulberry_1.jpg"
     # img_path = "../asm4/tif/MTLn3+EGF0000.tif"
 
     img: diplib.ImageRead = ImageUtil.obtain_diplib_image(img_path, input_dir);    ImageUtil.show_image_in_dip_view(img)
@@ -73,6 +78,36 @@ if __name__ == '__main__':
 
     ws_img = diplib.Watershed(contrasted_img, segment_img, connectivity=2, flags={"binary", "high first"});      ImageUtil.show_image_in_dip_view(ws_img)
     # ImageUtil.watershed(contrasted_img, segment_img)
+
+
+
+
+
+
+    segmentation_pixel_list = ImageUtil.obtain_pixel_value_list(segment_img)
+    img_rgb_tuple_list: list = ImageUtil.obtain_rgb_tuple_list(img)
+
+    blue_pixel_list: list = ImageUtil.extract_blue_pixel_values(img_rgb_tuple_list)
+
+
+    # print(segmentation_pixel_list)
+
+    burries_rgb_tuple_list: list = []
+    for i in range(len(segmentation_pixel_list)):
+        if segmentation_pixel_list[i] == True:
+            burries_rgb_tuple_list.append(img_rgb_tuple_list[i])
+
+
+    # image = data.imread( input_dir + img_path)
+    pixel_list = ImageUtil.obtain_rgb_tuple_list_list(img)
+    avg_hue_value: float = ImageUtil.avg_hue_value(pixel_list)
+
+    print("avg_hue_value", avg_hue_value)
+
+
+
+
+
 
 
 
