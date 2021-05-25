@@ -7,6 +7,9 @@ from diplib.PyDIP_bin.MeasurementTool import MeasurementFeature, Measurement
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 
+import skimage
+from skimage import color
+
 import numpy
 
 import csv
@@ -61,6 +64,31 @@ def obtain_avg_hue(rgb_img: diplib.Image, segmented_img: diplib.Image):
     return avg_hue
 
 
+def obtain_avg_hue_2(rgb_img: diplib.Image, segmented_img: diplib.Image):
+
+    pixel_list = ImageUtil.obtain_rgb_tuple_list_list(rgb_img)
+
+    rgb_tuple_list: list = []
+
+    if isinstance(pixel_list, list):
+        rgb_tuple_list = CommonUtil.list_to_ndarray(pixel_list)
+
+    hsv_img: numpy.ndarray = color.rgb2hsv(rgb_tuple_list)
+
+    hue_sum: float = 0
+    total_object_pixels: int = 0
+
+    for i in range(len(hsv_img)):
+        if segmented_img[i][0]:
+            hue_sum += hsv_img[i][0]
+            total_object_pixels += 1
+
+    avg_hue: float = hue_sum / total_object_pixels
+
+    return avg_hue * 360
+
+
+
 # Only obtain the measurements of the object that represents the berry
 def obtain_largest_object_measurements(measurements_all_objects: Measurement):
     # Collect measurements
@@ -101,7 +129,7 @@ if __name__ == '__main__':
     img_extension: str = ""
 
     # Indicate which berry group is measured
-    berry_group: str = "black"
+    berry_group: str = "white"
 
     folder_list: list = ["1_" + berry_group, "2_" + berry_group, "3_" + berry_group, "4_" + berry_group]
 
@@ -119,7 +147,7 @@ if __name__ == '__main__':
         writer = csv.writer(csv_file, delimiter=",")
 
         # label, area, perimeter, convexity, concavity
-        header = ['Label'] + ['Area'] + ['Perimeter'] + ['Convexity'] + ["Solidity"] + ["AverageHue"]
+        header = ['Label'] + ['Area'] + ['Perimeter'] + ['Convexity'] + ["Solidity"] + ["AverageHueManual"] + ["AverageHue"]
         writer.writerow(header)
 
 
@@ -189,7 +217,10 @@ if __name__ == '__main__':
 
                 avg_hue_value: float = obtain_avg_hue(curr_img, segm_img)
 
+                avg_hue_value_2: float = obtain_avg_hue_2(curr_img, segm_img)
+
                 features.append(avg_hue_value)
+                features.append(avg_hue_value_2)
 
 
                 # ---------- Save in csv file ----------
