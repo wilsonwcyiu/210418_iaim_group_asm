@@ -87,7 +87,7 @@ if __name__ == '__main__':
     segmentation_pixel_list = ImageUtil.obtain_pixel_value_list(segment_img)
     img_rgb_tuple_list: list = ImageUtil.obtain_rgb_tuple_list(img)
 
-    blue_pixel_list: list = ImageUtil.extract_blue_pixel_values(img_rgb_tuple_list)
+    blue_pixel_list: list = ImageUtil.extract_blue_pixel_values(img_rgb_tuple_list);        ImageUtil.show_image_in_dip_view(img_rgb_tuple_list)
 
 
     # print(segmentation_pixel_list)
