@@ -17,10 +17,16 @@ if __name__ == '__main__':
     proj_output_dir_path: str = '../../image_output/asm5'
     img_extension: str = ""
 
-    folder_list: list = ["4_black"]
+    folder_list: list = ["3_black"]
 
     for folder in folder_list:
+        # To collect relative image paths of all images in folder
         img_relative_path_list: list = []
+
+
+        # Output image directory
+        output_dir_path: str = proj_output_dir_path + '/' + folder + '/'
+
 
         # ATM only first image of folder
         file_list: list = CommonUtil.obtain_file_name_list(input_dir + folder + "/")
@@ -29,6 +35,7 @@ if __name__ == '__main__':
 
         # Go through every image
         for img_relative_path in img_relative_path_list:
+            # TODO 46.Black_Mulberry_3 does not work?
             # Obtain berry label/name
             img_name: str = img_relative_path.split("/")[-1].replace('.jpg', '')
 
@@ -36,19 +43,28 @@ if __name__ == '__main__':
             curr_img: diplib.ImageRead = ImageUtil.obtain_diplib_image(img_relative_path, input_dir)
 
 
+            # ---------- Pre-processing ----------
+
+
             # Obtain size of image
             width, height = curr_img.Sizes()
 
             # Create new image to save single channel values
-            new_image = diplib.Image((width, height), 1)
+            new_img = diplib.Image((width, height), 1)
 
-
-            # Collect only red(0)/green(1)/blue(2) channel values
+            # Subtract red channel (0) values from blue channel (2) values
             for i in range(len(curr_img)):
-                new_image[i] = curr_img[i][2]
+                new_img[i] = curr_img[i][2] - curr_img[i][0]
 
-            CommonUtil.save_image_to_folder(new_image, proj_output_dir_path, img_name + "blue_channel.jpg")
+            CommonUtil.save_image_to_folder(new_img, output_dir_path, img_name + '_processed.jpg')
 
+
+            # ---------- Segmentation ----------
+
+
+            segm_img: diplib.Image = ImageUtil.segment_image_black(new_img)
+
+            CommonUtil.save_image_to_folder(segm_img, output_dir_path, img_name + '_segmented.tif')
 
             '''
             # Pre-processing

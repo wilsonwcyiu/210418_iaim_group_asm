@@ -20,6 +20,7 @@ class ImageUtil:
 
     @staticmethod
     def extract_blue_pixel_values(rgb_tuple_list: numpy.ndarray):
+        raise Exception("not ready")
         blue_pixel_list: list = []
         for rgb_tuple in rgb_tuple_list:
             blue_pixel_list.append(rgb_tuple[2])
