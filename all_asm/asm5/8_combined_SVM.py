@@ -22,64 +22,28 @@ from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 import seaborn as sns
 
 
-def write_csv_features(input_dir: str, proj_dir_path: str, feature:str, img_group: str, cell_size: int):
 
-    first_line = True
-
-    with open(proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv', 'w') as csv_file:
-        writer = csv.writer(csv_file, delimiter=",")
-
-        types: list = ['1', '2', '3', '4']  # [number]_[black/white] - number means sage of ripening
-        for stage in types:
-            file_list: list = CommonUtil.obtain_file_name_list(input_dir + stage + '_' + img_group + '/')
-            for file in file_list:
-                img_rgb = ImageUtil.obtain_image_rgb_array(input_dir + stage + '_' + img_group + '/' + file)
-                img_gray = ImageUtil.obtain_image_gray_array(input_dir + stage + '_' + img_group + '/' + file)
-
-                # resizing image to have same number of features for images of different size
-                resized_img = resize(img_rgb, (128 * 4, 64 * 4))
-                # plt.axis("off")
-                # plt.imshow(resized_img)
-                # print(resized_img.shape)
-
-                # creating hog features for resized image
-                fd, hog_image = hog(resized_img, orientations=8,
-                                    pixels_per_cell=(cell_size, cell_size),
-                                    cells_per_block=(1, 1), visualize=True, multichannel=True)
-
-                if first_line:  # first line of a file is a header
-                    header = ['Label'] + ['Feature '+str(i) for i in range(len(fd))]
-                    # for i in range(len(fd)):
-                    #     header.append("Feature "+str(i))
-                    writer.writerow(header)
-                    first_line = False
-
-                # fd contains the features for classification
-                # inserting stage of ripening on the first position of each line,
-                # which serves as label for classification
-                line = np.insert(fd, 0, int(stage))
-
-                # writing to csv file
-                writer.writerow(line)
-
-
-def hog_SVM(img_group: str, cell_size: int):
+def combined_SVM(img_group: str):
     # Configure files and directories and settings
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm5/'
     proj_dir_path: str = '../../file_output/'
-    feature: str = 'hog'
 
-    # compute the HOG features and write them into csv file
-    # write_csv_features(input_dir, proj_dir_path, feature, img_group, cell_size)
 
-    # reading the csv file for classification
-    data = pd.read_csv(proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv')
+    # reading the csv files for classification
+    data_hog_16 = pd.read_csv(proj_dir_path + 'asm5/' + 'hog' + '_' + img_group + '_' + str(16) + '.csv')
+    data_hog_64 = pd.read_csv(proj_dir_path + 'asm5/' + 'hog' + '_' + img_group + '_' + str(64) + '.csv')
+    data_hue_size = pd.read_csv(proj_dir_path + 'asm5/' + 'measurement' + '_' + img_group + '.csv')
+
+    data = pd.concat([data_hue_size, data_hog_16, data_hog_64], axis=1)
+
     print(data.head())
+    print(data.shape)
 
     # dividing the data on labels and features
-    y = data['Label']
+    y = data['Label'].iloc[:,[0]]
+    print(y.shape)
     X = data.drop(columns=['Label'])
-
+    print(X.shape)
     # splitting the dataset on train and text set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, shuffle=True)
 
@@ -94,7 +58,7 @@ def hog_SVM(img_group: str, cell_size: int):
     y_pred_test = svc.predict(X_test)
     y_pred_train = svc.predict(X_train)
 
-    print("Image group:", img_group, "feature:", feature, "cell size:", cell_size)
+    print("Image group:", img_group, "features: combined")
 
     # computing accuracy and f1 score
     train_accuracy = accuracy_score(y_train, y_pred_train)
@@ -132,16 +96,19 @@ if __name__ == '__main__':
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm5/'
     proj_dir_path: str = '../../file_output/'
     img_group: str = 'white'  # white / black
-    cell_size: int = 16  # 16 / 64
-
-    # compute the HOG features and write them into csv file
-    # write_csv_features(input_dir, proj_dir_path, feature, img_group, cell_size)
 
 
-    # SVM for HOG features
+    # SVM for all combined features
     # run the SVM classification in one function
     # returns train and test accuracy
-    train_accuracy, test_accuracy = hog_SVM(img_group, cell_size)
+    train_accuracy, test_accuracy = combined_SVM(img_group)
+
+
+
+
+
+
+
 
 
 
