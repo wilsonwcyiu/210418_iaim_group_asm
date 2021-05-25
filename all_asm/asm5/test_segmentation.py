@@ -12,6 +12,55 @@ import numpy
 import csv
 
 
+# https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB
+# https://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/ for calculation of conversion from RGB to HSL
+def obtain_avg_hue(rgb_img: diplib.Image, segmented_img: diplib.Image):
+    hue_sum: float = 0
+    total_object_pixels: int = 0
+
+    for i in range(len(rgb_img)):
+        if segmented_img[i][0]:
+            total_object_pixels += 1
+
+            r_channel, g_channel, b_channel = rgb_img[i]
+
+            # Convert RGB values to range 0-1, [0] is red, [1] is green, [2] is blue
+            rgb = [r_channel / 255, g_channel / 255, b_channel / 255]
+
+            max_value = max(rgb)
+            max_value_channel = rgb.index(max_value)
+
+            min_value = min(rgb)
+
+            hue: float = 0
+
+            if (max_value - min_value) != 0:
+                # If red channel is max
+                if max_value_channel == 0:
+                    hue = (rgb[1] - rgb[2]) / (max_value - min_value)
+                # If green channel is max
+                elif max_value_channel == 1:
+                    hue = 2 + (rgb[2] - rgb[0]) / (max_value - min_value)
+                # If blue channel is max
+                elif max_value_channel == 2:
+                    hue = 4 + (rgb[0] - rgb[1]) / (max_value - min_value)
+            else:
+                hue = 0
+
+            # Multiplied by 60 to convert to degrees, if hue is negative then also add 360 (circle)
+            if hue < 0:
+                hue = hue * 60 + 360
+            else:
+                hue = hue * 60
+
+            hue_sum += hue
+
+    # Get average hue
+    avg_hue: float = hue_sum / total_object_pixels
+
+    return avg_hue
+
+
 # Only obtain the measurements of the object that represents the berry
 def obtain_largest_object_measurements(measurements_all_objects: Measurement):
     # Collect measurements
@@ -70,7 +119,7 @@ if __name__ == '__main__':
         writer = csv.writer(csv_file, delimiter=",")
 
         # label, area, perimeter, convexity, concavity
-        header = ['Label'] + ['Area'] + ['Perimeter'] + ['Convexity'] + ["Solidity"]
+        header = ['Label'] + ['Area'] + ['Perimeter'] + ['Convexity'] + ["Solidity"] + ["AverageHue"]
         writer.writerow(header)
 
 
@@ -137,6 +186,10 @@ if __name__ == '__main__':
 
                 # Obtain features in a list: area [0], perimeter [1], convexity [2], solidity (concavity?) [3]
                 features: list = obtain_measurements(curr_img, segm_img)
+
+                avg_hue_value: float = obtain_avg_hue(curr_img, segm_img)
+
+                features.append(avg_hue_value)
 
 
                 # ---------- Save in csv file ----------
