@@ -129,7 +129,7 @@ if __name__ == '__main__':
     img_extension: str = ""
 
     # Indicate which berry group is measured
-    berry_group: str = "white"
+    berry_group: str = "black"
 
     folder_list: list = ["1_" + berry_group, "2_" + berry_group, "3_" + berry_group, "4_" + berry_group]
 
