@@ -17,7 +17,7 @@ if __name__ == '__main__':
     proj_output_dir_path: str = '../../image_output/asm5'
     img_extension: str = ""
 
-    folder_list: list = ["4_black"]
+    folder_list: list = ["1_white"]
 
     for folder in folder_list:
         img_relative_path_list: list = []
@@ -43,11 +43,14 @@ if __name__ == '__main__':
             new_image = diplib.Image((width, height), 1)
 
 
-            # Collect only red(0)/green(1)/blue(2) channel values
+            # Subtract red channel (0) values from blue channel (2) values
             for i in range(len(curr_img)):
-                new_image[i] = curr_img[i][2]
+                new_image[i] = curr_img[i][2] - curr_img[i][0]
 
-            CommonUtil.save_image_to_folder(new_image, proj_output_dir_path, img_name + "blue_channel.jpg")
+
+            CommonUtil.save_image_to_folder(new_image, proj_output_dir_path + '/' + folder + '/', img_name + '_processed.jpg')
+
+
 
 
             '''
