@@ -27,7 +27,6 @@ def write_csv_features(input_dir: str, proj_dir_path: str, feature:str, img_grou
     first_line = True
 
     with open(proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv', 'w') as csv_file:
-        # f = open(proj_dir_path + "asm5/" + img_group + "_" + str(cell_size), "wb", delimiter=",")
         writer = csv.writer(csv_file, delimiter=",")
 
         types: list = ['1', '2', '3', '4']  # [number]_[black/white] - number means sage of ripening
