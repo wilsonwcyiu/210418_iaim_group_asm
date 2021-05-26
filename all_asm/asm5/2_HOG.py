@@ -52,7 +52,7 @@ if __name__ == '__main__':
                                     cells_per_block=(1, 1), visualize=True, multichannel=True)
 
                 if first_line:  # first line of a file is a header
-                    header = ['Label'] + ['Feature ' + str(i) for i in range(len(fd))]
+                    header = ['Label'] + [str(cell_size) + '_Feature ' + str(i) for i in range(len(fd))]
                     # for i in range(len(fd)):
                     #     header.append("Feature "+str(i))
                     writer.writerow(header)
@@ -90,7 +90,7 @@ if __name__ == '__main__':
                                     cells_per_block=(1, 1), visualize=True, multichannel=True)
 
                 if first_line:  # first line of a file is a header
-                    header = ['Label'] + ['Feature ' + str(i) for i in range(len(fd))]
+                    header = ['Label'] + [str(cell_size) + '_Feature ' + str(i) for i in range(len(fd))]
                     # for i in range(len(fd)):
                     #     header.append("Feature "+str(i))
                     writer.writerow(header)
