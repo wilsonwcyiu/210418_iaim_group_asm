@@ -125,8 +125,9 @@ if __name__ == '__main__':
     # Configure files and directories
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm5/'
     proj_file_output_dir_path: str = '../../file_output/asm5'
-    proj_output_dir_path: str = '../../image_output/asm5'
+    proj_output_dir_path: str = CommonUtil.obtain_project_default_output_dir_path() + 'asm5/'
     img_extension: str = ""
+
 
     # Indicate which berry group is measured
     berry_group: str = "black"

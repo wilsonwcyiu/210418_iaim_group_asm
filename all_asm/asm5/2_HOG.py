@@ -32,7 +32,8 @@ if __name__ == '__main__':
     types: list = ['1', '2', '3', '4']  # [number]_[black/white] - number means sage of ripening
 
     first_line = True
-    with open(proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv', 'w') as csv_file:
+    file_path: str = proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv'
+    with open(file_path, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=",")
 
         for stage in types:
@@ -70,7 +71,8 @@ if __name__ == '__main__':
     cell_size = 64  # 16 / 64
 
     first_line = True
-    with open(proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv', 'w') as csv_file:
+    file_path: str = proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv'
+    with open(file_path, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=",")
 
         for stage in types:

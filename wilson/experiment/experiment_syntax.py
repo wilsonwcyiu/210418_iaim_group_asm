@@ -16,15 +16,28 @@ max_run_case = 1
 # if run_case_idx == max_run_case:    exit()
 # else: run_case_idx += 1
 
+import pandas as pd
+
+
+
+
 if __name__ == '__main__':
 
 
 
     print("start")
 
+    proj_dir_path = CommonUtil.obtain_project_default_output_dir_path()
+    file_path: str = proj_dir_path + 'asm5/HOG_black_16.csv'
+    data = pd.read_csv(file_path)
+
+    print(data)
+
+    if run_case_idx == max_run_case:    exit();
+    else: run_case_idx += 1
 
 
-    # data = [("1","2","3"), ("4","5","6")]
+# data = [("1","2","3"), ("4","5","6")]
     data = [["1","2","3"], ["4","5","6"]]
     nlis = numpy.ndarray(data)
     print(nlis)
