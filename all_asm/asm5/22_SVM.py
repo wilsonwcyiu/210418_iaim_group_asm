@@ -75,7 +75,7 @@ def combined_SVM(plotting: bool = False):
         print(X.shape)
 
         # splitting the dataset on train and text set
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, shuffle=True)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=level, shuffle=True)
 
         # crate a svm classifier
         # svm = svm.SVC(kernel='linear')

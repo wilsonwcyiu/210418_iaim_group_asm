@@ -39,7 +39,7 @@ def hue_SVM(img_group: str, plotting: bool=False):
     X = data.drop(columns=['Label', 'Area', 'Perimeter', 'Convexity', 'Solidity'])
     # X = X.reshape(-1, 1)
     # splitting the dataset on train and text set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, shuffle=True)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=31, shuffle=True)
 
     # crate a svm classifier
     svc = svm.SVC(kernel='linear')
@@ -104,7 +104,7 @@ def shape_SVM(img_group: str, plotting: bool=False):
     X = data.drop(columns=['Label', 'AverageHueManual', 'AverageHue'])
 
     # splitting the dataset on train and text set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, shuffle=True)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=32, shuffle=True)
 
     # crate a svm classifier
     svc = svm.SVC(kernel='linear')
@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # Configure files and directories and settings
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm5/'
     proj_dir_path: str = '../../file_output/'
-    img_group: str = 'white'  # white / black
+    img_group: str = 'black'  # white / black
 
 
     # SVM for hue feature
