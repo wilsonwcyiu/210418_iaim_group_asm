@@ -51,6 +51,19 @@ class PlotUtil():
 
 
     @staticmethod
+    def save_plot_to_project_folder_ver2(plt: pyplot, dir_path_str: str, file_name: str):
+        # project_dir: str = "../../image_output/"
+        # dir_path_str: str = os.path.join(project_dir, dir_name)
+        full_file_path: str = os.path.join(dir_path_str, file_name)
+
+        if dir_path_str is not None and not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+
+        plt.savefig(full_file_path)
+
+
+
+    @staticmethod
     def save_plot_to_project_folder(plt: pyplot, dir_name: str, file_name: str):
         project_dir: str = "../../image_output/"
         dir_path_str: str = os.path.join(project_dir, dir_name)

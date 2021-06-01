@@ -15,9 +15,19 @@ import imageio
 import numpy as np
 from matplotlib import pyplot
 import csv
+import pandas as pd
+from pandas import DataFrame
 
 
 class CommonUtil:
+
+
+    @staticmethod
+    def read_csv_file(file_path: str):
+        csv_data_df: DataFrame = pd.read_csv(file_path)
+
+        return  csv_data_df
+
 
 
     @staticmethod
@@ -73,7 +83,7 @@ class CommonUtil:
 
     @staticmethod
     def join_path(parent_path: str, child_path: str):
-        joined_path: str = parent_path + child_path
+        joined_path: str = os.path.join(parent_path, child_path)
 
         return joined_path
 
