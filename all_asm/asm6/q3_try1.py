@@ -19,19 +19,10 @@ if __name__ == '__main__':
 
     for image_name in image_name_list:
         curr_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir)
-        # print(curr_img)
-        # diplib.ImageRead
-        # diplib.Image
-        print(type(curr_img))
 
-        pixel_list = ImageUtil.obtain_pixel_value_list(curr_img)
-        print(pixel_list.shape)
-
-        # diplib.ShowViewer(curr_img)
-        # squeeze(curr_img(:,:,2))
 
         # DataType : # https://diplib.org/diplib-docs/pixeltypes.html
-        # curr_img = diplib.Convert(curr_img, "UINT8")
+        curr_img = diplib.Convert(curr_img, "UINT8")
 
         # print(curr_img(1,1,1))
 
