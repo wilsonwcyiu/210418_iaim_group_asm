@@ -1,10 +1,13 @@
 import dip as dip
 import diplib
+import numpy
 from diplib import PyDIPjavaio
 
 from util.common_util import CommonUtil
 from util.image_util import ImageUtil
 from util.plot_util import PlotUtil
+import numpy as np
+
 
 if __name__ == '__main__':
 
@@ -18,7 +21,23 @@ if __name__ == '__main__':
     image_name_list: list = ["CHROMO3D.ics"]
 
     for image_name in image_name_list:
-        curr_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir);        ImageUtil.show_image_in_dip_view(curr_img)
+        curr_img: diplib.PyDIP_bin.Image = ImageUtil.obtain_diplib_image(image_name, input_dir);        ImageUtil.show_image_in_dip_view(curr_img)
+
+
+        ImageUtil.show_image_in_dip_view(curr_img.Squeeze())
+
+
+        CommonUtil.press_enter_to_exit()
+
+
+        data_list = numpy.array([[1,1,1,1],[0,0,0,0]])
+
+        ImageUtil.show_image_in_dip_view(data_list)
+
+        CommonUtil.press_enter_to_exit()
+
+        # print(type(a), a)
+
 
         curr_img.setProjectionMode("max")
 
