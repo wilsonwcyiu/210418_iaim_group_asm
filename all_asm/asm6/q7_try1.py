@@ -39,7 +39,8 @@ if __name__ == '__main__':
                 for height_idx in range(image_height):
                     pixel_value = pixel_binary_3d[layer_idx][width_idx][height_idx]
 
-                    if pixel_value == 1 and pixel_grayscale_2d[width_idx][height_idx] == 0:
+                    has_no_foreground_pixel = (pixel_grayscale_2d[width_idx][height_idx] == 0)
+                    if pixel_value == 1 and has_no_foreground_pixel:
                         pixel_grayscale_2d[width_idx][height_idx] = gray_value_in_each_layer[layer_idx]
 
 
