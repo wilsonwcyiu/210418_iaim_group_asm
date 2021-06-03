@@ -25,7 +25,7 @@ if __name__ == '__main__':
         threshold_img = ImageUtil.filter_image_by_threshold_value(curr_img, 75);        ImageUtil.show_image_in_dip_view(threshold_img)
 
 
-        t2_img = ImageUtil.segment_image_white(curr_img);                                ImageUtil.show_image_in_dip_view(t2_img)
+        threshold2_img = ImageUtil.segment_image_white(curr_img);                                ImageUtil.show_image_in_dip_view(threshold2_img)
 
 
         # p_list = ImageUtil.obtain_pixel_value_list(curr_img)
