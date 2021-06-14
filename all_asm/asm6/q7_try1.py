@@ -24,7 +24,7 @@ if __name__ == '__main__':
         threshold_value = ImageUtil.derive_threshold_value(curr_img)
         threshold_img = ImageUtil.filter_image_by_threshold_value(curr_img, threshold_value);        ImageUtil.show_image_in_dip_view(threshold_img, title="threshold")
 
-        gray_value_in_each_layer: list = [225, 210, 195, 180, 165, 150, 135, 120, 105, 90, 75, 60, 45, 30, 15, 0]
+        gray_value_in_each_layer: list = [255, 240, 225, 210, 195, 180, 165, 150, 135, 120, 105, 90, 75, 60, 45, 30]
 
         image_width: int = 140
         image_height: int = 160

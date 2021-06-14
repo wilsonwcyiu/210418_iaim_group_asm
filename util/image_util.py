@@ -190,7 +190,7 @@ class ImageUtil:
 
     @staticmethod
     def filter_image_by_threshold_value(img: diplib.PyDIP_bin.Image, threshold_value: float):
-        filtered_img: diplib.PyDIP_bin.Image = img < threshold_value
+        filtered_img: diplib.PyDIP_bin.Image = img > threshold_value
 
         return filtered_img
 
@@ -547,12 +547,13 @@ class ImageUtil:
 
         image_file_path = dir_path + image_name
 
-        diplib_img: PyDIPjavaio.ImageRead = None
+        diplib_img: diplib.PyDIP_bin.Image = None
         try:
             img_extension: str = CommonUtil.obtain_file_extension(image_name)
             if img_extension.lower() in ("jpeg", "jpg"):     diplib_img = diplib.ImageReadJPEG(image_file_path)
             elif img_extension.lower() in ("png"):           diplib_img = diplib.ImageRead(image_file_path)
             elif img_extension.lower() in ("tif", "tiff"):   diplib_img = diplib.ImageReadTIFF(image_file_path)
+            elif img_extension.lower() in ("ics"):           diplib_img = diplib.ImageReadICS(image_file_path)
             else: diplib_img = diplib.ImageRead(image_file_path)
 
 

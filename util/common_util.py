@@ -23,6 +23,12 @@ class CommonUtil:
 
 
     @staticmethod
+    def rename_file(from_path_name: str, to_path_name: str):
+        os.rename(from_path_name,to_path_name)
+
+
+
+    @staticmethod
     def read_csv_file(file_path: str):
         csv_data_df: DataFrame = pd.read_csv(file_path)
 
