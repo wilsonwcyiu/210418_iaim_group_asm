@@ -40,7 +40,8 @@ if __name__ == '__main__':
                         max_projection_list[width_idx][height_idx] = pixel_value
 
         ImageUtil.show_image_in_dip_view(max_projection_list, title="Max projection from original image")
-
+        file_name: str = "max_projection_original_img.png"
+        CommonUtil.save_ndarray_as_image(max_projection_list, proj_output_dir_path, file_name)
 
 
         threshold_img = ImageUtil.segment_image_white(curr_img)
@@ -57,6 +58,8 @@ if __name__ == '__main__':
                         max_projection_list[width_idx][height_idx] = pixel_value
 
         ImageUtil.show_image_in_dip_view(max_projection_list, title="Max projection from binary image")
+        file_name: str = "max_projection_binary_img.png"
+        CommonUtil.save_ndarray_as_image(max_projection_list, proj_output_dir_path, file_name)
 
 
 
