@@ -9,6 +9,8 @@ from util.plot_util import PlotUtil
 import numpy as np
 
 
+
+#found rotate function but not iso-surface. I think we have to use matlab for it
 if __name__ == '__main__':
 
     # Configure files and directories
