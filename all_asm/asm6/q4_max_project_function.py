@@ -25,6 +25,8 @@ if __name__ == '__main__':
         image_height: int = 160
         image_layers: int = 16
 
+
+        # Max projection from original image
         pixel_list = ImageUtil.obtain_pixel_value_list(curr_img)
         pixel_3d = np.reshape(pixel_list, (image_layers, image_width, image_height));
 
@@ -44,6 +46,10 @@ if __name__ == '__main__':
         CommonUtil.save_ndarray_as_image(max_projection_list, proj_output_dir_path, file_name)
 
 
+
+
+
+        # Max projection from threshold image
         threshold_img = ImageUtil.segment_image_white(curr_img)
         pixel_list = ImageUtil.obtain_pixel_value_list(threshold_img)
         pixel_3d = np.reshape(pixel_list, (image_layers, image_width, image_height));
