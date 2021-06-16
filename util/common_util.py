@@ -13,13 +13,23 @@ import pandas
 from diplib import PyDIPjavaio
 import imageio
 import numpy as np
-from matplotlib import pyplot
+from matplotlib import pyplot, cm
 import csv
 import pandas as pd
 from pandas import DataFrame
 
 
 class CommonUtil:
+
+
+
+    @staticmethod
+    def save_ndarray_as_image(ndarray: numpy.ndarray, dir_path: str, file_name: str):
+        if dir_path is not None and not path.exists(dir_path):
+            os.mkdir(dir_path, 0x0755)
+
+        pyplot.imsave(dir_path + file_name, ndarray, cmap=cm.gray)
+
 
 
     @staticmethod
