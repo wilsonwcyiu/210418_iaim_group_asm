@@ -5,7 +5,8 @@ import time
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-
+from sklearn.svm import SVR
+from sklearn.utils.tests.test_pprint import Pipeline
 
 from util.common_util import CommonUtil
 
@@ -18,7 +19,16 @@ max_run_case = 1
 
 import pandas as pd
 
+from sklearn import svm
+import numpy as np
 
+from sklearn.svm import SVC
+
+def gcd_iter(u, v):
+    while v != 0:
+        u, v = v, u % v
+        print(u, v)
+    return abs(u)
 
 
 if __name__ == '__main__':
@@ -27,8 +37,34 @@ if __name__ == '__main__':
 
     print("start")
 
+
+    print( gcd_iter(5, 10))
+
+
+    if run_case_idx == max_run_case:    exit();
+    else: run_case_idx += 1
+
+
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    X = np.array([[-1, -1], [-2, -1], [1, 1], [2, 1]])
+    y = np.array([1, 1, 2, 2])
+    clf = make_pipeline(StandardScaler(), SVC(gamma='auto'))
+    clf.fit(X, y)
+    Pipeline(steps=[('standardscaler', StandardScaler()),('svc', SVC(gamma='auto'))])
+
+    print(clf.predict([[-0.8, -1]]))
+    print(clf.predict([[2, 1]]))
+
+    CommonUtil.press_enter_to_exit()
+
+
+    if run_case_idx == max_run_case:    exit();
+    else: run_case_idx += 1
+
+
     proj_dir_path = CommonUtil.obtain_project_default_output_dir_path()
-    file_path: str = proj_dir_path + 'asm5/HOG_black_16.csv'
+    file_path: str = proj_dir_path + 'asm5/hog_black_16.csv'
     data = pd.read_csv(file_path)
 
     print(data)

@@ -13,11 +13,37 @@ import pandas
 from diplib import PyDIPjavaio
 import imageio
 import numpy as np
-from matplotlib import pyplot
+from matplotlib import pyplot, cm
 import csv
+import pandas as pd
+from pandas import DataFrame
 
 
 class CommonUtil:
+
+
+
+    @staticmethod
+    def save_ndarray_as_image(ndarray: numpy.ndarray, dir_path: str, file_name: str):
+        if dir_path is not None and not path.exists(dir_path):
+            os.mkdir(dir_path, 0x0755)
+
+        pyplot.imsave(dir_path + file_name, ndarray, cmap=cm.gray)
+
+
+
+    @staticmethod
+    def rename_file(from_path_name: str, to_path_name: str):
+        os.rename(from_path_name,to_path_name)
+
+
+
+    @staticmethod
+    def read_csv_file(file_path: str):
+        csv_data_df: DataFrame = pd.read_csv(file_path)
+
+        return  csv_data_df
+
 
 
     @staticmethod
@@ -73,7 +99,7 @@ class CommonUtil:
 
     @staticmethod
     def join_path(parent_path: str, child_path: str):
-        joined_path: str = parent_path + child_path
+        joined_path: str = os.path.join(parent_path, child_path)
 
         return joined_path
 

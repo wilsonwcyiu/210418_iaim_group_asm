@@ -32,7 +32,8 @@ if __name__ == '__main__':
     types: list = ['1', '2', '3', '4']  # [number]_[black/white] - number means sage of ripening
 
     first_line = True
-    with open(proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv', 'w') as csv_file:
+    file_path: str = proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv'
+    with open(file_path, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=",")
 
         for stage in types:
@@ -70,7 +71,8 @@ if __name__ == '__main__':
     cell_size = 64  # 16 / 64
 
     first_line = True
-    with open(proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv', 'w') as csv_file:
+    file_path: str = proj_dir_path + 'asm5/' + feature + '_' + img_group + '_' + str(cell_size) + '.csv'
+    with open(file_path, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=",")
 
         for stage in types:
@@ -103,14 +105,18 @@ if __name__ == '__main__':
                 writer.writerow(line)
 
 
-    # folder_list: list = ["1_black", "2_black", "3_black", "4_black"]
+
+
+
+
+
+    # folder_list: list = ["1_white", "2_white", "3_white", "4_white"]
     #
     # img_relative_path_list: list = []
     # for folder in folder_list:
     #     file_list: list = CommonUtil.obtain_file_name_list(input_dir + folder + "/")#[:2]
     #     for file in file_list:
     #         img_relative_path_list.append(folder + "/" + file)
-    #
     #
     # img_resize_dimention_tuple: tuple = (128*4, 64*4)
     #
@@ -131,7 +137,7 @@ if __name__ == '__main__':
     #
     #     hog_data_list.append(tuple(fd_hog_desc_str_list))
     #
-    # CommonUtil.make_dir(output_dir)
+    # # CommonUtil.make_dir(output_dir)
     # CommonUtil.write_csv_file(hog_data_list, output_dir, "hog_16_all_while_img.csv")
     #
     #
@@ -155,7 +161,7 @@ if __name__ == '__main__':
     #
     #     hog_data_list.append(tuple(fd_hog_desc_str_list))
     #
-    # CommonUtil.make_dir(output_dir)
+    # # CommonUtil.make_dir(output_dir)
     # CommonUtil.write_csv_file(hog_data_list, output_dir, "hog_64_all_while_img.csv")
     #
     # # print(fd_hog_desc_list.size)
