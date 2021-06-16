@@ -45,6 +45,7 @@ if __name__ == '__main__':
 
 
         ImageUtil.show_image_in_dip_view(pixel_grayscale_2d, title="depth cueing")
-
+        file_name: str = "cueing.png"
+        CommonUtil.save_ndarray_as_image(pixel_grayscale_2d, proj_output_dir_path, file_name)
 
     CommonUtil.press_enter_to_exit()
