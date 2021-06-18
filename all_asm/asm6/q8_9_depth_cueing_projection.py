@@ -42,16 +42,19 @@ if __name__ == '__main__':
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm6/'
     proj_output_dir_path: str = CommonUtil.obtain_project_default_output_dir_path() + 'asm6/'
 
-    image_name_list: list = ["CHROMO3D.ics"]
+    image_name_list: list = ["convollaria_512_10X_sameTracks_green.lsm"]
 
     image_width: int = 140
     image_height: int = 160
     image_layers: int = 16
 
-    gray_value_in_each_layer: list = [255, 240, 225, 210, 195, 180, 165, 150, 135, 120, 105, 90, 75, 60, 45, 30]
+    #gray_value_in_each_layer: list = [255, 240, 225, 210, 195, 180, 165, 150, 135, 120, 105, 90, 75, 60, 45, 30]
+    gray_value_in_each_layer: list = [255, 219, 183, 147, 111, 75, 39]
 
     for image_name in image_name_list:
         curr_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir)
+        print(curr_img)
+
 
         img_layers: list = []
 
