@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # Configure files and directories and settings
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm5/'
     proj_dir_path: str = '../../file_output/'
-    img_group: str = 'white'  # white / black
+    img_group: str = 'black'  # white / black
 
     labels = ['HOG_16', 'HOG_64', 'Hue', 'Shape', 'Combined']
     train_accuracies = []
@@ -28,31 +28,31 @@ if __name__ == '__main__':
 
     # SVM for all HOG features with cell size 16
     # returns train and test accuracy
-    train_accuracy, test_accuracy = hog_SVM(img_group, 16)
+    train_accuracy, test_accuracy = hog_SVM(img_group, 16, True)
     train_accuracies.append(train_accuracy)
     test_accuracies.append(test_accuracy)
 
     # SVM for all HOG features with cell size 64
     # returns train and test accuracy
-    train_accuracy, test_accuracy = hog_SVM(img_group, 64)
+    train_accuracy, test_accuracy = hog_SVM(img_group, 64, True)
     train_accuracies.append(train_accuracy)
     test_accuracies.append(test_accuracy)
 
     # SVM for Hue features
     # returns train and test accuracy
-    train_accuracy, test_accuracy = hue_SVM(img_group)
+    train_accuracy, test_accuracy = hue_SVM(img_group, True)
     train_accuracies.append(train_accuracy)
     test_accuracies.append(test_accuracy)
 
     # SVM for Shape features
     # returns train and test accuracy
-    train_accuracy, test_accuracy = shape_SVM(img_group)
+    train_accuracy, test_accuracy = shape_SVM(img_group, True)
     train_accuracies.append(train_accuracy)
     test_accuracies.append(test_accuracy)
 
     # SVM for all combined features
     # returns train and test accuracy
-    train_accuracy, test_accuracy = combined_SVM(img_group)
+    train_accuracy, test_accuracy = combined_SVM(img_group, True)
     train_accuracies.append(train_accuracy)
     test_accuracies.append(test_accuracy)
 

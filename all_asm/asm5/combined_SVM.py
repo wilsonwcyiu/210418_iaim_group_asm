@@ -101,7 +101,7 @@ if __name__ == '__main__':
     # Configure files and directories and settings
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm5/'
     proj_dir_path: str = '../../file_output/'
-    img_group: str = 'white'  # white / black
+    img_group: str = 'black'  # white / black
 
 
     # SVM for all combined features

@@ -17,7 +17,7 @@ if __name__ == '__main__':
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm6/'
     proj_output_dir_path: str = CommonUtil.obtain_project_default_output_dir_path() + CommonUtil.generate_date_time_str() + "/"
 
-    image_name_list: list = ["CHROMO3D.ics"]
+    image_name_list: list = ["CHROMO3D.ICS"]
 
     for image_name in image_name_list:
         curr_img: diplib.PyDIP_bin.Image = ImageUtil.obtain_diplib_image(image_name, input_dir);        ImageUtil.show_image_in_dip_view(curr_img, title="original image")
