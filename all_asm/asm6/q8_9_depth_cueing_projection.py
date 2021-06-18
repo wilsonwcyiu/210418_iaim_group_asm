@@ -20,6 +20,7 @@ def mean_proj(img_layers_list: list, image_width: int, image_height: int):
             projected_img[width_idx][height_idx] = sum_pixel_value/len(img_layers_list)
 
     CommonUtil.save_image_to_folder(projected_img, proj_output_dir_path, 'mean_projection.jpg')
+    # CommonUtil.save_image_to_folder_imageio(projected_img, proj_output_dir_path, 'mean_projection.jpg')
 
 
 def max_proj(img_layers_list: list, image_width: int, image_height: int):
@@ -35,6 +36,7 @@ def max_proj(img_layers_list: list, image_width: int, image_height: int):
             projected_img[width_idx][height_idx] = max_pixel_value
 
     CommonUtil.save_image_to_folder(projected_img, proj_output_dir_path, 'max_projection.jpg')
+    # CommonUtil.save_image_to_folder_imageio(projected_img, proj_output_dir_path, 'max_projection.jpg')
 
 
 if __name__ == '__main__':
@@ -42,7 +44,7 @@ if __name__ == '__main__':
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm6/'
     proj_output_dir_path: str = CommonUtil.obtain_project_default_output_dir_path() + 'asm6/'
 
-    image_name_list: list = ["CHROMO3D.ics"]
+    image_name_list: list = ["CHROMO3D.ICS"]
 
     image_width: int = 140
     image_height: int = 160
@@ -51,7 +53,9 @@ if __name__ == '__main__':
     gray_value_in_each_layer: list = [255, 240, 225, 210, 195, 180, 165, 150, 135, 120, 105, 90, 75, 60, 45, 30]
 
     for image_name in image_name_list:
+
         curr_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir)
+        # curr_img = diplib.ImageReadICS('image_files/asm6/CHROMO3D.ics')
 
         img_layers: list = []
 

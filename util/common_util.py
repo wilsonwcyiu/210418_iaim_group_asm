@@ -349,6 +349,19 @@ class CommonUtil:
         PyDIPjavaio.ImageWrite(img, full_file_path)
 
 
+    @staticmethod
+    def save_image_to_folder_imageio(img: PyDIPjavaio.ImageRead, dir_path_str: str, file_name: str):
+        if not path.exists(dir_path_str):
+            os.mkdir(dir_path_str, 0x0755)
+
+        full_file_path: str = os.path.join(dir_path_str, file_name)
+
+        image = np.array(img)
+        if image.dtype == 'bool':
+            image = np.array(image, dtype=np.uint8)
+            imageio.imwrite(full_file_path, image * 255, 'png')
+        else:
+            imageio.imwrite(full_file_path, image, 'png')
 
     @staticmethod
     def save_image_to_default_project_folder(img: PyDIPjavaio.ImageRead, dir_name: str, file_name: str, project_dir: str = None):
