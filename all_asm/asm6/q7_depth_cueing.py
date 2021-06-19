@@ -33,7 +33,7 @@ if __name__ == '__main__':
         pixel_binary_3d = np.reshape(pixel_flattened_list, (image_layers, image_width, image_height));        #ImageUtil.show_image_in_dip_view(pixel_binary_3d, title="pixel_3d")
 
         pixel_grayscale_2d = np.zeros((image_width, image_height))
-        for layer_idx in range(0, 16):
+        for layer_idx in range(0, image_layers):
             for width_idx in range(image_width):
                 for height_idx in range(image_height):
                     pixel_value = pixel_binary_3d[layer_idx][width_idx][height_idx]
