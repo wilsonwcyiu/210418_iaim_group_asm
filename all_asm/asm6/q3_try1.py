@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
 
 
-    image_name_list: list = ["CHROMO3D.ics"]
+    image_name_list: list = ["CHROMO3D.ICS"]
 
     for image_name in image_name_list:
         curr_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir)

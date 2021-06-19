@@ -8,33 +8,33 @@ from util.image_util import ImageUtil
 import numpy as np
 
 
-def mean_proj(img_layers_list: list, image_width: int, image_height: int):
+def mean_proj(img_layers_list: list, image_width: int, image_height: int, image_layers: int):
     projected_img = np.zeros((image_width, image_height))
 
     for width_idx in range(image_width):
         for height_idx in range(image_height):
             sum_pixel_value = 0
-            for layer_idx in range(0, 16):
+            for layer_idx in range(0, image_layers):
                 current_pixel_value = img_layers_list[layer_idx][width_idx][height_idx]
                 sum_pixel_value += current_pixel_value
             projected_img[width_idx][height_idx] = sum_pixel_value/len(img_layers_list)
 
-    CommonUtil.save_image_to_folder(projected_img, proj_output_dir_path, 'mean_projection.jpg')
+    CommonUtil.save_image_to_folder(projected_img, proj_output_dir_path, 'mean_projection_clsm.jpg')
 
 
-def max_proj(img_layers_list: list, image_width: int, image_height: int):
+def max_proj(img_layers_list: list, image_width: int, image_height: int, image_layers: int):
     projected_img = np.zeros((image_width, image_height))
 
     for width_idx in range(image_width):
         for height_idx in range(image_height):
             max_pixel_value = 0
-            for layer_idx in range(0, 16):
+            for layer_idx in range(0, image_layers):
                 current_pixel_value = img_layers_list[layer_idx][width_idx][height_idx]
                 if max_pixel_value < current_pixel_value:
                     max_pixel_value = current_pixel_value
             projected_img[width_idx][height_idx] = max_pixel_value
 
-    CommonUtil.save_image_to_folder(projected_img, proj_output_dir_path, 'max_projection.jpg')
+    CommonUtil.save_image_to_folder(projected_img, proj_output_dir_path, 'max_projection_clsm.jpg')
 
 
 if __name__ == '__main__':
@@ -42,16 +42,19 @@ if __name__ == '__main__':
     input_dir: str = CommonUtil.obtain_project_default_input_dir_path() + 'asm6/'
     proj_output_dir_path: str = CommonUtil.obtain_project_default_output_dir_path() + 'asm6/'
 
-    image_name_list: list = ["CHROMO3D.ics"]
+    image_name_list: list = ["convollaria_512_10X_sameTracks_green.lsm"]
 
     image_width: int = 140
     image_height: int = 160
     image_layers: int = 16
 
-    gray_value_in_each_layer: list = [255, 240, 225, 210, 195, 180, 165, 150, 135, 120, 105, 90, 75, 60, 45, 30]
+    #gray_value_in_each_layer: list = [255, 240, 225, 210, 195, 180, 165, 150, 135, 120, 105, 90, 75, 60, 45, 30]
+    gray_value_in_each_layer: list = [255, 219, 183, 147, 111, 75, 39]
 
     for image_name in image_name_list:
         curr_img: PyDIPjavaio.ImageRead = ImageUtil.obtain_diplib_image(image_name, input_dir)
+        print(curr_img)
+
 
         img_layers: list = []
 
@@ -62,7 +65,7 @@ if __name__ == '__main__':
 
         pixel_binary_stack = np.reshape(pixel_value_list, (image_layers, image_width, image_height))
 
-        for layer_idx in range(0, 16):
+        for layer_idx in range(0, image_layers):
             layer_img = np.zeros((image_width, image_height))
             for width_idx in range(image_width):
                 for height_idx in range(image_height):
@@ -75,7 +78,7 @@ if __name__ == '__main__':
 
             img_layers.append(layer_img)
 
-        max_proj(img_layers, image_width, image_height)
-        mean_proj(img_layers, image_width, image_height)
+        max_proj(img_layers, image_width, image_height, image_layers)
+        mean_proj(img_layers, image_width, image_height, image_layers)
 
     CommonUtil.press_enter_to_exit()
