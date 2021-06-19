@@ -1,0 +1,115 @@
+	
+ics_version	1.0
+filename	convollaria_512_10X_twoTracks_green_red
+layout	parameters	6
+layout	order	bits	x	y	z	ch	p
+layout	sizes	8	512	512	8	2	1
+layout	coordinates	cartesian
+layout	significant_bits	8
+representation	format	integer
+representation	sign	unsigned
+representation	compression	uncompressed
+representation	byte_order	1
+parameter	origin	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000
+parameter	scale	1.000000	2.324811	2.324811	6.751307	1.000000	1.000000
+parameter	units	bits	micrometers	micrometers	micrometers	undefined	detector
+parameter	labels	intensity	x	y	z	ch	p
+sensor	type	IncohConfMicr	IncohConfMicr
+sensor	model	unknown
+sensor	s_params	Channels	2
+sensor	s_params	Detectors	1
+sensor	s_params	ImagingDirection	upward	upward
+sensor	s_params	NumAperture	0.300000
+sensor	s_params	ObjectiveQuality	80	80
+sensor	s_params	RefrInxMedium	1.515000
+sensor	s_params	RefrInxLensMedium	1.515000
+sensor	s_params	PinholeRadius	1261.261261	1111.111111
+sensor	s_params	IllPinholeRadius	0.000000	0.000000
+sensor	s_params	PinholeSpacing	2.530000
+sensor	s_params	ExcitationBeamFill	2.000000	2.000000
+sensor	s_params	LambdaEx	543.000000	488.000000
+sensor	s_params	LambdaEm	576.000000	518.000000
+sensor	s_params	ExPhotonCnt	1	1
+sensor	s_params	InterFacePrimary	0.000000
+sensor	s_params	InterFaceSecondary	1000000.000000
+sensor	s_params	DetectorMagnif	10.000000	10.000000
+sensor	s_params	DetectorPPU	1.000000	1.000000
+sensor	s_params	DetectorBaseline	0.000000	0.000000
+sensor	s_params	DetectorLineAvgCnt	1.000000	1.000000
+sensor	s_params	DetectorNoiseGain	1.000000	1.000000
+sensor	s_params	DetectorOffset[0][X]	0.000000	0.000000
+sensor	s_params	DetectorOffset[0][Y]	0.000000	0.000000
+sensor	s_params	DetectorOffset[0][Z]	0.000000	0.000000
+sensor	s_params	DetectorSensitivity[0]	1.000000	1.000000
+sensor	s_params	DetectorRadius[0]	0.000000	0.000000
+sensor	s_params	DetectorScale	1.000000	1.000000
+sensor	s_params	DetectorStretch	1.000000	1.000000
+sensor	s_params	DetectorRot	0.000000	0.000000
+sensor	s_params	DetectorMirror	N	N
+sensor	s_params	STEDDeplMode	VortexPulsed	VortexPulsed
+sensor	s_params	STEDLambda	676.000000	676.000000
+sensor	s_params	STEDSatFactor	30.000000	30.000000
+sensor	s_params	STEDImmFraction	0.100000	0.100000
+sensor	s_params	STEDVPPM	1.000000	1.000000
+sensor	s_params	SPIMExcType	Gauss	Gauss
+sensor	s_params	SPIMPlaneNA	0.030000	0.030000
+sensor	s_params	SPIMFillFactor	0.500000	0.500000
+sensor	s_params	SPIMPlaneGaussWidth	4.000000	4.000000
+sensor	s_params	SPIMPlanePropDir[X]	1.000000	1.000000
+sensor	s_params	SPIMPlanePropDir[Y]	0.000000	0.000000
+sensor	s_params	SPIMPlanePropDir[Z]	0.000000	0.000000
+sensor	s_params	SPIMPlaneCenterOff	0.000000	0.000000
+sensor	s_params	SPIMPlaneFocusOff	0.000000	0.000000
+sensor	s_params	ScatterModel	None	None
+sensor	s_params	ScatterFreePath	1000.000000	1000.000000
+sensor	s_params	ScatterRelContrib	0.000000	0.000000
+sensor	s_params	ScatterBlurring	0.000000	0.000000
+sensor	s_states	ImagingDirection	default	default
+sensor	s_states	NumAperture	reported
+sensor	s_states	ObjectiveQuality	default	default
+sensor	s_states	RefrInxMedium	estimated
+sensor	s_states	RefrInxLensMedium	estimated
+sensor	s_states	PinholeRadius	estimated	estimated
+sensor	s_states	IllPinholeRadius	default	default
+sensor	s_states	PinholeSpacing	default
+sensor	s_states	ExcitationBeamFill	default	default
+sensor	s_states	LambdaEx	reported	reported
+sensor	s_states	LambdaEm	estimated	estimated
+sensor	s_states	ExPhotonCnt	default	default
+sensor	s_states	InterFacePrimary	default
+sensor	s_states	InterFaceSecondary	default
+sensor	s_states	Description	default	default
+sensor	s_states	DetectorMagnif	default	default
+sensor	s_states	DetectorPPU	default	default
+sensor	s_states	DetectorBaseline	default	default
+sensor	s_states	DetectorLineAvgCnt	default	default
+sensor	s_states	DetectorNoiseGain	default	default
+sensor	s_states	DetectorOffset	default	default
+sensor	s_states	DetectorSensitivity	default	default
+sensor	s_states	DetectorRadius	default	default
+sensor	s_states	DetectorScale	default	default
+sensor	s_states	DetectorStretch	default	default
+sensor	s_states	DetectorRot	default	default
+sensor	s_states	DetectorMirror	default	default
+sensor	s_states	DetectorModel	default	default
+sensor	s_states	DetectorReduceHist	default	default
+sensor	s_states	STEDDeplMode	default	default
+sensor	s_states	STEDLambda	default	default
+sensor	s_states	STEDSatFactor	default	default
+sensor	s_states	STEDImmFraction	default	default
+sensor	s_states	STEDVPPM	default	default
+sensor	s_states	SPIMExcType	default	default
+sensor	s_states	SPIMPlaneNA	default	default
+sensor	s_states	SPIMFillFactor	default	default
+sensor	s_states	SPIMPlaneGaussWidth	default	default
+sensor	s_states	SPIMPlanePropDir	default	default
+sensor	s_states	SPIMPlaneCenterOff	default	default
+sensor	s_states	SPIMPlaneFocusOff	default	default
+sensor	s_states	ScatterModel	default	default
+sensor	s_states	ScatterFreePath	default	default
+sensor	s_states	ScatterRelContrib	default	default
+sensor	s_states	ScatterBlurring	default	default
+history	software	SVI-Huygens
+history	libics_version	1.6.3
+history	version	21.04.0p2
+history	date	Fri 18 Jun 2021 23:59:52 UTC
